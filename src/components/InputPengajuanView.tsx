@@ -471,6 +471,16 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
     setDraftTersedia(true);
   };
 
+  /** Hapus draft dari penyimpanan lokal (memulai dari awal). */
+  const hapusDraft = () => {
+    try {
+      localStorage.removeItem(DRAFT_KEY);
+      setDraftTersedia(false);
+    } catch {
+      /* abaikan kegagalan hapus draft */
+    }
+  };
+
   const restoreDraft = (d: Record<string, unknown>) => {
     if (typeof d.nomorSPK === 'string') setNomorSPK(d.nomorSPK);
     if (typeof d.namaPekerjaan === 'string') setNamaPekerjaan(d.namaPekerjaan);
@@ -3336,6 +3346,16 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 >
                   <Save className="w-3.5 h-3.5" />
                   Simpan Draft
+                </button>
+
+                {/* Hapus Draft — buang isian lama agar draft baru tersimpan rapi. */}
+                <button
+                  type="button"
+                  onClick={hapusDraft}
+                  className="inline-flex items-center gap-1.5 min-h-[44px] px-5 rounded-full text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Hapus Draft
                 </button>
               </div>
 
