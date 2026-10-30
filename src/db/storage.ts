@@ -7,6 +7,24 @@ const STORAGE_KEYS = {
   IF_ENTRIES: 'prelim_if_entries_v1',
 };
 
+// Muat data contoh/demo saat pertama kali buka aplikasi?
+// Set true jika suatu saat ingin menampilkan data demo lagi.
+const SEED_DEMO_DATA = false;
+
+// Bersihkan sekali jalan data demo lama yang mungkin masih tersimpan di
+// browser (localStorage). Hanya berjalan sekali per browser.
+const PURGE_FLAG_KEY = 'prelim_demo_purged_v1';
+try {
+  if (typeof localStorage !== 'undefined' && !localStorage.getItem(PURGE_FLAG_KEY)) {
+    localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify([]));
+    localStorage.setItem(STORAGE_KEYS.AMANDEMEN, JSON.stringify([]));
+    localStorage.setItem(STORAGE_KEYS.IF_ENTRIES, JSON.stringify([]));
+    localStorage.setItem(PURGE_FLAG_KEY, '1');
+  }
+} catch {
+  // abaikan bila localStorage tidak tersedia
+}
+
 // Date calculation utilities per user's rules:
 // - BAKH = Tanggal sama dengan SPK
 // - SPK = Tanggal sama dengan SPK
@@ -1106,8 +1124,9 @@ export const db = {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.SUBMISSIONS);
       if (!data) {
-        localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(INITIAL_SUBMISSIONS));
-        return INITIAL_SUBMISSIONS;
+        const seed = SEED_DEMO_DATA ? INITIAL_SUBMISSIONS : [];
+        localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(seed));
+        return seed;
       }
       const list: ProjectSubmission[] = JSON.parse(data);
       // Jika list sengaja dikosongkan (mis. setelah "Hapus Semua Data Antrian"),
@@ -1115,18 +1134,19 @@ export const db = {
       if (list.length === 0) {
         return [];
       }
-      // Pelengkap seed: tambahkan pengajuan contoh yang belum ada, tanpa
-      // menyentuh data yang sudah tersimpan (aman dijalankan berulang).
-      const sudahAda = new Set(list.map(s => s.id));
-      const tambahan = INITIAL_SUBMISSIONS.filter(s => !sudahAda.has(s.id));
-      if (tambahan.length > 0) {
-        const gabung = [...list, ...tambahan];
-        localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(gabung));
-        return gabung;
+      // Pelengkap seed hanya dijalankan bila data demo diaktifkan.
+      if (SEED_DEMO_DATA) {
+        const sudahAda = new Set(list.map(s => s.id));
+        const tambahan = INITIAL_SUBMISSIONS.filter(s => !sudahAda.has(s.id));
+        if (tambahan.length > 0) {
+          const gabung = [...list, ...tambahan];
+          localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(gabung));
+          return gabung;
+        }
       }
       return list;
     } catch {
-      return INITIAL_SUBMISSIONS;
+      return SEED_DEMO_DATA ? INITIAL_SUBMISSIONS : [];
     }
   },
 
@@ -1277,12 +1297,13 @@ export const db = {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.AMANDEMEN);
       if (!data) {
-        localStorage.setItem(STORAGE_KEYS.AMANDEMEN, JSON.stringify(INITIAL_AMANDEMEN));
-        return INITIAL_AMANDEMEN;
+        const seed = SEED_DEMO_DATA ? INITIAL_AMANDEMEN : [];
+        localStorage.setItem(STORAGE_KEYS.AMANDEMEN, JSON.stringify(seed));
+        return seed;
       }
       return JSON.parse(data);
     } catch {
-      return INITIAL_AMANDEMEN;
+      return SEED_DEMO_DATA ? INITIAL_AMANDEMEN : [];
     }
   },
 
@@ -1317,12 +1338,13 @@ export const db = {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.IF_ENTRIES);
       if (!data) {
-        localStorage.setItem(STORAGE_KEYS.IF_ENTRIES, JSON.stringify(INITIAL_IF_ENTRIES));
-        return INITIAL_IF_ENTRIES;
+        const seed = SEED_DEMO_DATA ? INITIAL_IF_ENTRIES : [];
+        localStorage.setItem(STORAGE_KEYS.IF_ENTRIES, JSON.stringify(seed));
+        return seed;
       }
       return JSON.parse(data);
     } catch {
-      return INITIAL_IF_ENTRIES;
+      return SEED_DEMO_DATA ? INITIAL_IF_ENTRIES : [];
     }
   },
 
@@ -1348,8 +1370,8 @@ export const db = {
   },
 
   resetAllData() {
-    localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(INITIAL_SUBMISSIONS));
-    localStorage.setItem(STORAGE_KEYS.AMANDEMEN, JSON.stringify(INITIAL_AMANDEMEN));
-    localStorage.setItem(STORAGE_KEYS.IF_ENTRIES, JSON.stringify(INITIAL_IF_ENTRIES));
+    localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(SEED_DEMO_DATA ? INITIAL_SUBMISSIONS : []));
+    localStorage.setItem(STORAGE_KEYS.AMANDEMEN, JSON.stringify(SEED_DEMO_DATA ? INITIAL_AMANDEMEN : []));
+    localStorage.setItem(STORAGE_KEYS.IF_ENTRIES, JSON.stringify(SEED_DEMO_DATA ? INITIAL_IF_ENTRIES : []));
   }
 };
