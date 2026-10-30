@@ -1,0 +1,6 @@
+{
+  "name": "PrelimHub - Dashboard Manajemen Pengajuan & Imprest Fund Proyek",
+  "description": "Aplikasi manajemen pengajuan prelim proyek, alur SPK, BAKH, Kurva S, eviden transfer dan serah terima, amandemen, serta laporan Imprest Fund (IF).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

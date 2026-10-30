@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* Sembunyikan scrollbar pada strip legenda lokasi (tetap bisa digeser). */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Field angka: sembunyikan spinner bawaan browser agar suffix (Rp / % / hari)
+   tidak bertabrakan. Nilai tetap bisa diketik, digeser panah keyboard, atau
+   lewat chip persentase. */
+.no-spin {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
