@@ -39,6 +39,7 @@ import {
   cariOrang,
   hintOrang,
 } from '../db/masterpp';
+import { BOQ_SWAKELOLA_ITEMS } from '../db/boqSwakelola';
 import {
   BERKAS_PRELIM_WIZARD,
   BerkasDef,
@@ -347,6 +348,11 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const [lampiranHargaFile, setLampiranHargaFile] = useState('');
   const [lampiranHargaErr, setLampiranHargaErr] = useState<string | null>(null);
   const lampiranHargaInputRef = useRef<HTMLInputElement>(null);
+  // Input manual Lampiran Harga via pencarian designator (tanpa harus tempel/unggah Excel).
+  const [lampiranManual, setLampiranManual] = useState(false);
+  const [lampiranManualDesignator, setLampiranManualDesignator] = useState('');
+  const [lampiranManualUraian, setLampiranManualUraian] = useState('');
+  const [lampiranManualNilai, setLampiranManualNilai] = useState<number>(0);
   const [gm, setGm] = useState('');
   const [pm, setPm] = useState('');
   const [mandor, setMandor] = useState('');
@@ -857,10 +863,46 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
     }
   };
 
+  /** Tambah baris Lampiran Harga manual via pencarian designator. */
+  const tambahBarisManualLampiranHarga = () => {
+    const designator = lampiranManualDesignator.trim();
+    if (!designator) {
+      setLampiranHargaErr('Pilih designator untuk baris Lampiran Harga manual.');
+      return;
+    }
+    const master = BOQ_SWAKELOLA_ITEMS.find(
+      i => i.designator.toLowerCase() === designator.toLowerCase()
+    );
+    const row: LampiranHargaRow = {
+      ...barisLampiranHargaKosong(),
+      designator,
+      uraian: master?.uraian || lampiranManualUraian.trim(),
+      sat: master?.satuan || '',
+      ksepMaterial: lampiranManualNilai,
+      ksepJasa: 0,
+    };
+    setBarisHarga([
+      ...lampiranHargaRows.filter(r => r.designator.trim().toLowerCase() !== designator.toLowerCase()),
+      row,
+    ]);
+    setLampiranManualDesignator('');
+    setLampiranManualUraian('');
+    setLampiranManualNilai(0);
+    setLampiranHargaErr(null);
+  };
+
   // NILAI TOTAL SPK = Nilai Jasa + Nilai Material (ikut berubah saat BOQ diubah).
   useEffect(() => {
     if (nilaiTotalBoq > 0) {
       setNilaiPekerjaan(nilaiTotalBoq);
+    }
+    // Material Non Stock: TIDAK diinput manual — terisi otomatis dari baris Lampiran
+    // BOQ SPK yang memuat material (total = Σ Volume x Harga Satuan per baris).
+    const totalNonStock = boqSpk
+      .filter(r => r.material > 0)
+      .reduce((s, r) => s + r.vol * r.jasa, 0);
+    if (totalNonStock > 0) {
+      setMaterialStock(totalNonStock);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boqSpk]);
@@ -1460,6 +1502,78 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 </span>
               }
             >
+              {/* LAMPILAN HARGA — input manual via search designator */}
+              <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h5 className="text-[12px] font-bold text-emerald-900">Input Manual — Designator</h5>
+                    <p className="mt-0.5 text-[10px] leading-snug text-emerald-700">
+                      Cari designator dari master BOQ, isi nilai — tanpa harus tempel / unggah Excel.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setLampiranManual(v => !v)}
+                    className="inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-full border border-emerald-200 bg-white px-4 text-[11px] font-bold text-emerald-800 transition-colors hover:border-emerald-400 outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+                  >
+                    {lampiranManual ? 'Tutup Input Manual' : 'Input Manual (Designator)'}
+                  </button>
+                </div>
+
+                {lampiranManual && (
+                  <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-12">
+                    <SearchSelectField
+                      id="f-lampiran-manual-designator"
+                      label="Designator"
+                      containerClassName="md:col-span-5"
+                      options={BOQ_SWAKELOLA_ITEMS.map(i => ({ value: i.designator, label: i.designator }))}
+                      value={lampiranManualDesignator}
+                      onChange={v => {
+                        setLampiranManualDesignator(v);
+                        setLampiranHargaErr(null);
+                      }}
+                      placeholder="Ketik designator..."
+                      emptyLabel="Designator tidak ditemukan di master"
+                      hint="Sumber: BOQ SWAKELOLA.xlsx (COST STRUCTURE)."
+                      hintTone="muted"
+                    />
+                    <TextField
+                      id="f-lampiran-manual-uraian"
+                      label="Uraian Pekerjaan"
+                      containerClassName="md:col-span-3"
+                      value={lampiranManualUraian}
+                      onChange={e => setLampiranManualUraian(e.target.value)}
+                      hint="Kosongkan — diambil otomatis dari master bila designator ada."
+                      hintTone="muted"
+                    />
+                    <TextField
+                      id="f-lampiran-manual-nilai"
+                      label="Nilai Kesepakatan (Rp)"
+                      type="number"
+                      min={0}
+                      step={1000}
+                      inputMode="numeric"
+                      prefix="Rp"
+                      containerClassName="md:col-span-2"
+                      value={lampiranManualNilai}
+                      onChange={e => setLampiranManualNilai(Math.max(0, Number(e.target.value) || 0))}
+                      hint="Material/Jasa — nilai kesepakatan manual."
+                      hintTone="muted"
+                    />
+                    <div className="md:col-span-2 flex items-end">
+                      <button
+                        type="button"
+                        onClick={tambahBarisManualLampiranHarga}
+                        className="inline-flex w-full min-h-[44px] cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-emerald-700 px-4 text-[12px] font-bold text-white shadow-md transition-colors hover:bg-emerald-600"
+                      >
+                        <FilePlus2 className="h-4 w-4" />
+                        Tambah Baris
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* LAMPIRAN HARGA — input ala BOQ (manual) atau unggah Excel */}
               <div>
                 {/* Area tempel: salin sel di Excel (Ctrl+C) lalu tempel (Ctrl+V) di sini */}
@@ -2159,6 +2273,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                             <th className="px-2 py-2 text-center font-bold">Satuan</th>
                             <th className="px-2 py-2 text-right font-bold">Harga Satuan</th>
                             <th className="px-2 py-2 text-right font-bold">Total Harga</th>
+                            <th className="w-10 px-2 py-2" />
                           </tr>
                         </thead>
                         <tbody>
@@ -2190,6 +2305,16 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                                 <td className="px-2 py-2 text-right font-bold tabular-nums text-slate-900">
                                   {formatRupiah(r.vol * r.jasa)}
                                 </td>
+                                <td className="px-2 py-2 text-right">
+                                  <button
+                                    type="button"
+                                    onClick={() => hapusBarisBoq(idxBarisBoq)}
+                                    aria-label={`Hapus designator ${r.designator || i + 1}`}
+                                    className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-rose-50 hover:text-rose-600 outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </button>
+                                </td>
                               </tr>
                             );
                           })}
@@ -2202,6 +2327,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                             <td className="px-2 py-2 text-right tabular-nums text-teal-800">
                               {formatRupiah(totalNonStock)}
                             </td>
+                            <td />
                           </tr>
                           <tr className="bg-slate-50 font-bold">
                             <td colSpan={5} className="px-2 py-2 text-right text-slate-600">

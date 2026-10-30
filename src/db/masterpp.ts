@@ -40,6 +40,16 @@ export const NAMA_PEKERJAAN_BAKH: string[] = [
   'OLO',
   'OSP',
   'RELOKASI UTILITAS',
+  // Topik Tema / kode pekerjaan baru (ditambah sesuai kebutuhan tim).
+  'FASTEL',
+  'IPT Bandung',
+  'MD',
+  'Migrasi',
+  'NAP',
+  'NIQE',
+  'PT2',
+  'QE Relok',
+  'REMALA',
 ];
 
 /** SELURUH ORANG (satu sumber, difilter per jabatan di bawah). */

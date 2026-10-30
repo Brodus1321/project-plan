@@ -29,10 +29,11 @@ const BARIS: { nomor: string; uraian: string; key: keyof MarginAngka }[] = [
 ];
 
 /** Input angka rupiah — memisah ribuan dengan titik saat tidak sedang fokus. */
-const InputRupiah: React.FC<{ label: string; value: number; onChange: (v: number) => void }> = ({
+const InputRupiah: React.FC<{ label: string; value: number; onChange: (v: number) => void; readOnly?: boolean }> = ({
   label,
   value,
   onChange,
+  readOnly = false,
 }) => {
   const [fokus, setFokus] = useState(false);
   return (
@@ -43,11 +44,27 @@ const InputRupiah: React.FC<{ label: string; value: number; onChange: (v: number
       value={fokus ? (value ? String(value) : '') : ribuan(value)}
       onFocus={() => setFokus(true)}
       onBlur={() => setFokus(false)}
-      onChange={e => onChange(Number(e.target.value.replace(/[^0-9]/g, '')) || 0)}
+      readOnly={readOnly}
+      onChange={e => {
+        if (readOnly) return;
+        onChange(Number(e.target.value.replace(/[^0-9]/g, '')) || 0);
+      }}
       className="w-full rounded-md border border-slate-200 bg-white px-2 py-1 text-right font-mono text-[11px] text-slate-800 outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
     />
   );
 };
+
+/**
+ * COGS (nomor 2) = penjumlahan otomatis baris 2.1 s/d 2.5
+ * (Material Stock + Material Non Stock + Jasa + Sewa + Operasional).
+ * Field COGS kini dihitung otomatis dari baris 2.1–2.5, bukan input manual.
+ */
+const hitungCogs = (nilai: MarginAngka): number =>
+  (nilai.materialStock || 0) +
+  (nilai.materialNonStock || 0) +
+  (nilai.jasa || 0) +
+  (nilai.sewa || 0) +
+  (nilai.operasional || 0);
 
 /** Satu blok margin (a. KEMITRAAN / b. SWAKELOLA) — admin isi kolom Penilaian saja. */
 const TabelMargin: React.FC<{
@@ -55,7 +72,8 @@ const TabelMargin: React.FC<{
   nilai: MarginAngka;
   onChange: (m: MarginAngka) => void;
 }> = ({ label, nilai, onChange }) => {
-  const gpm = nilai.revenue - nilai.cogs;
+  const cogs = hitungCogs(nilai);
+  const gpm = nilai.revenue - cogs;
   return (
     <div className="mb-3">
       <div className="mb-1 text-[12px] font-bold text-slate-800">
@@ -72,22 +90,35 @@ const TabelMargin: React.FC<{
             </tr>
           </thead>
           <tbody className="text-slate-700">
-            {BARIS.map(b => (
-              <tr key={b.key} className="border-t border-slate-100">
-                <td className="px-2 py-1 text-center font-mono text-slate-500">{b.nomor}</td>
-                <td className="px-2 py-1">{b.uraian}</td>
-                <td className="px-1 py-1">
-                  <InputRupiah
-                    label={`${label} — ${b.uraian}`}
-                    value={nilai[b.key]}
-                    onChange={v => onChange({ ...nilai, [b.key]: v })}
-                  />
-                </td>
-                <td className="px-2 py-1 text-right font-mono whitespace-nowrap">
-                  {persen(nilai[b.key], nilai.revenue)}
-                </td>
-              </tr>
-            ))}
+            {BARIS.map(b => {
+              const nilaiTampil = b.key === 'cogs' ? hitungCogs(nilai) : nilai[b.key];
+              const ubahNilai = (v: number) => {
+                if (b.key === 'cogs') {
+                  onChange({ ...nilai, cogs: hitungCogs(nilai) });
+                  return;
+                }
+                const next = { ...nilai, [b.key]: v };
+                if (b.key !== 'revenue') next.cogs = hitungCogs(next);
+                onChange(next);
+              };
+              return (
+                <tr key={b.key} className="border-t border-slate-100">
+                  <td className="px-2 py-1 text-center font-mono text-slate-500">{b.nomor}</td>
+                  <td className="px-2 py-1">{b.uraian}</td>
+                  <td className="px-1 py-1">
+                    <InputRupiah
+                      label={`${label} — ${b.uraian}`}
+                      value={nilaiTampil}
+                      onChange={ubahNilai}
+                      readOnly={b.key === 'cogs'}
+                    />
+                  </td>
+                  <td className="px-2 py-1 text-right font-mono whitespace-nowrap">
+                    {persen(nilaiTampil, nilai.revenue)}
+                  </td>
+                </tr>
+              );
+            })}
             <tr className="border-t-2 border-slate-400 bg-slate-50 font-bold text-slate-900">
               <td className="px-2 py-1.5" />
               <td className="px-2 py-1.5">Gross Profit Margin</td>
