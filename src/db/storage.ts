@@ -1129,6 +1129,10 @@ export const db = {
     localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(items));
   },
 
+  clearSubmissions() {
+    localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify([]));
+  },
+
   getSubmissionById(id: string): ProjectSubmission | undefined {
     return this.getSubmissions().find(s => s.id === id);
   },

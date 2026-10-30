@@ -7,6 +7,7 @@ import {
   WalletCards,
   Info,
   RotateCcw,
+  Trash2,
   Sparkles,
   ShieldCheck,
   Lock,
@@ -19,6 +20,7 @@ interface SidebarProps {
   setActiveTab: (tab: ActiveTab) => void;
   onOpenSop: () => void;
   onResetData: () => void;
+  onClearAntrianData: () => void;
   pendingEvidenCount: number;
   role?: 'ADMIN' | 'VERIFIKATOR';
   userName?: string;
@@ -30,6 +32,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setActiveTab,
   onOpenSop,
   onResetData,
+  onClearAntrianData,
   pendingEvidenCount,
   role,
   userName,
@@ -154,13 +157,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </button>
 
         {role === 'ADMIN' && (
-          <button
-            onClick={onResetData}
-            title="Reset Data Demo"
-            className={`${iconButtonClass} text-slate-400 hover:text-rose-600 hover:bg-rose-50`}
-          >
-            <RotateCcw className="w-4 h-4" strokeWidth={1.8} />
-          </button>
+          <>
+            <button
+              onClick={onClearAntrianData}
+              title="Hapus Semua Data Antrian"
+              className={`${iconButtonClass} text-slate-400 hover:text-rose-600 hover:bg-rose-50`}
+            >
+              <Trash2 className="w-4 h-4" strokeWidth={1.8} />
+            </button>
+
+            <button
+              onClick={onResetData}
+              title="Reset Data Demo"
+              className={`${iconButtonClass} text-slate-400 hover:text-rose-600 hover:bg-rose-50`}
+            >
+              <RotateCcw className="w-4 h-4" strokeWidth={1.8} />
+            </button>
+          </>
         )}
 
         {role && userName && (

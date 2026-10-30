@@ -167,6 +167,15 @@ export default function App() {
     }
   };
 
+  /** Hapus SEMUA data pengajuan dari daftar antrian (buat bersih). */
+  const handleClearAntrianData = () => {
+    if (confirm('Apakah Anda yakin ingin menghapus SEMUA data pengajuan dari daftar antrian?')) {
+      db.clearSubmissions();
+      refreshData();
+      showToast('Seluruh data pengajuan berhasil dihapus dari antrian.');
+    }
+  };
+
   const pendingEvidenCount = submissions.filter(s => s.isLockedForPrint && lolosVerifikasi(s)).length;
   const menungguVerifCount = submissions.filter(s => s.verifikasiStatus === 'MENUNGGU').length;
   const revisiAdminCount = submissions.filter(s => s.verifikasiStatus === 'REVISI').length;
@@ -212,6 +221,7 @@ export default function App() {
           setActiveTab={setActiveTab}
           onOpenSop={() => setIsSopModalOpen(true)}
           onResetData={handleResetData}
+          onClearAntrianData={handleClearAntrianData}
           pendingEvidenCount={pendingEvidenCount}
           role={session.role}
           userName={session.nama}
