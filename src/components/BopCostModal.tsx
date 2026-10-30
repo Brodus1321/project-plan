@@ -300,7 +300,8 @@ export const BopCostModal: React.FC<BopCostModalProps> = ({
               suffix=",-"
               containerClassName="w-full max-w-xs"
               value={perizinan}
-              hint="Disimpan bersama rincian BOP Cost Structure."
+              readOnly
+              hint="Otomatis dari Rincian Total Nilai Pengajuan IF Project (langkah PP) — tidak diisi manual."
               hintTone="muted"
               onChange={e => {
                 setPerizinan(Math.max(0, Number(e.target.value) || 0));

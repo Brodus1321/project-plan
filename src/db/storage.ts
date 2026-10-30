@@ -340,7 +340,9 @@ export function alurProyekDariKurvaS(
 
   let akhir = patokan;
   let akumulasi = 0;
-  for (const tahap of URUTAN_TAHAP.slice(0, 4)) {
+  // Persiapan tidak terhitung sebagai hari kerja — hitungan hari kerja dimulai
+  // dari tahap berikutnya (Material Delivery) dan bertambah s/d Uji Terima.
+  for (const tahap of URUTAN_TAHAP.slice(1, 4)) {
     const t = batas[tahap];
     if (!t || t <= akhir) continue;
     const hari = selisihHari(t, akhir) ?? 0;

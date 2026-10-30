@@ -247,9 +247,9 @@ const TAHAP_ALUR: { key: keyof AlurProyek; label: string; id: string }[] = [
   { key: 'ujiTerima', label: 'Uji Terima', id: 'f-alur-uji-terima' },
 ];
 
-/** Σ jumlah hari seluruh tahap alur proyek. */
+/** Σ jumlah hari kerja seluruh tahap alur proyek (Persiapan tidak dihitung). */
 const hitungTotalAlur = (a: AlurProyek): number =>
-  a.persiapan + a.materialDelivery + a.instalasi + a.commissioningTest + a.ujiTerima;
+  a.materialDelivery + a.instalasi + a.commissioningTest + a.ujiTerima;
 
 /**
  * Unggahan terpisah dokumen penerima panjar (berkas i1/i2/i3).
@@ -2894,6 +2894,10 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
 
       // ---------- h. GRAVIK CURVA S ----------
       case 'kurvaS': {
+        // Rincian Total Nilai Pengajuan IF Project (langkah PP) — sumber nilai
+        // Perizinan (Preliminary) untuk BOP Cost Structure (langkah Jadwal Pelaksanaan).
+        const totalIf =
+          prelim + termin1 + termin2 + termin3 + retensi + materialStock + lumpsum;
         return (
           <div className="space-y-4">
             {/* 6. Perkiraan Margin yang dilaksanakan — admin isi Penilaian, % otomatis / Revenue. */}
@@ -2946,7 +2950,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 boqSpk={boqSpk}
                 totalBoq={nilaiTotalBoq}
                 nilaiPerintahRincian={nilaiPerintahRincian}
-                nilaiPerizinan={nilaiPerizinan}
+                nilaiPerizinan={totalIf}
                 manajemenRisiko={manajemenRisiko}
                 onClose={() => setShowBopModal(false)}
                 onSave={(next, nilai, nilaiPerizinanBaru, risikoBaru) => {
