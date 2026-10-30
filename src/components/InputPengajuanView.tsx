@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import {
   AlurProyek,
   BoqSpkRow,
@@ -86,6 +86,7 @@ import {
   Eye,
   FileSearch,
   Lock,
+  Save,
 } from 'lucide-react';
 import { PrintDocumentModal } from './PrintDocumentModal';
 import { RailStep } from './wizard/WizardRail';
@@ -110,7 +111,7 @@ const KOMPONEN_TOTAL: { key: KomponenTotal; label: string }[] = [
 ];
 
 /** Galangan judul sub-bagian di dalam satu langkah. */
-/** Warna aksen per sub-bagian — redup (50/200/700) supaya hidup tapi tidak mencolok. */
+/** Warna aksen per sub-bagian â€” redup (50/200/700) supaya hidup tapi tidak mencolok. */
 type SectionTone =
   | 'teal'
   | 'emerald'
@@ -190,7 +191,7 @@ const ruleCls = (tone: SectionTone) => SECTION_TONE[tone].rule;
 const panelCls = (tone: SectionTone) => SECTION_TONE[tone].panel;
 
 /**
- * Kartu sub-bagian berlatar warna redup — SectionTitle + isian di dalam satu
+ * Kartu sub-bagian berlatar warna redup â€” SectionTitle + isian di dalam satu
  * kotak berwarna supaya form tidak didominasi putih.
  */
 const SectionPanel: React.FC<{
@@ -247,7 +248,7 @@ const TAHAP_ALUR: { key: keyof AlurProyek; label: string; id: string }[] = [
   { key: 'ujiTerima', label: 'Uji Terima', id: 'f-alur-uji-terima' },
 ];
 
-/** Σ jumlah hari kerja seluruh tahap alur proyek (Persiapan tidak dihitung). */
+/** Î£ jumlah hari kerja seluruh tahap alur proyek (Persiapan tidak dihitung). */
 const hitungTotalAlur = (a: AlurProyek): number =>
   a.materialDelivery + a.instalasi + a.commissioningTest + a.ujiTerima;
 
@@ -301,7 +302,7 @@ const SlotAlurRinci: React.FC<{ nama: string }> = ({ nama }) => (
   <div className="mt-3 flex items-start gap-2 rounded-xl border border-dashed border-teal-300 bg-teal-50/60 px-3 py-2.5">
     <Clock3 className="w-4 h-4 text-teal-600 shrink-0 mt-px" />
     <p className="text-[11px] text-teal-800 leading-relaxed">
-      <strong>Slot alur input {nama}.</strong> Kerangka langkah ini sudah disiapkan — formulir rinci
+      <strong>Slot alur input {nama}.</strong> Kerangka langkah ini sudah disiapkan â€” formulir rinci
       berkas <strong>{nama}</strong> akan dicolok di sini tanpa mengubah kerangka wizard.
     </p>
   </div>
@@ -341,7 +342,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const [hargaKesepakatan, setHargaKesepakatan] = useState<number>(0);
   const [teamFo, setTeamFo] = useState<number>(0);
   const [teamJoiner, setTeamJoiner] = useState<number>(0);
-  /** Lampiran Harga BAKH — tabel gaya Excel (Designator | Uraian | Negosiasi | Kesepakatan). */
+  /** Lampiran Harga BAKH â€” tabel gaya Excel (Designator | Uraian | Negosiasi | Kesepakatan). */
   const [lampiranHargaRows, setLampiranHargaRows] = useState<LampiranHargaRow[]>([
     barisLampiranHargaKosong(),
   ]);
@@ -357,7 +358,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const [pm, setPm] = useState('');
   const [mandor, setMandor] = useState('');
   const [projectAdmin, setProjectAdmin] = useState('');
-  /** Alur proyek BAKH — jumlah hari tiap tahap (Σ = jumlah hari kerja). */
+  /** Alur proyek BAKH â€” jumlah hari tiap tahap (Î£ = jumlah hari kerja). */
   const [alurProyek, setAlurProyek] = useState<AlurProyek>({
     persiapan: 0,
     materialDelivery: 0,
@@ -387,7 +388,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   // --- Pembayaran (langkah d) ---
   const [persentasePrelim, setPersentasePrelim] = useState<number>(15);
   const [nilaiPrelimPanjar, setNilaiPrelimPanjar] = useState<number>(37500000);
-  /** Komponen rincian PP yang dipakai sebagai "Total Nilai" panjar (langkah 5) — boleh lebih dari satu. */
+  /** Komponen rincian PP yang dipakai sebagai "Total Nilai" panjar (langkah 5) â€” boleh lebih dari satu. */
   const [komponenPanjar, setKomponenPanjar] = useState<KomponenTotal[]>(['prelim']);
   const [namaPenerimaPrelim, setNamaPenerimaPrelim] = useState('');
   const [bankPenerima, setBankPenerima] = useState('Bank Mandiri');
@@ -396,14 +397,14 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   /** Alur penerima panjar (langkah 5): Prelim = input manual, Mandor = ambil dari database. */
   const [jenisPenerima, setJenisPenerima] = useState<'prelim' | 'mandor'>('prelim');
 
-  // --- Isian PP (langkah c) — daftar field baru ---
-  /** SAAT PENGGUNAAN — INPUT TANGGAL PENGGUNAAN PP. */
+  // --- Isian PP (langkah c) â€” daftar field baru ---
+  /** SAAT PENGGUNAAN â€” INPUT TANGGAL PENGGUNAAN PP. */
   const [tglPenggunaanPP, setTglPenggunaanPP] = useState('');
-  /** Jenis disposisi: kosong / IHLD / NDE — menentukan nomor mana yang diisi. */
+  /** Jenis disposisi: kosong / IHLD / NDE â€” menentukan nomor mana yang diisi. */
   const [jenisDisposisi, setJenisDisposisi] = useState<'' | 'IHLD' | 'NDE'>('');
   const [nomorIhld, setNomorIhld] = useState('');
   const [nomorNde, setNomorNde] = useState('');
-  /** Rincian Total Nilai Pengajuan IF Project (TOTAL KESELURUHAN = Σ ketujuh isian). */
+  /** Rincian Total Nilai Pengajuan IF Project (TOTAL KESELURUHAN = Î£ ketujuh isian). */
   const [prelim, setPrelim] = useState<number>(0);
   const [lumpsum, setLumpsum] = useState<number>(0);
   const [termin1, setTermin1] = useState<number>(0);
@@ -411,7 +412,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const [termin3, setTermin3] = useState<number>(0);
   const [retensi, setRetensi] = useState<number>(0);
   const [materialStock, setMaterialStock] = useState<number>(0);
-  /** TEKNISI — sumbernya belum ditentukan (dikosongkan dulu). */
+  /** TEKNISI â€” sumbernya belum ditentukan (dikosongkan dulu). */
   const [teknisi, setTeknisi] = useState('');
 
   // --- Tanggal turunan sesuai SOP ---
@@ -435,15 +436,118 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const [bopRows, setBopRows] = useState<BopCostRow[]>([]);
   const [showBopModal, setShowBopModal] = useState(false);
   const [nilaiPerintahRincian, setNilaiPerintahRincian] = useState(500_000);
-  /** Nilai Perizinan (Preliminary) yang dapat dilakukan reimbursement — diisi di popup BOP Cost Structure. */
+  /** Nilai Perizinan (Preliminary) yang dapat dilakukan reimbursement â€” diisi di popup BOP Cost Structure. */
   const [nilaiPerizinan, setNilaiPerizinan] = useState(0);
-  /** V. Manajemen Risiko — tingkat risiko proyek (diisi di popup BOP Cost Structure). */
+  /** V. Manajemen Risiko â€” tingkat risiko proyek (diisi di popup BOP Cost Structure). */
   const [manajemenRisiko, setManajemenRisiko] = useState<LevelRisiko | ''>('');
-  // Perkiraan Margin yang dilaksanakan (langkah Jadwal Pelaksanaan Proyek) — admin isi angka Penilaian saja.
+  // Perkiraan Margin yang dilaksanakan (langkah Jadwal Pelaksanaan Proyek) â€” admin isi angka Penilaian saja.
   const [marginKemitraan, setMarginKemitraan] = useState<MarginAngka>(PERKIRAAN_MARGIN_AWAL);
   const [marginSwakelola, setMarginSwakelola] = useState<MarginAngka>(PERKIRAAN_MARGIN_AWAL);
+  // --- Draft wizard: simpan / pulihkan input setengah jalan (tanpa mulai dari awal lagi) ---
+  const DRAFT_KEY = 'prelim_draft_input_v1';
+  const [draftTersedia, setDraftTersedia] = useState(false);
+
+  const simpanDraft = () => {
+    const d: Record<string, unknown> = {
+      nomorSPK, namaPekerjaan, lokasiProyek, regional, picProyek, vendorPelaksana,
+      nilaiPekerjaan, tanggalSPK, durasiKerjaHari,
+      bakhNamaPekerjaan, bakhWitel, bakhPid, hargaPenawaran, hargaKesepakatan,
+      teamFo, teamJoiner, lampiranHargaRows, lampiranHargaFile,
+      gm, pm, mandor, projectAdmin, alurProyek,
+      noLeonita, waspang, noHp, boqSpk, boqSumber,
+      nomorBAKH, nomorPP, nomorIF,
+      persentasePrelim, nilaiPrelimPanjar, komponenPanjar, namaPenerimaPrelim,
+      bankPenerima, nomorRekening, npwpPenerima, jenisPenerima,
+      tglPenggunaanPP, jenisDisposisi, nomorIhld, nomorNde,
+      prelim, lumpsum, termin1, termin2, termin3, retensi, materialStock,
+      teknisi, kurvaSPlan, bopRows, nilaiPerintahRincian, nilaiPerizinan, manajemenRisiko,
+      marginKemitraan, marginSwakelola,
+    };
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    } catch {
+      /* abaikan kegagalan penyimpanan draft */
+    }
+    setDraftTersedia(true);
+  };
+
+  const restoreDraft = (d: Record<string, unknown>) => {
+    if (typeof d.nomorSPK === 'string') setNomorSPK(d.nomorSPK);
+    if (typeof d.namaPekerjaan === 'string') setNamaPekerjaan(d.namaPekerjaan);
+    if (typeof d.lokasiProyek === 'string') setLokasiProyek(d.lokasiProyek);
+    if (typeof d.regional === 'string') setRegional(d.regional);
+    if (typeof d.picProyek === 'string') setPicProyek(d.picProyek);
+    if (typeof d.vendorPelaksana === 'string') setVendorPelaksana(d.vendorPelaksana);
+    if (typeof d.nilaiPekerjaan === 'number') setNilaiPekerjaan(d.nilaiPekerjaan);
+    if (typeof d.tanggalSPK === 'string') setTanggalSPK(d.tanggalSPK);
+    if (typeof d.durasiKerjaHari === 'number') setDurasiKerjaHari(d.durasiKerjaHari);
+    if (typeof d.bakhNamaPekerjaan === 'string') setBakhNamaPekerjaan(d.bakhNamaPekerjaan);
+    if (typeof d.bakhWitel === 'string') setBakhWitel(d.bakhWitel);
+    if (typeof d.bakhPid === 'string') setBakhPid(d.bakhPid);
+    if (typeof d.hargaPenawaran === 'number') setHargaPenawaran(d.hargaPenawaran);
+    if (typeof d.hargaKesepakatan === 'number') setHargaKesepakatan(d.hargaKesepakatan);
+    if (typeof d.teamFo === 'number') setTeamFo(d.teamFo);
+    if (typeof d.teamJoiner === 'number') setTeamJoiner(d.teamJoiner);
+    if (Array.isArray(d.lampiranHargaRows)) setLampiranHargaRows(d.lampiranHargaRows as LampiranHargaRow[]);
+    if (typeof d.lampiranHargaFile === 'string') setLampiranHargaFile(d.lampiranHargaFile);
+    if (typeof d.gm === 'string') setGm(d.gm);
+    if (typeof d.pm === 'string') setPm(d.pm);
+    if (typeof d.mandor === 'string') setMandor(d.mandor);
+    if (typeof d.projectAdmin === 'string') setProjectAdmin(d.projectAdmin);
+    if (d.alurProyek && typeof d.alurProyek === 'object') setAlurProyek(d.alurProyek as AlurProyek);
+    if (typeof d.noLeonita === 'string') setNoLeonita(d.noLeonita);
+    if (typeof d.waspang === 'string') setWaspang(d.waspang);
+    if (typeof d.noHp === 'string') setNoHp(d.noHp);
+    if (Array.isArray(d.boqSpk)) setBoqSpk(d.boqSpk as BoqSpkRow[]);
+    if (typeof d.boqSumber === 'string') setBoqSumber(d.boqSumber);
+    if (typeof d.nomorBAKH === 'string') setNomorBAKH(d.nomorBAKH);
+    if (typeof d.nomorPP === 'string') setNomorPP(d.nomorPP);
+    if (typeof d.nomorIF === 'string') setNomorIF(d.nomorIF);
+    if (typeof d.persentasePrelim === 'number') setPersentasePrelim(d.persentasePrelim);
+    if (typeof d.nilaiPrelimPanjar === 'number') setNilaiPrelimPanjar(d.nilaiPrelimPanjar);
+    if (Array.isArray(d.komponenPanjar)) setKomponenPanjar(d.komponenPanjar as KomponenTotal[]);
+    if (typeof d.namaPenerimaPrelim === 'string') setNamaPenerimaPrelim(d.namaPenerimaPrelim);
+    if (typeof d.bankPenerima === 'string') setBankPenerima(d.bankPenerima);
+    if (typeof d.nomorRekening === 'string') setNomorRekening(d.nomorRekening);
+    if (typeof d.npwpPenerima === 'string') setNpwpPenerima(d.npwpPenerima);
+    if (typeof d.jenisPenerima === 'string') setJenisPenerima(d.jenisPenerima as 'prelim' | 'mandor');
+    if (typeof d.tglPenggunaanPP === 'string') setTglPenggunaanPP(d.tglPenggunaanPP);
+    if (typeof d.jenisDisposisi === 'string') setJenisDisposisi(d.jenisDisposisi as '' | 'IHLD' | 'NDE');
+    if (typeof d.nomorIhld === 'string') setNomorIhld(d.nomorIhld);
+    if (typeof d.nomorNde === 'string') setNomorNde(d.nomorNde);
+    if (typeof d.prelim === 'number') setPrelim(d.prelim);
+    if (typeof d.lumpsum === 'number') setLumpsum(d.lumpsum);
+    if (typeof d.termin1 === 'number') setTermin1(d.termin1);
+    if (typeof d.termin2 === 'number') setTermin2(d.termin2);
+    if (typeof d.termin3 === 'number') setTermin3(d.termin3);
+    if (typeof d.retensi === 'number') setRetensi(d.retensi);
+    if (typeof d.materialStock === 'number') setMaterialStock(d.materialStock);
+    if (typeof d.teknisi === 'string') setTeknisi(d.teknisi);
+    if (d.kurvaSPlan && typeof d.kurvaSPlan === 'object') setKurvaSPlan(d.kurvaSPlan as KurvaSPlan);
+    if (Array.isArray(d.bopRows)) setBopRows(d.bopRows as BopCostRow[]);
+    if (typeof d.nilaiPerintahRincian === 'number') setNilaiPerintahRincian(d.nilaiPerintahRincian);
+    if (typeof d.nilaiPerizinan === 'number') setNilaiPerizinan(d.nilaiPerizinan);
+    if (typeof d.manajemenRisiko === 'string') setManajemenRisiko((d.manajemenRisiko as LevelRisiko) || '');
+    if (d.marginKemitraan && typeof d.marginKemitraan === 'object') setMarginKemitraan(d.marginKemitraan as MarginAngka);
+    if (d.marginSwakelola && typeof d.marginSwakelola === 'object') setMarginSwakelola(d.marginSwakelola as MarginAngka);
+  };
+
+  // Pulihkan draft bila ada (saat mulai input baru / refresh).
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      if (d && typeof d === 'object') restoreDraft(d);
+      setDraftTersedia(true);
+    } catch {
+      /* abaikan kegagalan membaca draft */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const topRef = useRef<HTMLDivElement>(null);
-  /** Draft pengajuan untuk pratinjau review (langkah 6) — belum disimpan. */
+  /** Draft pengajuan untuk pratinjau review (langkah 6) â€” belum disimpan. */
   const [reviewSub, setReviewSub] = useState<ProjectSubmission | null>(null);
 
   /**
@@ -551,24 +655,24 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
         if (!mandor) e['f-mandor'] = 'Pilih Mandor pelaksana.';
         if (!projectAdmin) e['f-project-admin'] = 'Pilih Project Admin.';
         {
-          // Alur Proyek terkunci — hanya terisi otomatis dari Kurva S,
+          // Alur Proyek terkunci â€” hanya terisi otomatis dari Kurva S,
           // jadi divalidasi hanya bila Kurva S sudah menghasilkan isian.
           if (kurvaSPlan?.entries.length || kurvaSPlan?.progres.some(p => p.tanggal)) {
             const totalAlur = hitungTotalAlur(alurProyek);
             if (totalAlur <= 0) {
               e['f-alur-persiapan'] =
-                'Alur Proyek belum terbentuk dari Kurva S — pastikan tiap progres punya tanggal dan namanya mengandung Persiapan / Material / Instalasi / Commissioning / Uji Terima.';
+                'Alur Proyek belum terbentuk dari Kurva S â€” pastikan tiap progres punya tanggal dan namanya mengandung Persiapan / Material / Instalasi / Commissioning / Uji Terima.';
             } else if (totalAlur !== durasiKerjaHari) {
               e['f-alur-persiapan'] =
                 `Jumlah hari alur proyek (${totalAlur} hari) harus sama dengan ` +
-                `jumlah hari kerja (${durasiKerjaHari} hari) — perbaiki rentang tanggal pada Kurva S.`;
+                `jumlah hari kerja (${durasiKerjaHari} hari) â€” perbaiki rentang tanggal pada Kurva S.`;
             }
           }
         }
         // Isian Kurva S kini berada di langkah BAKH (di bawah Lampiran Harga).
         if (durasiKerjaHari < 1) {
           e['f-durasi-kurva'] = rentangKurva
-            ? `Durasi hasil Kurva S hanya ${durasiKerjaHari} hari — periksa tanggal progres pada Kurva S.`
+            ? `Durasi hasil Kurva S hanya ${durasiKerjaHari} hari â€” periksa tanggal progres pada Kurva S.`
             : 'Durasi kerja minimal 1 hari (langkah SPK).';
         }
         if (!kurvaSPlan || kurvaSPlan.entries.length === 0) {
@@ -593,7 +697,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
         if (!noLeonita.trim()) e['f-no-leonita'] = 'Nomor Leonita wajib diisi.';
         if (!tanggalMulaiKerja) e['f-tgl-mulai'] = 'Tanggal mulai kerja wajib diisi.';
         else if (!tanggalSelesaiKerja) {
-          e['f-rentang-spk'] = 'Tanggal selesai kerja belum diisi — atur rentang di langkah BAKH.';
+          e['f-rentang-spk'] = 'Tanggal selesai kerja belum diisi â€” atur rentang di langkah BAKH.';
         }
         if (!waspang) e['f-waspang'] = 'Pilih Waspang pelaksana.';
         if (!bakhWitel.trim()) e['_form'] = 'Witel belum diisi pada langkah BAKH.';
@@ -601,7 +705,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
           !boqSpk.some(r => r.designator.trim() && r.vol > 0 && (r.material > 0 || r.jasa > 0))
         ) {
           e['_form'] =
-            'Lampiran BOQ SPK: tempel dari Excel / unggah file — butuh minimal 1 baris (Designator, Material/Jasa, Vol).';
+            'Lampiran BOQ SPK: tempel dari Excel / unggah file â€” butuh minimal 1 baris (Designator, Material/Jasa, Vol).';
         }
         if (nilaiPekerjaan <= 0) e['f-nilai'] = 'Nilai total pekerjaan harus lebih dari 0.';
         break;
@@ -622,13 +726,13 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
         const totalIf = prelim + termin1 + termin2 + termin3 + retensi + materialStock + lumpsum;
         if (totalIf <= 0)
           e['f-pp-total-if'] =
-            'Total Nilai Pengajuan IF masih 0 — isi Prelim, Termin 1/2/3, Retensi, Material Non Stock & Lumpsum.';
+            'Total Nilai Pengajuan IF masih 0 â€” isi Prelim, Termin 1/2/3, Retensi, Material Non Stock & Lumpsum.';
         break;
       }
       case 'pengajuanPanjar':
         if (nilaiPrelimPanjar <= 0)
           e['_form'] =
-            'Total Nilai panjar masih 0 — pilih komponen yang sudah diisi pada Rincian langkah PP.';
+            'Total Nilai panjar masih 0 â€” pilih komponen yang sudah diisi pada Rincian langkah PP.';
         if (!uploadedFiles.lampiranDasarPekerjaan)
           e['f-panjar-upload'] = 'Unggah Lampiran Dasar Pekerjaan terlebih dahulu.';
         if (jenisPenerima === 'prelim') {
@@ -785,7 +889,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const hapusBarisBoq = (idx: number) =>
     setBoqSpk(prev => (prev.length > 1 ? prev.filter((_, i) => i !== idx) : prev));
 
-  /** Tempel (Ctrl+V) salinan sel BOQ dari Excel — kolom dipisah Tab. */
+  /** Tempel (Ctrl+V) salinan sel BOQ dari Excel â€” kolom dipisah Tab. */
   const tempelBoq = (e: React.ClipboardEvent<HTMLDivElement>) => {
     const teks = e.clipboardData.getData('text/plain');
     if (!teks.trim()) return;
@@ -833,7 +937,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const hapusBarisHarga = (idx: number) =>
     setLampiranHargaRows(prev => (prev.length > 1 ? prev.filter((_, i) => i !== idx) : prev));
 
-  /** Tempel (Ctrl+V) salinan sel dari Excel — kolom dipisah Tab. */
+  /** Tempel (Ctrl+V) salinan sel dari Excel â€” kolom dipisah Tab. */
   const tempelLampiranHarga = (e: React.ClipboardEvent<HTMLDivElement>) => {
     const teks = e.clipboardData.getData('text/plain');
     if (!teks.trim()) return;
@@ -896,8 +1000,8 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
     if (nilaiTotalBoq > 0) {
       setNilaiPekerjaan(nilaiTotalBoq);
     }
-    // Material Non Stock: TIDAK diinput manual — terisi otomatis dari baris Lampiran
-    // BOQ SPK yang memuat material (total = Σ Volume x Harga Satuan per baris).
+    // Material Non Stock: TIDAK diinput manual â€” terisi otomatis dari baris Lampiran
+    // BOQ SPK yang memuat material (total = Î£ Volume x Harga Satuan per baris).
     const totalNonStock = boqSpk
       .filter(r => r.material > 0)
       .reduce((s, r) => s + r.vol * r.jasa, 0);
@@ -1144,10 +1248,17 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const handleSimpan = () => {
     if (!validasiSemuaLangkah()) return;
     onSubmitSuccess(buildPayload() as ProjectSubmission);
+    // Pengajuan resmi sudah tersimpan â€” hapus draft setengah jalan.
+    try {
+      localStorage.removeItem(DRAFT_KEY);
+      setDraftTersedia(false);
+    } catch {
+      /* abaikan kegagalan hapus draft */
+    }
   };
 
   /**
-   * Langkah 6 — Review Dokumen: tampilkan bundel prelim di layar
+   * Langkah 6 â€” Review Dokumen: tampilkan bundel prelim di layar
    * (tanpa unduh) memakai data draft. Tombol Cetak PDF / Ekspor Word
    * sengaja dikunci (`allowDownload={false}`) sampai pengajuan terverifikasi.
    */
@@ -1173,7 +1284,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const titikKurva = titikKurvaSDariPlan(kurvaSPlan);
 
   /**
-   * Tanggal & durasi kerja selalu mengikuti rentang Kurva S (hari pertama →
+   * Tanggal & durasi kerja selalu mengikuti rentang Kurva S (hari pertama â†’
    * terakhir): mulai = awal Kurva S, selesai = akhir, durasi = selisihnya.
    * Bila Kurva S belum diisi, patokan tetap dari tanggal BAKH.
    */
@@ -1187,7 +1298,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
 
   /**
    * Alur Proyek BAKH selalu mengikuti tanggal progres Kurva S. Kolomnya terkunci
-   * di BAKH — satu-satunya cara mengisi/mengubahnya adalah lewat Kurva S.
+   * di BAKH â€” satu-satunya cara mengisi/mengubahnya adalah lewat Kurva S.
    */
   useEffect(() => {
     if (!kurvaSPlan?.entries.length && !kurvaSPlan?.progres.some(p => p.tanggal)) return;
@@ -1243,10 +1354,10 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               </span>
               <span className="block text-[11px] leading-snug text-slate-500">
                 {adaIsi
-                  ? `${kurvaSPlan?.entries.length} item · ${progresTerisi} progres terisi · ${formatRupiah(
+                  ? `${kurvaSPlan?.entries.length} item Â· ${progresTerisi} progres terisi Â· ${formatRupiah(
                       rekapPlan?.totalNilai ?? 0
                     )}`
-                  : 'Tanggal mulai kerja mandor → tanggal tiap progres → item (search) + qty per kolom progres.'}
+                  : 'Tanggal mulai kerja mandor â†’ tanggal tiap progres â†’ item (search) + qty per kolom progres.'}
               </span>
             </span>
           </span>
@@ -1312,8 +1423,8 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                     rentangKurva.awal
                   )} s/d ${formatTanggalIndo(rentangKurva.akhir)} (${
                     rentangKurva.hari
-                  } hari) · Nilai kontrak ${formatRupiah(nilaiPekerjaan)}`
-                : `Isi Kurva S, durasi ikut terhitung otomatis · Nilai kontrak ${formatRupiah(
+                  } hari) Â· Nilai kontrak ${formatRupiah(nilaiPekerjaan)}`
+                : `Isi Kurva S, durasi ikut terhitung otomatis Â· Nilai kontrak ${formatRupiah(
                     nilaiPekerjaan
                   )}`
             }
@@ -1358,7 +1469,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="teal"
               icon={<FileText className="h-4 w-4" />}
               title="Isian Rinci BAKH"
-              caption="Satu kali isi — hasilnya digenerate ke dokumen master (masterpp.docx)."
+              caption="Satu kali isi â€” hasilnya digenerate ke dokumen master (masterpp.docx)."
             >
               <div className="grid grid-cols-1 gap-4 text-xs md:grid-cols-3">
               <TextField
@@ -1366,7 +1477,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 label="No. BAKH"
                 required
                 value={nomorBAKH}
-                placeholder="BAKH/…/09-2026"
+                placeholder="BAKH/â€¦/09-2026"
                 mono
                 error={stepErrors['f-bakh']}
                 onChange={textChange('f-bakh', setNomorBAKH)}
@@ -1381,7 +1492,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 onChange={pick('f-bakh-nama', setBakhNamaPekerjaan)}
                 options={opsiTeks(NAMA_PEKERJAAN_BAKH)}
                 placeholder="Ketik untuk mencari tematis..."
-                hint="Pilihan tetap — daftar bisa diedit di src/db/masterpp.ts."
+                hint="Pilihan tetap â€” daftar bisa diedit di src/db/masterpp.ts."
               />
 
               <TextField
@@ -1495,20 +1606,20 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="emerald"
               icon={<Table2 className="h-4 w-4" />}
               title="Lampiran Harga"
-              caption="Tempel dari Excel atau unggah file — header Negosiasi & Kesepakatan (Material/Jasa) terbaca otomatis."
+              caption="Tempel dari Excel atau unggah file â€” header Negosiasi & Kesepakatan (Material/Jasa) terbaca otomatis."
               right={
                 <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${SECTION_TONE.emerald.badge}`}>
-                  {lampiranHargaRows.length} baris · {formatRupiah(totalHargaLampiran)}
+                  {lampiranHargaRows.length} baris Â· {formatRupiah(totalHargaLampiran)}
                 </span>
               }
             >
-              {/* LAMPILAN HARGA — input manual via search designator */}
+              {/* LAMPILAN HARGA â€” input manual via search designator */}
               <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <h5 className="text-[12px] font-bold text-emerald-900">Input Manual — Designator</h5>
+                    <h5 className="text-[12px] font-bold text-emerald-900">Input Manual â€” Designator</h5>
                     <p className="mt-0.5 text-[10px] leading-snug text-emerald-700">
-                      Cari designator dari master BOQ, isi nilai — tanpa harus tempel / unggah Excel.
+                      Cari designator dari master BOQ, isi nilai â€” tanpa harus tempel / unggah Excel.
                     </p>
                   </div>
                   <button
@@ -1543,7 +1654,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                       containerClassName="md:col-span-3"
                       value={lampiranManualUraian}
                       onChange={e => setLampiranManualUraian(e.target.value)}
-                      hint="Kosongkan — diambil otomatis dari master bila designator ada."
+                      hint="Kosongkan â€” diambil otomatis dari master bila designator ada."
                       hintTone="muted"
                     />
                     <TextField
@@ -1557,7 +1668,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                       containerClassName="md:col-span-2"
                       value={lampiranManualNilai}
                       onChange={e => setLampiranManualNilai(Math.max(0, Number(e.target.value) || 0))}
-                      hint="Material/Jasa — nilai kesepakatan manual."
+                      hint="Material/Jasa â€” nilai kesepakatan manual."
                       hintTone="muted"
                     />
                     <div className="md:col-span-2 flex items-end">
@@ -1574,7 +1685,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 )}
               </div>
 
-              {/* LAMPIRAN HARGA — input ala BOQ (manual) atau unggah Excel */}
+              {/* LAMPIRAN HARGA â€” input ala BOQ (manual) atau unggah Excel */}
               <div>
                 {/* Area tempel: salin sel di Excel (Ctrl+C) lalu tempel (Ctrl+V) di sini */}
                 <div
@@ -1587,7 +1698,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   <p className="text-[11px] leading-snug text-teal-900">
                     <strong>Salin (Ctrl+C) baris dari Excel, lalu klik area ini &amp; tekan Ctrl+V.</strong>{' '}
                     Header <em>Negosiasi (Telkom Akses/Mandor) &amp; Kesepakatan (Material/Jasa)</em>{' '}
-                    terdeteksi otomatis — tidak perlu diketik per baris.
+                    terdeteksi otomatis â€” tidak perlu diketik per baris.
                   </p>
                 </div>
 
@@ -1645,13 +1756,13 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                             {i + 1}
                           </td>
                           <td className="px-2 py-2 font-mono text-slate-800">
-                            {r.designator || <span className="text-slate-400">—</span>}
+                            {r.designator || <span className="text-slate-400">â€”</span>}
                           </td>
                           <td className="whitespace-pre-wrap px-2 py-2 text-slate-700">
-                            {r.uraian || <span className="text-slate-400">—</span>}
+                            {r.uraian || <span className="text-slate-400">â€”</span>}
                           </td>
                           <td className="px-2 py-2 text-slate-600">
-                            {r.sat || <span className="text-slate-400">—</span>}
+                            {r.sat || <span className="text-slate-400">â€”</span>}
                           </td>
                           <td className="border-l border-slate-100 px-2 py-2 text-right tabular-nums text-slate-700">
                             {r.telkomMaterial.toLocaleString('id-ID')}
@@ -1706,9 +1817,9 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   />
                   <p className="text-[10px] text-slate-500">
                     Negosiasi <strong className="text-slate-700">{formatRupiah(totalNegosiasiLampiran)}</strong>
-                    {' · '}
+                    {' Â· '}
                     Kesepakatan <strong className="text-teal-800">{formatRupiah(totalHargaLampiran)}</strong>
-                    {lampiranHargaFile ? ` · Sumber: ${lampiranHargaFile}` : ''}
+                    {lampiranHargaFile ? ` Â· Sumber: ${lampiranHargaFile}` : ''}
                   </p>
                 </div>
 
@@ -1744,7 +1855,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="violet"
               icon={<Clock3 className="h-4 w-4" />}
               title="Alur Proyek"
-              caption="Terkunci — jumlah hari per tahap hanya bisa diisi lewat Kurva S, lalu tersalin otomatis ke sini (totalnya wajib sama dengan jumlah hari kerja)."
+              caption="Terkunci â€” jumlah hari per tahap hanya bisa diisi lewat Kurva S, lalu tersalin otomatis ke sini (totalnya wajib sama dengan jumlah hari kerja)."
               right={
                 <span className="flex flex-wrap items-baseline justify-end gap-1.5">
                   <span
@@ -1754,7 +1865,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                         : 'border-rose-200 bg-rose-50 text-rose-700'
                     }`}
                   >
-                    Σ {totalAlur} hari / {durasiKerjaHari} hari kerja
+                    Î£ {totalAlur} hari / {durasiKerjaHari} hari kerja
                   </span>
                   {!!kurvaSPlan?.entries.length && (
                     <span className="rounded-full border border-teal-100 bg-teal-50 px-2.5 py-0.5 text-[11px] font-bold text-teal-700">
@@ -1765,7 +1876,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               }
             >
 
-              {/* ALUR PROYEK — 5 tahap; Σ hari harus = Jumlah Hari Kerja */}
+              {/* ALUR PROYEK â€” 5 tahap; Î£ hari harus = Jumlah Hari Kerja */}
               <div className="md:col-span-3">
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
                   {TAHAP_ALUR.map((t, idx) => {
@@ -1789,9 +1900,9 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                         error={stepErrors[t.id]}
                         hint={
                           alurProyek[t.key] > 0 && tanggalMulaiKerja
-                            ? `${alurProyek[t.key]} hari · ${formatTanggalIndo(
+                            ? `${alurProyek[t.key]} hari Â· ${formatTanggalIndo(
                                 mulaiTahap
-                              )} – ${formatTanggalIndo(selesaiTahap)}`
+                              )} â€“ ${formatTanggalIndo(selesaiTahap)}`
                             : 'Terisi otomatis dari Kurva S.'
                         }
                         hintTone={alurProyek[t.key] > 0 ? 'accent' : 'muted'}
@@ -1807,8 +1918,8 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   {selisihAlur === 0
                     ? `Sesuai dengan jumlah hari kerja (${durasiKerjaHari} hari).`
                     : selisihAlur < 0
-                      ? `Masih ada ${-selisihAlur} hari yang belum dialokasikan — perbaiki lewat Kurva S.`
-                      : `Melebihi jumlah hari kerja sebanyak ${selisihAlur} hari — perbaiki lewat Kurva S.`}
+                      ? `Masih ada ${-selisihAlur} hari yang belum dialokasikan â€” perbaiki lewat Kurva S.`
+                      : `Melebihi jumlah hari kerja sebanyak ${selisihAlur} hari â€” perbaiki lewat Kurva S.`}
                 </p>
                 <button
                   type="button"
@@ -1826,7 +1937,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="indigo"
               icon={<Users className="h-4 w-4" />}
               title="Jumlah Team FO + Jointer"
-              caption={`1 team FO = ${ORANG_PER_TEAM_FO} orang · 1 team Jointer = ${ORANG_PER_TEAM_JOINTER} orang.`}
+              caption={`1 team FO = ${ORANG_PER_TEAM_FO} orang Â· 1 team Jointer = ${ORANG_PER_TEAM_JOINTER} orang.`}
               right={
                 <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${SECTION_TONE.indigo.badge}`}>
                   {teamFo} FO ({orangFo}) + {teamJoiner} JNT ({orangJoiner}) ={' '}
@@ -1847,7 +1958,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                     value={teamFo}
                     error={stepErrors['f-team-fo']}
                     onChange={numChange('f-team-fo', setTeamFo)}
-                    hint={`1 team = ${ORANG_PER_TEAM_FO} orang → ${orangFo} orang`}
+                    hint={`1 team = ${ORANG_PER_TEAM_FO} orang â†’ ${orangFo} orang`}
                   />
                   <span
                     aria-hidden="true"
@@ -1867,7 +1978,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                     value={teamJoiner}
                     error={stepErrors['f-team-joiner']}
                     onChange={numChange('f-team-joiner', setTeamJoiner)}
-                    hint={`1 team = ${ORANG_PER_TEAM_JOINTER} orang → ${orangJoiner} orang`}
+                    hint={`1 team = ${ORANG_PER_TEAM_JOINTER} orang â†’ ${orangJoiner} orang`}
                   />
                 </div>
             </SectionPanel>
@@ -1877,7 +1988,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="rose"
               icon={<Users className="h-4 w-4" />}
               title="Personel Penanggung Jawab"
-              caption="GM, PM, Mandor & Project Admin — menempel di seluruh dokumen prelim."
+              caption="GM, PM, Mandor & Project Admin â€” menempel di seluruh dokumen prelim."
             >
               {/* INPUT GM / PM / MANDOR */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1935,7 +2046,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="sky"
               icon={<Building2 className="h-4 w-4" />}
               title="Data Kontrak & Identitas Pekerjaan"
-              caption="Tgl Surat, Lokasi, Witel & Mandor mengikuti BAKH — hanya No. Leonita, BOQ dan Tim Lapangan yang diisi ulang di sini."
+              caption="Tgl Surat, Lokasi, Witel & Mandor mengikuti BAKH â€” hanya No. Leonita, BOQ dan Tim Lapangan yang diisi ulang di sini."
             >
               <div className="grid grid-cols-1 gap-4 text-xs md:grid-cols-3">
               <TextField
@@ -1944,14 +2055,14 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 type="date"
                 value={tanggalSPK}
                 readOnly
-                hint={`Sama dengan Tgl Surat BAKH — ${formatTanggalIndo(tanggalSPK)}`}
+                hint={`Sama dengan Tgl Surat BAKH â€” ${formatTanggalIndo(tanggalSPK)}`}
                 hintTone="accent"
               />
               <TextField
                 id="f-no-leonita"
                 label="No. Leonita"
                 required
-                placeholder="cth. 07649/LG.000/…"
+                placeholder="cth. 07649/LG.000/â€¦"
                 mono
                 value={noLeonita}
                 error={stepErrors['f-no-leonita']}
@@ -1991,7 +2102,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   error={stepErrors['f-mandor']}
                   onChange={pick('f-mandor', setMandor)}
                   options={opsiOrang(MANDOR_LIST)}
-                  hint={mandor ? `Sama dengan BAKH · ${hintOrang(MANDOR_LIST, mandor)}` : 'Sama dengan BAKH.'}
+                  hint={mandor ? `Sama dengan BAKH Â· ${hintOrang(MANDOR_LIST, mandor)}` : 'Sama dengan BAKH.'}
                 />
                 <SearchSelectField
                   id="f-waspang"
@@ -2034,7 +2145,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                     clearFieldError('f-tgl-mulai');
                     ubahMulai(e.target.value);
                   }}
-                  hint={`${formatTanggalIndo(tanggalMulaiKerja)} — H+1 setelah Tgl Surat BAKH.`}
+                  hint={`${formatTanggalIndo(tanggalMulaiKerja)} â€” H+1 setelah Tgl Surat BAKH.`}
                   hintTone="accent"
                 />
                 <div className="md:col-span-2">
@@ -2068,7 +2179,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="emerald"
               icon={<Table2 className="h-4 w-4" />}
               title="Lampiran BOQ SPK"
-              caption="No | Designator | Material | Jasa | Vol | Jumlah Material | Jumlah Jasa | Total Harga — tempel langsung dari Excel atau unggah file; Jumlah Jasa & Material masuk ke nilai SPK."
+              caption="No | Designator | Material | Jasa | Vol | Jumlah Material | Jumlah Jasa | Total Harga â€” tempel langsung dari Excel atau unggah file; Jumlah Jasa & Material masuk ke nilai SPK."
             >
 
               {(stepErrors['_form'] || boqErr) && (
@@ -2091,7 +2202,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 <ClipboardPaste className="h-5 w-5 shrink-0 text-teal-600" />
                 <p className="text-[11px] leading-snug text-teal-900">
                   <strong>Salin (Ctrl+C) baris BOQ dari Excel, lalu klik area ini &amp; tekan Ctrl+V.</strong>{' '}
-                  Kolom <em>Designator | Material | Jasa | Vol</em> terdeteksi otomatis — tidak perlu
+                  Kolom <em>Designator | Material | Jasa | Vol</em> terdeteksi otomatis â€” tidak perlu
                   diketik per baris.
                 </p>
               </div>
@@ -2122,7 +2233,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                             {i + 1}
                           </td>
                           <td className="px-2 py-2 font-mono text-slate-800">
-                            {r.designator || <span className="text-slate-400">—</span>}
+                            {r.designator || <span className="text-slate-400">â€”</span>}
                           </td>
                           <td className="px-2 py-2 text-right tabular-nums text-slate-700">
                             {formatRupiah(r.material)}
@@ -2195,19 +2306,19 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 />
                 <p className="text-[10px] text-slate-500">
                   {boqSumber
-                    ? `Sumber: ${boqSumber} — ${boqSpk.length} baris terbaca.`
+                    ? `Sumber: ${boqSumber} â€” ${boqSpk.length} baris terbaca.`
                     : boqTerisi
-                      ? 'Baris terbaca — nilai total mengikuti BOQ.'
-                      : 'Tempel dari Excel / upload file — minimal 1 baris Designator + Vol (Material/Jasa).'}
+                      ? 'Baris terbaca â€” nilai total mengikuti BOQ.'
+                      : 'Tempel dari Excel / upload file â€” minimal 1 baris Designator + Vol (Material/Jasa).'}
                 </p>
               </div>
 
               <div className="mt-3 grid grid-cols-1 gap-3 text-xs md:grid-cols-3">
-                <InfoBox title="Nilai Jasa" value={formatRupiah(totalJasaBoq)} hint="Σ Jumlah Jasa" />
+                <InfoBox title="Nilai Jasa" value={formatRupiah(totalJasaBoq)} hint="Î£ Jumlah Jasa" />
                 <InfoBox
                   title="Nilai Material"
                   value={formatRupiah(totalMaterialBoq)}
-                  hint="Σ Jumlah Material (nonstock)"
+                  hint="Î£ Jumlah Material (nonstock)"
                 />
                 <InfoBox
                   title="Nilai Total di SPK"
@@ -2227,7 +2338,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   value={nilaiPekerjaan}
                   error={stepErrors['f-nilai']}
                   onChange={numChange('f-nilai', handleNilaiPekerjaanChange)}
-                  hint={`Otomatis dari Lampiran BOQ SPK — setara ${formatRupiah(nilaiPekerjaan)}`}
+                  hint={`Otomatis dari Lampiran BOQ SPK â€” setara ${formatRupiah(nilaiPekerjaan)}`}
                   hintTone="accent"
                 />
               </div>
@@ -2238,7 +2349,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="amber"
               icon={<DollarSign className="h-4 w-4" />}
               title="2. Rincian Kebutuhan Anggaran Material Non Stock"
-              caption="(dapat dibeli oleh Mandor/TA, diisi sesuai kebutuhan) — terisi otomatis dari baris Lampiran BOQ SPK yang memuat material."
+              caption="(dapat dibeli oleh Mandor/TA, diisi sesuai kebutuhan) â€” terisi otomatis dari baris Lampiran BOQ SPK yang memuat material."
             >
 
                 {(() => {
@@ -2251,7 +2362,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   if (!barisNonStock.length) {
                     return (
                       <p className="mt-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-3 py-5 text-center text-[11px] font-medium text-slate-400">
-                        Belum ada material non stock — kolom Material pada Lampiran BOQ SPK masih 0
+                        Belum ada material non stock â€” kolom Material pada Lampiran BOQ SPK masih 0
                         di semua baris.
                       </p>
                     );
@@ -2285,7 +2396,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                                   {i + 1}
                                 </td>
                                 <td className="px-2 py-2 font-mono text-slate-800">
-                                  {r.designator || <span className="text-slate-400">—</span>}
+                                  {r.designator || <span className="text-slate-400">â€”</span>}
                                 </td>
                                 <td className="px-2 py-2 text-right tabular-nums text-slate-700">
                                   {r.vol}
@@ -2348,7 +2459,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="sky"
               icon={<Calendar className="h-4 w-4" />}
               title="Turunan Tanggal SOP"
-              caption="Dihitung otomatis dari Tgl Surat BAKH — tidak perlu diisi manual."
+              caption="Dihitung otomatis dari Tgl Surat BAKH â€” tidak perlu diisi manual."
             >
               <div className="grid grid-cols-2 gap-3 text-xs md:grid-cols-4">
                 <InfoBox title="Tgl Surat BAKH" value={formatTanggalIndo(tanggalBAKH)} hint="= Tgl Surat SPK" />
@@ -2372,7 +2483,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="amber"
               icon={<DollarSign className="h-4 w-4" />}
               title="Data PP (Permintaan Pembayaran)"
-              caption="Nama Kegiatan, Id Project, Total BOQ & personel mengikuti BAKH/SPK — yang diinput: Tanggal Penggunaan, Jenis/Nomor Disposisi (IHLD/NDE) dan rincian Termin."
+              caption="Nama Kegiatan, Id Project, Total BOQ & personel mengikuti BAKH/SPK â€” yang diinput: Tanggal Penggunaan, Jenis/Nomor Disposisi (IHLD/NDE) dan rincian Termin."
             >
               <div className="grid grid-cols-1 gap-4 text-xs md:grid-cols-3">
               <TextField
@@ -2400,7 +2511,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 readOnly
                 prefix="Rp"
                 value={nilaiTotalBoq}
-                hint={`Sumber: BOQ DRM — ${formatRupiah(nilaiTotalBoq)}`}
+                hint={`Sumber: BOQ DRM â€” ${formatRupiah(nilaiTotalBoq)}`}
                 hintTone="accent"
               />
               <TextField
@@ -2409,7 +2520,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                 readOnly
                 prefix="Rp"
                 value={totalIf}
-                hint={`${formatRupiah(totalIf)} — total keseluruhan (Prelim + Termin 1/2/3 + Retensi + Material Non Stock + Lumpsum)`}
+                hint={`${formatRupiah(totalIf)} â€” total keseluruhan (Prelim + Termin 1/2/3 + Retensi + Material Non Stock + Lumpsum)`}
                 hintTone={totalIf > 0 ? 'success' : 'muted'}
                 error={stepErrors['f-pp-total-if']}
               />
@@ -2435,7 +2546,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   setJenisDisposisi(e.target.value as '' | 'IHLD' | 'NDE');
                 }}
               >
-                <option value="">— Pilih IHLD / NDE —</option>
+                <option value="">â€” Pilih IHLD / NDE â€”</option>
                 <option value="IHLD">IHLD</option>
                 <option value="NDE">NDE</option>
               </SelectField>
@@ -2473,7 +2584,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   Rincian Total Nilai Pengajuan IF Project
                 </span>
                 <span className="rounded-full border border-teal-100 bg-teal-50 px-2.5 py-0.5 text-[11px] font-bold text-teal-800">
-                  Σ {formatRupiah(totalIf)}
+                  Î£ {formatRupiah(totalIf)}
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-4 text-xs sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-7">
@@ -2656,7 +2767,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               <legend className="px-1 text-[12px] font-semibold text-slate-700">
                 Total Nilai
                 <span className="ml-2 text-[11px] font-normal text-slate-500">
-                  (boleh pilih lebih dari satu — mis. Termin 1 + Termin 2)
+                  (boleh pilih lebih dari satu â€” mis. Termin 1 + Termin 2)
                 </span>
               </legend>
               <div className="mt-1 flex flex-wrap items-center gap-x-6 gap-y-2.5">
@@ -2707,7 +2818,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               tone="violet"
               icon={<Users className="h-4 w-4" />}
               title="Penerima Panjar Proyek"
-              caption="Pilih salah satu — Prelim diisi manual atau Mandor diambil dari database."
+              caption="Pilih salah satu â€” Prelim diisi manual atau Mandor diambil dari database."
             >
 
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2.5">
@@ -2719,7 +2830,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                     onChange={() => setJenisPenerima('prelim')}
                     className="h-4 w-4 border-slate-300 text-teal-700 focus:ring-2 focus:ring-teal-600/30"
                   />
-                  Prelim — input manual
+                  Prelim â€” input manual
                 </label>
                 <label className="inline-flex cursor-pointer items-center gap-2 text-[12px] font-bold text-slate-700">
                   <input
@@ -2729,7 +2840,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                     onChange={() => setJenisPenerima('mandor')}
                     className="h-4 w-4 border-slate-300 text-teal-700 focus:ring-2 focus:ring-teal-600/30"
                   />
-                  Mandor — ambil dari database
+                  Mandor â€” ambil dari database
                 </label>
               </div>
 
@@ -2766,7 +2877,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                     <div className="mb-2 text-[12px] font-semibold text-slate-700">
                       Upload Dokumen Penerima{' '}
                       <span className="font-normal text-slate-500">
-                        (KTP, NPWP & buku tabungan — unggah terpisah)
+                        (KTP, NPWP & buku tabungan â€” unggah terpisah)
                       </span>
                     </div>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -2804,7 +2915,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                       id="f-panjar-mandor-nama"
                       label="Nama Mandor"
                       readOnly
-                      value={mandor || '—'}
+                      value={mandor || 'â€”'}
                       hint="Diambil dari data mandor (langkah BAKH)."
                       error={stepErrors['f-panjar-mandor']}
                     />
@@ -2812,7 +2923,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                       id="f-panjar-mandor-hp"
                       label="No. HP Mandor"
                       readOnly
-                      value={dataMandor?.noHp || '—'}
+                      value={dataMandor?.noHp || 'â€”'}
                     />
                     <TextField id="f-panjar-mandor-jabatan" label="Jabatan" readOnly value="MANDOR" />
                   </div>
@@ -2871,7 +2982,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               id="f-if"
               label="Nomor Disposisi Imprest Fund (IF)"
               value={nomorIF}
-              placeholder="IF-DISB-2604-…"
+              placeholder="IF-DISB-2604-â€¦"
               mono
               error={stepErrors['f-if']}
               onChange={textChange('f-if', setNomorIF)}
@@ -2894,13 +3005,13 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
 
       // ---------- h. GRAVIK CURVA S ----------
       case 'kurvaS': {
-        // Rincian Total Nilai Pengajuan IF Project (langkah PP) — sumber nilai
+        // Rincian Total Nilai Pengajuan IF Project (langkah PP) â€” sumber nilai
         // Perizinan (Preliminary) untuk BOP Cost Structure (langkah Jadwal Pelaksanaan).
         const totalIf =
           prelim + termin1 + termin2 + termin3 + retensi + materialStock + lumpsum;
         return (
           <div className="space-y-4">
-            {/* 6. Perkiraan Margin yang dilaksanakan — admin isi Penilaian, % otomatis / Revenue. */}
+            {/* 6. Perkiraan Margin yang dilaksanakan â€” admin isi Penilaian, % otomatis / Revenue. */}
             <PerkiraanMargin
               kemitraan={marginKemitraan}
               swakelola={marginSwakelola}
@@ -2909,7 +3020,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               }
             />
 
-            {/* Rincian Kebutuhan BOP Cost Structure — terpisah dari isian Kurva S. */}
+            {/* Rincian Kebutuhan BOP Cost Structure â€” terpisah dari isian Kurva S. */}
             <button
               type="button"
               onClick={() => setShowBopModal(true)}
@@ -2931,9 +3042,9 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   </span>
                   <span className="block text-[11px] leading-snug text-slate-500">
                     {bopRows.length
-                      ? `${bopRows.length} material · ${formatRupiah(
+                      ? `${bopRows.length} material Â· ${formatRupiah(
                           bopRows.reduce((s, r) => s + r.vol * r.hargaSatuan, 0)
-                        )} · Nilai Perizinan ${formatRupiah(nilaiPerizinan)} · Risiko ${manajemenRisiko || '—'}`
+                        )} Â· Nilai Perizinan ${formatRupiah(nilaiPerizinan)} Â· Risiko ${manajemenRisiko || 'â€”'}`
                       : 'Material, volume, satuan & harga satuan diambil dari BOQ swakelola (berkas COST STRUCTURE).'}
                   </span>
                 </span>
@@ -3009,7 +3120,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
         <div className="flex items-start gap-2 rounded-xl bg-indigo-50 border border-indigo-200 px-3 py-2.5">
           <Info className="w-4 h-4 text-indigo-600 shrink-0 mt-px" />
           <p className="text-[11px] text-indigo-900 leading-relaxed">
-            <strong>Excel dibaca sistem.</strong> Berkas yang diunggah dibaca lewat SheetJS — baris,
+            <strong>Excel dibaca sistem.</strong> Berkas yang diunggah dibaca lewat SheetJS â€” baris,
             jumlah item, dan total nilai dibaca lalu digenerate ke dokumen BOQ DRM.
           </p>
         </div>
@@ -3042,7 +3153,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
           <div>
             <h2 className="text-lg font-bold text-slate-900">Input Pengajuan Prelim Proyek</h2>
             <p className="text-xs text-slate-500">
-              Wizard {RAIL_STEPS.length} langkah — Informasi Pekerjaan (dasar pekerjaan), BOQ,
+              Wizard {RAIL_STEPS.length} langkah â€” Informasi Pekerjaan (dasar pekerjaan), BOQ,
               Struktur Organisasi &amp; Tim Proyek, Jadwal Pelaksanaan Proyek, Pengajuan Panjar
               otomatis, lalu review dokumen sebelum disimpan
             </p>
@@ -3074,7 +3185,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
       )}
 
       {isReviewStep ? (
-        /* ============ Langkah 6 — Review Dokumen ============ */
+        /* ============ Langkah 6 â€” Review Dokumen ============ */
         <section aria-labelledby="review-title" className="space-y-4">
           <header className="pb-4 border-b border-slate-100">
             <div className="flex flex-wrap items-center gap-2">
@@ -3102,7 +3213,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
             </h2>
             <p className="mt-0.5 text-xs text-slate-500 leading-relaxed">
               Seluruh isian sudah dirangkum menjadi bundel dokumen (BAKH, SPK, PP, Kurva S,
-              Pengajuan Panjar &amp; IF). Cek hasilnya langsung di layar — tidak perlu unduh.
+              Pengajuan Panjar &amp; IF). Cek hasilnya langsung di layar â€” tidak perlu unduh.
             </p>
           </header>
 
@@ -3137,7 +3248,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                           ok ? 'text-slate-500' : 'text-amber-700'
                         }`}
                       >
-                        {ok ? 'Lengkap — klik untuk ubah' : pesan}
+                        {ok ? 'Lengkap â€” klik untuk ubah' : pesan}
                       </span>
                     </span>
                   </button>
@@ -3205,16 +3316,28 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
           def={def!}
           status={statusOf(def!)}
           actions={
-            <div className="w-full flex items-center justify-between gap-3 pt-3 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => goto(step - 1)}
-                disabled={step === 0}
-                className="inline-flex items-center gap-1.5 min-h-[44px] px-5 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Sebelumnya
-              </button>
+            <div className="w-full flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => goto(step - 1)}
+                  disabled={step === 0}
+                  className="inline-flex items-center gap-1.5 min-h-[44px] px-5 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Sebelumnya
+                </button>
+
+                {/* Simpan Draft â€” isian setengah jalan ke penyimpanan lokal browser. */}
+                <button
+                  type="button"
+                  onClick={simpanDraft}
+                  className="inline-flex items-center gap-1.5 min-h-[44px] px-5 rounded-full text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  Simpan Draft
+                </button>
+              </div>
 
               {step === REVIEW_IDX - 1 ? (
                 <button
@@ -3255,7 +3378,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
         </p>
       </div>
 
-      {/* Planner Kurva S — dirender di root agar bisa dibuka dari langkah mana pun */}
+      {/* Planner Kurva S â€” dirender di root agar bisa dibuka dari langkah mana pun */}
       {showKurvaPlanner && (
         <KurvaSPlannerModal
           plan={kurvaSPlan}
@@ -3285,7 +3408,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
         />
       )}
 
-      {/* Pratinjau dokumen (tanpa unduh) — dikunci sampai verifikasi */}
+      {/* Pratinjau dokumen (tanpa unduh) â€” dikunci sampai verifikasi */}
       {reviewSub && (
         <PrintDocumentModal
           submission={reviewSub}
