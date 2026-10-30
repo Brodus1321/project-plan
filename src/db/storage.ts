@@ -1110,6 +1110,11 @@ export const db = {
         return INITIAL_SUBMISSIONS;
       }
       const list: ProjectSubmission[] = JSON.parse(data);
+      // Jika list sengaja dikosongkan (mis. setelah "Hapus Semua Data Antrian"),
+      // jangan diisi ulang dengan data demo.
+      if (list.length === 0) {
+        return [];
+      }
       // Pelengkap seed: tambahkan pengajuan contoh yang belum ada, tanpa
       // menyentuh data yang sudah tersimpan (aman dijalankan berulang).
       const sudahAda = new Set(list.map(s => s.id));
