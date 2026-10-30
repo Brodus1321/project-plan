@@ -524,7 +524,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
     switch (d.key) {
       case 'bakh':
         if (!nomorBAKH.trim()) e['f-bakh'] = 'Nomor BAKH wajib diisi.';
-        if (!bakhNamaPekerjaan.trim()) e['f-bakh-nama'] = 'Pilih nama pekerjaan.';
+        if (!bakhNamaPekerjaan.trim()) e['f-bakh-nama'] = 'Pilih tematis.';
         if (!lokasiProyek.trim()) e['f-bakh-lokasi'] = 'Lokasi wajib diisi.';
         if (!bakhWitel.trim()) e['f-witel'] = 'Witel wajib diisi.';
         if (!bakhPid.trim()) e['f-pid'] = 'PID SAP wajib diisi.';
@@ -1373,14 +1373,14 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
               />
               <SearchSelectField
                 id="f-bakh-nama"
-                label="Nama Pekerjaan"
+                label="Tematik"
                 required
                 containerClassName="md:col-span-2"
                 value={bakhNamaPekerjaan}
                 error={stepErrors['f-bakh-nama']}
                 onChange={pick('f-bakh-nama', setBakhNamaPekerjaan)}
                 options={opsiTeks(NAMA_PEKERJAAN_BAKH)}
-                placeholder="Ketik untuk mencari nama pekerjaan..."
+                placeholder="Ketik untuk mencari tematis..."
                 hint="Pilihan tetap — daftar bisa diedit di src/db/masterpp.ts."
               />
 
