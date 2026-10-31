@@ -46,6 +46,7 @@ import {
   cariRabItem,
 } from '../db/lampiranBakhMaster';
 import { BOQ_SWAKELOLA_ITEMS } from '../db/boqSwakelola';
+import { cariRabTA, cariRabMandor } from '../db/lampiranBakhData';
 import {
   BERKAS_PRELIM_WIZARD,
   BerkasDef,
@@ -1016,6 +1017,33 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
     setLampiranHargaErr(null);
   };
 
+  /** Auto-populate Uraian, Sat, & harga dari RAB TA & MANDOR ketika Designator diinput di tabel. */
+  const autoPopulateDariRAB = (row: LampiranHargaRow, designator: string): LampiranHargaRow => {
+    const upper = designator.trim().toUpperCase();
+    const itemTA = cariRabTA(upper);
+    const itemMandor = cariRabMandor(upper);
+    const item = itemTA || itemMandor;
+
+    if (!item) {
+      return { ...row, designator: upper };
+    }
+
+    // Kesepakatan default = Negosiasi Telkom Akses (Material + Jasa)
+    return {
+      ...row,
+      designator: upper,
+      uraian: item.uraian,
+      sat: item.sat,
+      telkomMaterial: itemTA?.material || 0,
+      telkomJasa: itemTA?.jasa || 0,
+      mandorMaterial: itemMandor?.material || 0,
+      mandorJasa: itemMandor?.jasa || 0,
+      ksepMaterial: itemTA?.material || 0,
+      ksepJasa: itemTA?.jasa || 0,
+      volume: row.volume || 0,
+    };
+  };
+
   // NILAI TOTAL SPK = Nilai Jasa + Nilai Material (ikut berubah saat BOQ diubah).
   useEffect(() => {
     if (nilaiTotalBoq > 0) {
@@ -1782,8 +1810,19 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                           <td className="px-2 py-2 text-center font-bold tabular-nums text-slate-400">
                             {i + 1}
                           </td>
-                          <td className="px-2 py-2 font-mono text-slate-800">
-                            {r.designator || <span className="text-slate-400">â€”</span>}
+                          <td className="px-2 py-2">
+                            <input
+                              type="text"
+                              placeholder="Designator"
+                              value={r.designator || ''}
+                              onChange={(e) => {
+                                const updated = lampiranHargaRows.map((row: LampiranHargaRow, idx: number) =>
+                                  idx === i ? autoPopulateDariRAB(row, e.target.value) : row
+                                );
+                                setLampiranHargaRows(updated);
+                              }}
+                              className="w-32 rounded border border-slate-200 px-1.5 py-1 font-mono text-[10px] font-bold text-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
+                            />
                           </td>
                           <td className="whitespace-pre-wrap px-2 py-2 text-slate-700">
                             {r.uraian || <span className="text-slate-400">â€”</span>}
