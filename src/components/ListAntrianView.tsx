@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ProjectSubmission } from '../types';
-import { formatRupiah, formatTanggalIndo } from '../db/storage';
+import { formatRupiah, formatTanggalIndo, db } from '../db/storage';
 import { berkasLabel, berkasLabelByKey, BERKAS_PRELIM } from '../db/berkas';
 import { KurvaSChart } from './KurvaSChart';
 import { 
@@ -33,6 +33,18 @@ interface ListAntrianViewProps {
   onQuickSimulateEviden: (subId: string) => void;
 }
 
+/** Label & warna badge status pengajuan untuk tabel antrian. */
+const STATUS_BADGE: Record<ProjectSubmission['status'], { label: string; cls: string }> = {
+  DRAFT: { label: 'Draft', cls: 'bg-violet-100 text-violet-800 border-violet-200' },
+  MENUNGGU_VERIFIKASI: { label: 'Menunggu Verifikasi', cls: 'bg-sky-100 text-sky-800 border-sky-200' },
+  REVISI_ADMIN: { label: 'Revisi Admin', cls: 'bg-rose-100 text-rose-700 border-rose-200' },
+  VERIFIKASI_ADMIN: { label: 'Verifikasi Admin', cls: 'bg-indigo-100 text-indigo-800 border-indigo-200' },
+  KIRIM_DIGITAL: { label: 'Kirim Digital', cls: 'bg-teal-100 text-teal-800 border-teal-200' },
+  MENUNGGU_EVIDEN: { label: 'Menunggu Eviden', cls: 'bg-amber-100 text-amber-800 border-amber-200' },
+  SIAP_CETAK: { label: 'Siap Cetak', cls: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
+  SELESAI: { label: 'Selesai', cls: 'bg-slate-200 text-slate-700 border-slate-300' },
+};
+
 export const ListAntrianView: React.FC<ListAntrianViewProps> = ({
   submissions,
   onOpenEvidenModal,
@@ -40,9 +52,15 @@ export const ListAntrianView: React.FC<ListAntrianViewProps> = ({
   onOpenKurvaModal,
   onQuickSimulateEviden,
 }) => {
-  const [filterTab, setFilterTab] = useState<'ALL' | 'SIAP_CETAK' | 'MENUNGGU_EVIDEN' | 'KIRIM_DIGITAL' | 'SELESAI'>('ALL');
+  const [filterTab, setFilterTab] = useState<'ALL' | 'SIAP_CETAK' | 'MENUNGGU_EVIDEN' | 'KIRIM_DIGITAL' | 'SELESAI' | 'DRAFT'>('ALL');
   const [searchLocal, setSearchLocal] = useState('');
   const [selectedSubDetail, setSelectedSubDetail] = useState<ProjectSubmission | null>(submissions[0] || null);
+  const [draftMetadata, setDraftMetadata] = useState<Array<{ id: string; nomorSPK: string; namaPekerjaan: string; createdAt: string; updatedAt: string; status: 'DRAFT' }>>([]);
+
+  // Load draft metadata
+  useEffect(() => {
+    setDraftMetadata(db.getDraftMetadata());
+  }, []);
 
   // Panel detail harus tetap terisi walau komponen ter-mount saat data masih
   // kosong (render pertama) — pilih pengajuan pertama begitu data tersedia.
@@ -65,20 +83,47 @@ export const ListAntrianView: React.FC<ListAntrianViewProps> = ({
     return docs?.[key]?.fileName ?? docs?.ktpNpwpBukuRekening?.fileName ?? '';
   };
 
-  const filteredList = submissions.filter(sub => {
+  // Convert draft metadata ke format display
+  interface DraftMeta {
+    id: string;
+    nomorSPK: string;
+    namaPekerjaan: string;
+    createdAt: string;
+    updatedAt: string;
+    status: 'DRAFT';
+  }
+  type AntrianItem =
+    | (ProjectSubmission & { _isDraft: false })
+    | (DraftMeta & { _isDraft: true });
+
+  const draftItems: AntrianItem[] = draftMetadata.map(d => ({
+    ...d,
+    _isDraft: true,
+  }));
+
+  // Combine submissions + drafts
+  const allItems: AntrianItem[] = [
+    ...draftItems,
+    ...submissions.map(s => ({ ...s, _isDraft: false } as ProjectSubmission & { _isDraft: false })),
+  ];
+
+  const filteredList = allItems.filter(item => {
     const matchFilter = 
       filterTab === 'ALL' ? true :
-      filterTab === 'SIAP_CETAK' ? !sub.isLockedForPrint :
-      filterTab === 'MENUNGGU_EVIDEN' ? sub.isLockedForPrint :
-      sub.status === filterTab;
+      filterTab === 'DRAFT' ? item._isDraft :
+      !item._isDraft && (
+        filterTab === 'SIAP_CETAK' ? !item.isLockedForPrint :
+        filterTab === 'MENUNGGU_EVIDEN' ? item.isLockedForPrint :
+        item.status === filterTab
+      );
 
     const q = searchLocal.toLowerCase();
     const matchSearch = searchLocal === '' ||
-      (sub.nomorSPK ?? '').toLowerCase().includes(q) ||
-      (sub.nomorPP ?? '').toLowerCase().includes(q) ||
-      (sub.namaPekerjaan ?? '').toLowerCase().includes(q) ||
-      (sub.namaPenerimaPrelim ?? '').toLowerCase().includes(q) ||
-      (sub.vendorPelaksana ?? '').toLowerCase().includes(q);
+      (item.nomorSPK ?? '').toLowerCase().includes(q) ||
+      (item.namaPekerjaan ?? '').toLowerCase().includes(q) ||
+      (!item._isDraft && ((item.nomorPP ?? '').toLowerCase().includes(q) ||
+        (item.namaPenerimaPrelim ?? '').toLowerCase().includes(q) ||
+        (item.vendorPelaksana ?? '').toLowerCase().includes(q)));
 
     return matchFilter && matchSearch;
   });
@@ -109,7 +154,19 @@ export const ListAntrianView: React.FC<ListAntrianViewProps> = ({
                 : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
             }`}
           >
-            Semua Antrian ({submissions.length})
+            Semua Antrian ({allItems.length})
+          </button>
+
+          <button
+            onClick={() => setFilterTab('DRAFT')}
+            className={`px-3 py-1.5 rounded-full font-semibold transition-all flex items-center gap-1.5 ${
+              filterTab === 'DRAFT'
+                ? 'bg-violet-700 text-white shadow-sm'
+                : 'bg-violet-50 hover:bg-violet-100 text-violet-800'
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>Draft ({draftMetadata.length})</span>
           </button>
 
           <button
@@ -189,6 +246,42 @@ export const ListAntrianView: React.FC<ListAntrianViewProps> = ({
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredList.map(sub => {
+                // ---- Baris khusus DRAFT ----
+                if (sub._isDraft) {
+                  return (
+                    <tr
+                      key={sub.id}
+                      className="bg-violet-50/40 hover:bg-violet-50/70 transition-colors"
+                    >
+                      {/* SPK & status */}
+                      <td className="py-3.5 px-4">
+                        <div className="font-bold text-slate-900 font-mono">{sub.nomorSPK}</div>
+                        <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-violet-800 bg-violet-100 border border-violet-200 px-2 py-0.5 rounded-full">
+                          <FileText className="w-3 h-3" />
+                          DRAFT
+                        </span>
+                      </td>
+
+                      {/* Proyek */}
+                      <td className="py-3.5 px-4 max-w-[240px]">
+                        <div className="font-semibold text-slate-800 line-clamp-1" title={sub.namaPekerjaan}>
+                          {sub.namaPekerjaan}
+                        </div>
+                        <div className="text-[10px] text-violet-600 font-medium mt-0.5">
+                          Draft tersimpan {formatTanggalIndo(sub.updatedAt.slice(0, 10))} — belum disubmit
+                        </div>
+                      </td>
+
+                      {/* Kolom lain belum ada datanya */}
+                      <td className="py-3.5 px-4 text-slate-300 text-center" colSpan={5}>
+                        <span className="text-[11px] italic">
+                          Lanjutkan input di menu &ldquo;Input Pengajuan Prelim Proyek&rdquo; untuk submit.
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                }
+
                 const hasEvidenTransfer = !!(sub.dokumen.buktiTransferTA?.fileName);
                 const hasEvidenST = !!(sub.dokumen.evidenSerahTerimaPrelim?.fileName);
                 const isSelected = selectedSubDetail?.id === sub.id;
@@ -206,6 +299,9 @@ export const ListAntrianView: React.FC<ListAntrianViewProps> = ({
                       <div className="font-bold text-slate-900 font-mono">{sub.nomorSPK}</div>
                       <div className="text-[11px] text-teal-700 font-mono mt-0.5">{sub.nomorPP}</div>
                       <span className="text-[10px] text-slate-400 block mt-0.5">{sub.id}</span>
+                      <span className={`mt-1 inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${STATUS_BADGE[sub.status].cls}`}>
+                        {STATUS_BADGE[sub.status].label}
+                      </span>
                     </td>
 
                     {/* Proyek & Vendor */}

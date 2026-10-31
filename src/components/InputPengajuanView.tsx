@@ -26,6 +26,7 @@ import {
   rentangKurvaSDariPlan,
   alurProyekDariKurvaS,
   formatTanggalIndo,
+  db,
 } from '../db/storage';
 import {
   ADMIN_LIST,
@@ -465,6 +466,8 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
     };
     try {
       localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+      // Simpan draft metadata untuk tampil di list antrian
+      db.saveDraftMetadata(nomorSPK, namaPekerjaan);
     } catch {
       /* abaikan kegagalan penyimpanan draft */
     }
@@ -475,6 +478,8 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const hapusDraft = () => {
     try {
       localStorage.removeItem(DRAFT_KEY);
+      // Hapus draft metadata dari list antrian
+      db.deleteDraftMetadata(nomorSPK);
       setDraftTersedia(false);
     } catch {
       /* abaikan kegagalan hapus draft */
@@ -1258,9 +1263,11 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   const handleSimpan = () => {
     if (!validasiSemuaLangkah()) return;
     onSubmitSuccess(buildPayload() as ProjectSubmission);
-    // Pengajuan resmi sudah tersimpan â€” hapus draft setengah jalan.
+    // Pengajuan resmi sudah tersimpan — hapus draft setengah jalan.
     try {
       localStorage.removeItem(DRAFT_KEY);
+      // Metadata draft juga dihapus dari list antrian.
+      db.deleteDraftMetadata(nomorSPK);
       setDraftTersedia(false);
     } catch {
       /* abaikan kegagalan hapus draft */

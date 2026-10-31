@@ -5,6 +5,7 @@ const STORAGE_KEYS = {
   SUBMISSIONS: 'prelim_submissions_v1',
   AMANDEMEN: 'prelim_amandemen_v1',
   IF_ENTRIES: 'prelim_if_entries_v1',
+  DRAFT_METADATA: 'prelim_draft_metadata_v1',
 };
 
 // Muat data contoh/demo saat pertama kali buka aplikasi?
@@ -1373,5 +1374,46 @@ export const db = {
     localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(SEED_DEMO_DATA ? INITIAL_SUBMISSIONS : []));
     localStorage.setItem(STORAGE_KEYS.AMANDEMEN, JSON.stringify(SEED_DEMO_DATA ? INITIAL_AMANDEMEN : []));
     localStorage.setItem(STORAGE_KEYS.IF_ENTRIES, JSON.stringify(SEED_DEMO_DATA ? INITIAL_IF_ENTRIES : []));
+    localStorage.setItem(STORAGE_KEYS.DRAFT_METADATA, JSON.stringify([]));
+  },
+
+  // DRAFT METADATA
+  getDraftMetadata(): Array<{ id: string; nomorSPK: string; namaPekerjaan: string; createdAt: string; updatedAt: string; status: 'DRAFT' }> {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.DRAFT_METADATA);
+      if (!data) return [];
+      return JSON.parse(data);
+    } catch {
+      return [];
+    }
+  },
+
+  saveDraftMetadata(nomorSPK: string, namaPekerjaan: string): void {
+    const drafts = this.getDraftMetadata();
+    const now = new Date().toISOString();
+    const draftId = `DRAFT-${Date.now()}`;
+    
+    // Cek apakah sudah ada draft untuk nomor SPK ini, jika ya update, jika tidak tambah baru
+    const existingIdx = drafts.findIndex(d => d.nomorSPK === nomorSPK);
+    if (existingIdx !== -1) {
+      drafts[existingIdx].updatedAt = now;
+      drafts[existingIdx].namaPekerjaan = namaPekerjaan;
+    } else {
+      drafts.unshift({
+        id: draftId,
+        nomorSPK,
+        namaPekerjaan,
+        createdAt: now,
+        updatedAt: now,
+        status: 'DRAFT',
+      });
+    }
+    
+    localStorage.setItem(STORAGE_KEYS.DRAFT_METADATA, JSON.stringify(drafts));
+  },
+
+  deleteDraftMetadata(nomorSPK: string): void {
+    const drafts = this.getDraftMetadata().filter(d => d.nomorSPK !== nomorSPK);
+    localStorage.setItem(STORAGE_KEYS.DRAFT_METADATA, JSON.stringify(drafts));
   }
 };
