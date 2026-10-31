@@ -256,9 +256,9 @@ const TAHAP_ALUR: { key: keyof AlurProyek; label: string; id: string }[] = [
   { key: 'ujiTerima', label: 'Uji Terima', id: 'f-alur-uji-terima' },
 ];
 
-/** Î£ jumlah hari kerja seluruh tahap alur proyek (Persiapan tidak dihitung). */
+/** Î£ jumlah hari kerja seluruh tahap Alur Proyek, termasuk Persiapan. */
 const hitungTotalAlur = (a: AlurProyek): number =>
-  a.materialDelivery + a.instalasi + a.commissioningTest + a.ujiTerima;
+  a.persiapan + a.materialDelivery + a.instalasi + a.commissioningTest + a.ujiTerima;
 
 /**
  * Unggahan terpisah dokumen penerima panjar (berkas i1/i2/i3).

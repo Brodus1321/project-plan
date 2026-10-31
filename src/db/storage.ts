@@ -326,8 +326,9 @@ function tahapDariNamaProgres(nama: string): keyof AlurProyek | null {
  * Isi otomatis Alur Proyek BAKH dari tanggal progres Kurva S.
  * Batas akhir tiap tahap = tanggal progres terakhir pada kelompoknya;
  * hari tahap = selisih hari dari batas tahap sebelumnya (patokan Kurva S untuk
- * tahap pertama). Tahap terakhir (Uji Terima) menampung sisa durasi kerja
- * agar Σ alur selalu = durasi. Null bila belum ada tanggal progres sama sekali.
+ * tahap pertama, termasuk Persiapan). Tahap terakhir (Uji Terima) menampung
+ * sisa durasi kerja agar Σ alur selalu = durasi. Null bila belum ada tanggal
+ * progres sama sekali.
  */
 export function alurProyekDariKurvaS(
   plan: KurvaSPlan | null,
@@ -359,9 +360,10 @@ export function alurProyekDariKurvaS(
 
   let akhir = patokan;
   let akumulasi = 0;
-  // Persiapan tidak terhitung sebagai hari kerja — hitungan hari kerja dimulai
-  // dari tahap berikutnya (Material Delivery) dan bertambah s/d Uji Terima.
-  for (const tahap of URUTAN_TAHAP.slice(1, 4)) {
+  // Semua tahap, termasuk Persiapan, dihitung sebagai total hari kerja.
+  // Durasi tiap tahap adalah rentang dari batas tahap sebelumnya sampai
+  // tanggal progres terakhir pada tahap tersebut.
+  for (const tahap of URUTAN_TAHAP.slice(0, 4)) {
     const t = batas[tahap];
     if (!t || t <= akhir) continue;
     const hari = selisihHari(t, akhir) ?? 0;
