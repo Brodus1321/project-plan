@@ -941,14 +941,20 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   };
 
   // --- Lampiran Harga BAKH (langsung salin dari Excel / unggah file) ---
+  // Seluruh total memperhitungkan Volume setiap baris.
+  const totalTelkomAksesLampiran = lampiranHargaRows.reduce(
+    (s, r) => s + ((Number(r.telkomMaterial) || 0) + (Number(r.telkomJasa) || 0)) * (Number(r.volume) || 0),
+    0
+  );
+  const totalMandorLampiran = lampiranHargaRows.reduce(
+    (s, r) => s + ((Number(r.mandorMaterial) || 0) + (Number(r.mandorJasa) || 0)) * (Number(r.volume) || 0),
+    0
+  );
   const totalHargaLampiran = lampiranHargaRows.reduce(
-    (s, r) => s + totalKesepakatanBaris(r),
+    (s, r) => s + totalKesepakatanBaris(r) * (Number(r.volume) || 0),
     0
   );
-  const totalNegosiasiLampiran = lampiranHargaRows.reduce(
-    (s, r) => s + totalNegosiasiBaris(r),
-    0
-  );
+  const totalNegosiasiLampiran = totalTelkomAksesLampiran + totalMandorLampiran;
   const setBarisHarga = (rows: LampiranHargaRow[]) => {
     setLampiranHargaRows(rows.length ? rows : [barisLampiranHargaKosong()]);
     setLampiranHargaErr(null);
@@ -1015,9 +1021,9 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
       telkomJasa: itemTA?.jasa || 0,
       mandorMaterial: itemMandor?.material || 0,
       mandorJasa: itemMandor?.jasa || 0,
-      // Nilai kesepakatan awal mengikuti harga Telkom Akses dari format RAB.
-      ksepMaterial: itemTA?.material || 0,
-      ksepJasa: itemTA?.jasa || 0,
+      // Kesepakatan diisi manual oleh user setelah Designator dipilih.
+      ksepMaterial: 0,
+      ksepJasa: 0,
       volume: lampiranManualVolume,
     };
     setBarisHarga([
@@ -1050,8 +1056,9 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
       telkomJasa: itemTA?.jasa || 0,
       mandorMaterial: itemMandor?.material || 0,
       mandorJasa: itemMandor?.jasa || 0,
-      ksepMaterial: itemTA?.material || 0,
-      ksepJasa: itemTA?.jasa || 0,
+      // Kolom Kesepakatan sengaja tidak disalin dari RAB: diisi manual oleh user.
+      ksepMaterial: 0,
+      ksepJasa: 0,
       volume: row.volume || 0,
     };
   };
@@ -1834,11 +1841,41 @@ Pilih Designator dan isi Volume saja — uraian, satuan, serta seluruh harga dii
                           <td className="px-2 py-2 text-right tabular-nums text-slate-700">
                             {r.mandorJasa.toLocaleString('id-ID')}
                           </td>
-                          <td className="border-l border-slate-100 px-2 py-2 text-right tabular-nums text-slate-800">
-                            {r.ksepMaterial.toLocaleString('id-ID')}
+                          <td className="border-l border-slate-100 px-2 py-2">
+                            <input
+                              type="number"
+                              min="0"
+                              step="1"
+                              inputMode="numeric"
+                              value={r.ksepMaterial || ''}
+                              placeholder="0"
+                              aria-label={`Kesepakatan Material ${r.designator || i + 1}`}
+                              onChange={(e) => {
+                                const value = Math.max(0, Number(e.target.value) || 0);
+                                setLampiranHargaRows(prev => prev.map((row, idx) =>
+                                  idx === i ? { ...row, ksepMaterial: value } : row
+                                ));
+                              }}
+                              className="w-24 rounded border border-teal-200 bg-teal-50/60 px-1.5 py-1 text-right font-mono text-[10px] font-semibold text-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
+                            />
                           </td>
-                          <td className="px-2 py-2 text-right tabular-nums text-slate-800">
-                            {r.ksepJasa.toLocaleString('id-ID')}
+                          <td className="px-2 py-2">
+                            <input
+                              type="number"
+                              min="0"
+                              step="1"
+                              inputMode="numeric"
+                              value={r.ksepJasa || ''}
+                              placeholder="0"
+                              aria-label={`Kesepakatan Jasa ${r.designator || i + 1}`}
+                              onChange={(e) => {
+                                const value = Math.max(0, Number(e.target.value) || 0);
+                                setLampiranHargaRows(prev => prev.map((row, idx) =>
+                                  idx === i ? { ...row, ksepJasa: value } : row
+                                ));
+                              }}
+                              className="w-24 rounded border border-teal-200 bg-teal-50/60 px-1.5 py-1 text-right font-mono text-[10px] font-semibold text-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
+                            />
                           </td>
                            <td className="border-l border-slate-100 px-2 py-2 text-center">
                              <input
@@ -1871,21 +1908,22 @@ Pilih Designator dan isi Volume saja — uraian, satuan, serta seluruh harga dii
                   </table>
                 </div>
 
-                 {/* Subtotal footer */}
-                 <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
-                   <div className="grid grid-cols-3 gap-4 text-xs font-semibold">
-                     <div>
-                       <p className="text-slate-600">Subtotal Material</p>
-                       <p className="text-lg text-emerald-800">{formatRupiah(lampiranHargaRows.reduce((s, r) => s + ((r.ksepMaterial || 0) * (r.volume || 0)), 0))}</p>
-                     </div>
-                     <div>
-                       <p className="text-slate-600">Subtotal Jasa</p>
-                       <p className="text-lg text-emerald-800">{formatRupiah(lampiranHargaRows.reduce((s, r) => s + ((r.ksepJasa || 0) * (r.volume || 0)), 0))}</p>
-                     </div>
-                     <div>
-                       <p className="text-slate-600">Total</p>
-                       <p className="text-lg text-emerald-900 font-bold">{formatRupiah(lampiranHargaRows.reduce((s, r) => s + (((r.ksepMaterial || 0) + (r.ksepJasa || 0)) * (r.volume || 0)), 0))}</p>
-                     </div>
+                 {/* Total per kategori: seluruh harga × Volume. */}
+                 <div className="mt-3 grid gap-3 md:grid-cols-3">
+                   <div className="rounded-lg border border-sky-200 bg-sky-50 p-3">
+                     <p className="text-xs font-semibold text-slate-600">Total Telkom Akses</p>
+                     <p className="mt-1 text-lg font-bold text-sky-900">{formatRupiah(totalTelkomAksesLampiran)}</p>
+                     <p className="mt-1 text-[10px] text-sky-700">Material + Jasa × Volume</p>
+                   </div>
+                   <div className="rounded-lg border border-violet-200 bg-violet-50 p-3">
+                     <p className="text-xs font-semibold text-slate-600">Total Mandor</p>
+                     <p className="mt-1 text-lg font-bold text-violet-900">{formatRupiah(totalMandorLampiran)}</p>
+                     <p className="mt-1 text-[10px] text-violet-700">Material + Jasa × Volume</p>
+                   </div>
+                   <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+                     <p className="text-xs font-semibold text-slate-600">Total Kesepakatan</p>
+                     <p className="mt-1 text-lg font-bold text-emerald-900">{formatRupiah(totalHargaLampiran)}</p>
+                     <p className="mt-1 text-[10px] text-emerald-700">Material + Jasa × Volume</p>
                    </div>
                  </div>
 
