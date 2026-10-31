@@ -722,12 +722,6 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
         }
         if (!waspang) e['f-waspang'] = 'Pilih Waspang pelaksana.';
         if (!bakhWitel.trim()) e['_form'] = 'Witel belum diisi pada langkah BAKH.';
-        if (
-          !boqSpk.some(r => r.designator.trim() && r.vol > 0 && (r.material > 0 || r.jasa > 0))
-        ) {
-          e['_form'] =
-            'Lampiran BOQ SPK: tempel dari Excel / unggah file â€” butuh minimal 1 baris (Designator, Material/Jasa, Vol).';
-        }
         if (nilaiPekerjaan <= 0) e['f-nilai'] = 'Nilai total pekerjaan harus lebih dari 0.';
         break;
       case 'pp': {
@@ -2189,7 +2183,7 @@ Pilih Designator dan isi Volume saja — uraian, satuan, serta seluruh harga dii
               tone="sky"
               icon={<Building2 className="h-4 w-4" />}
               title="Data Kontrak & Identitas Pekerjaan"
-              caption="Tgl Surat, Lokasi, Witel & Mandor mengikuti BAKH â€” hanya No. Leonita, BOQ dan Tim Lapangan yang diisi ulang di sini."
+              caption="Tgl Surat, Lokasi, dan Witel mengikuti BAKH â€” isi No. Leonita serta Nilai Total Pekerjaan di sini."
             >
               <div className="grid grid-cols-1 gap-4 text-xs md:grid-cols-3">
               <TextField
@@ -2225,6 +2219,22 @@ Pilih Designator dan isi Volume saja — uraian, satuan, serta seluruh harga dii
                 value={bakhWitel || ''}
                 readOnly
                 hint="Sama dengan BAKH."
+              />
+              <TextField
+                id="f-nilai"
+                label="Nilai Total Pekerjaan (Kontrak SPK)"
+                required
+                containerClassName="md:col-span-3"
+                type="number"
+                min={0}
+                step={1000}
+                inputMode="numeric"
+                prefix="Rp"
+                value={nilaiPekerjaan}
+                error={stepErrors['f-nilai']}
+                onChange={numChange('f-nilai', handleNilaiPekerjaanChange)}
+                hint="Isi sesuai nilai kontrak SPK."
+                hintTone="muted"
               />
               </div>
             </SectionPanel>
@@ -2314,176 +2324,6 @@ Pilih Designator dan isi Volume saja — uraian, satuan, serta seluruh harga dii
                     )}
                   </div>
                 </div>
-              </div>
-            </SectionPanel>
-
-            {/* --- Lampiran BOQ SPK --- */}
-            <SectionPanel
-              tone="emerald"
-              icon={<Table2 className="h-4 w-4" />}
-              title="Lampiran BOQ SPK"
-              caption="No | Designator | Material | Jasa | Vol | Jumlah Material | Jumlah Jasa | Total Harga â€” tempel langsung dari Excel atau unggah file; Jumlah Jasa & Material masuk ke nilai SPK."
-            >
-
-              {(stepErrors['_form'] || boqErr) && (
-                <p
-                  role="alert"
-                  className="mt-3 flex items-start gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-700"
-                >
-                  <AlertCircle className="mt-px h-3.5 w-3.5 shrink-0" />
-                  {stepErrors['_form'] ?? boqErr}
-                </p>
-              )}
-
-              {/* Area tempel: salin sel BOQ di Excel (Ctrl+C) lalu tempel (Ctrl+V) di sini */}
-              <div
-                tabIndex={0}
-                onPaste={tempelBoq}
-                aria-label="Area tempel Lampiran BOQ SPK dari Excel"
-                className="mt-3 flex cursor-copy items-center gap-3 rounded-xl border-2 border-dashed border-teal-300 bg-teal-50/50 px-4 py-3 transition-colors hover:border-teal-500 hover:bg-teal-50 outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
-              >
-                <ClipboardPaste className="h-5 w-5 shrink-0 text-teal-600" />
-                <p className="text-[11px] leading-snug text-teal-900">
-                  <strong>Salin (Ctrl+C) baris BOQ dari Excel, lalu klik area ini &amp; tekan Ctrl+V.</strong>{' '}
-                  Kolom <em>Designator | Material | Jasa | Vol</em> terdeteksi otomatis â€” tidak perlu
-                  diketik per baris.
-                </p>
-              </div>
-
-              <div className="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-white">
-                <table className="w-full min-w-[760px] text-[11px]">
-                  <thead>
-                    <tr className="bg-slate-100 text-slate-600">
-                      <th className="w-9 px-2 py-2 text-left font-bold">No</th>
-                      <th className="px-2 py-2 text-left font-bold">Designator</th>
-                      <th className="px-2 py-2 text-right font-bold">Material</th>
-                      <th className="px-2 py-2 text-right font-bold">Jasa</th>
-                      <th className="px-2 py-2 text-right font-bold">Vol</th>
-                      <th className="px-2 py-2 text-right font-bold">Jumlah Material</th>
-                      <th className="px-2 py-2 text-right font-bold">Jumlah Jasa</th>
-                      <th className="px-2 py-2 text-right font-bold">Total Harga</th>
-                      <th className="w-10 px-2 py-2">
-                        <span className="sr-only">Aksi</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {boqSpk.map((r, i) => {
-                      const h = hitungBaris(r);
-                      return (
-                        <tr key={i} className="border-t border-slate-100">
-                          <td className="px-2 py-2 text-center font-bold tabular-nums text-slate-400">
-                            {i + 1}
-                          </td>
-                          <td className="px-2 py-2 font-mono text-slate-800">
-                            {r.designator || <span className="text-slate-400">â€”</span>}
-                          </td>
-                          <td className="px-2 py-2 text-right tabular-nums text-slate-700">
-                            {formatRupiah(r.material)}
-                          </td>
-                          <td className="px-2 py-2 text-right tabular-nums text-slate-700">
-                            {formatRupiah(r.jasa)}
-                          </td>
-                          <td className="px-2 py-2 text-right tabular-nums text-slate-700">
-                            {r.vol}
-                          </td>
-                          <td className="px-2 py-2 text-right tabular-nums text-slate-600">
-                            {formatRupiah(h.jumlahMaterial)}
-                          </td>
-                          <td className="px-2 py-2 text-right tabular-nums text-slate-600">
-                            {formatRupiah(h.jumlahJasa)}
-                          </td>
-                          <td className="px-2 py-2 text-right font-bold tabular-nums text-slate-900">
-                            {formatRupiah(h.total)}
-                          </td>
-                          <td className="px-1.5 py-1.5 text-center">
-                            <button
-                              type="button"
-                              onClick={() => hapusBarisBoq(i)}
-                              aria-label={`Hapus baris ${i + 1}`}
-                              className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-rose-50 hover:text-rose-600 outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                  <tfoot>
-                    <tr className="border-t-2 border-slate-200 bg-slate-50 font-bold">
-                      <td colSpan={5} className="px-2 py-2 text-right text-slate-500">
-                        Total ({boqSpk.length} baris)
-                      </td>
-                      <td className="px-2 py-2 text-right tabular-nums text-slate-800">
-                        {formatRupiah(totalMaterialBoq)}
-                      </td>
-                      <td className="px-2 py-2 text-right tabular-nums text-slate-800">
-                        {formatRupiah(totalJasaBoq)}
-                      </td>
-                      <td className="px-2 py-2 text-right tabular-nums text-teal-800">
-                        {formatRupiah(nilaiTotalBoq)}
-                      </td>
-                      <td />
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-
-              <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-                <button
-                  type="button"
-                  onClick={() => boqInputRef.current?.click()}
-                  className="inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-4 text-[11px] font-bold text-emerald-800 transition-colors hover:border-emerald-400 hover:bg-emerald-100 outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
-                >
-                  <FileSpreadsheet className="h-3.5 w-3.5" />
-                  Upload Excel
-                </button>
-                <input
-                  ref={boqInputRef}
-                  type="file"
-                  accept=".xlsx,.xls,.csv"
-                  className="hidden"
-                  aria-label="Upload file Excel Lampiran BOQ SPK"
-                  onChange={uploadBoqSpk}
-                />
-                <p className="text-[10px] text-slate-500">
-                  {boqSumber
-                    ? `Sumber: ${boqSumber} â€” ${boqSpk.length} baris terbaca.`
-                    : boqTerisi
-                      ? 'Baris terbaca â€” nilai total mengikuti BOQ.'
-                      : 'Tempel dari Excel / upload file â€” minimal 1 baris Designator + Vol (Material/Jasa).'}
-                </p>
-              </div>
-
-              <div className="mt-3 grid grid-cols-1 gap-3 text-xs md:grid-cols-3">
-                <InfoBox title="Nilai Jasa" value={formatRupiah(totalJasaBoq)} hint="Î£ Jumlah Jasa" />
-                <InfoBox
-                  title="Nilai Material"
-                  value={formatRupiah(totalMaterialBoq)}
-                  hint="Î£ Jumlah Material (nonstock)"
-                />
-                <InfoBox
-                  title="Nilai Total di SPK"
-                  value={formatRupiah(nilaiTotalBoq)}
-                  hint="Nilai Jasa + Nilai Material"
-                  tone="emerald"
-                />
-                <TextField
-                  id="f-nilai"
-                  label="Nilai Total Pekerjaan (Kontrak SPK)"
-                  required
-                  containerClassName="md:col-span-3"
-                  type="number"
-                  step={1000}
-                  inputMode="numeric"
-                  prefix="Rp"
-                  value={nilaiPekerjaan}
-                  error={stepErrors['f-nilai']}
-                  onChange={numChange('f-nilai', handleNilaiPekerjaanChange)}
-                  hint={`Otomatis dari Lampiran BOQ SPK â€” setara ${formatRupiah(nilaiPekerjaan)}`}
-                  hintTone="accent"
-                />
               </div>
             </SectionPanel>
 
