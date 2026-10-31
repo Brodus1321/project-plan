@@ -46,7 +46,7 @@ import {
   cariRabItem,
 } from '../db/lampiranBakhMaster';
 import { BOQ_SWAKELOLA_ITEMS } from '../db/boqSwakelola';
-import { cariRabTA, cariRabMandor } from '../db/lampiranBakhData';
+import { RAB_TA, RAB_MANDOR, cariRabTA, cariRabMandor } from '../db/lampiranBakhData';
 import {
   BERKAS_PRELIM_WIZARD,
   BerkasDef,
@@ -991,21 +991,34 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
 
   /** Tambah baris Lampiran Harga manual via pencarian designator. */
   const tambahBarisManualLampiranHarga = () => {
-    const designator = lampiranManualDesignator.trim();
+    const designator = lampiranManualDesignator.trim().toUpperCase();
     if (!designator) {
       setLampiranHargaErr('Pilih designator untuk baris Lampiran Harga manual.');
       return;
     }
+
+    // Cari di RAB TA & MANDOR terlebih dahulu
+    const itemTA = cariRabTA(designator);
+    const itemMandor = cariRabMandor(designator);
+    const item = itemTA || itemMandor;
+
+    // Jika ada di RAB, gunakan nilai dari sana; fallback ke master BOQ
     const master = BOQ_SWAKELOLA_ITEMS.find(
       i => i.designator.toLowerCase() === designator.toLowerCase()
     );
+
     const row: LampiranHargaRow = {
       ...barisLampiranHargaKosong(),
       designator,
-      uraian: master?.uraian || lampiranManualUraian.trim(),
-      sat: master?.satuan || '',
-      ksepMaterial: lampiranManualNilai,
-      ksepJasa: 0,
+      uraian: item?.uraian || master?.uraian || lampiranManualUraian.trim(),
+      sat: item?.sat || master?.satuan || '',
+      telkomMaterial: itemTA?.material || 0,
+      telkomJasa: itemTA?.jasa || 0,
+      mandorMaterial: itemMandor?.material || 0,
+      mandorJasa: itemMandor?.jasa || 0,
+      // Kesepakatan = jika user input manual nilai, pakai itu; kalau tidak, pakai Negosiasi TA
+      ksepMaterial: lampiranManualNilai > 0 ? lampiranManualNilai : (itemTA?.material || 0),
+      ksepJasa: itemTA?.jasa || 0,
     };
     setBarisHarga([
       ...lampiranHargaRows.filter(r => r.designator.trim().toLowerCase() !== designator.toLowerCase()),
@@ -1688,15 +1701,26 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                       id="f-lampiran-manual-designator"
                       label="Designator"
                       containerClassName="md:col-span-5"
-                      options={BOQ_SWAKELOLA_ITEMS.map(i => ({ value: i.designator, label: i.designator }))}
+                      options={[
+                        ...RAB_TA.map(i => ({ value: i.designator, label: i.designator })),
+                        ...RAB_MANDOR.filter(m => !RAB_TA.some(t => t.designator === m.designator)).map(i => ({ value: i.designator, label: i.designator })),
+                      ]}
                       value={lampiranManualDesignator}
                       onChange={v => {
                         setLampiranManualDesignator(v);
                         setLampiranHargaErr(null);
+                        // Auto-fill uraian & sat dari RAB TA/MANDOR
+                        const upper = v.trim().toUpperCase();
+                        const item = cariRabTA(upper) || cariRabMandor(upper);
+                        if (item) {
+                          setLampiranManualUraian(item.uraian);
+                          // Kesepakatan default = Negosiasi TA
+                          setLampiranManualNilai(item.material + item.jasa);
+                        }
                       }}
                       placeholder="Ketik designator..."
-                      emptyLabel="Designator tidak ditemukan di master"
-                      hint="Sumber: BOQ SWAKELOLA.xlsx (COST STRUCTURE)."
+                      emptyLabel="Designator tidak ditemukan di master RAB"
+                      hint="Sumber: Lampiran BAKH.xlsx (RAB TA & RAB MANDOR)."
                       hintTone="muted"
                     />
                     <TextField
