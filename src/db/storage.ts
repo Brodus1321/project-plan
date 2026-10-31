@@ -1157,6 +1157,8 @@ export const db = {
 
   clearSubmissions() {
     localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify([]));
+    // Hapus juga semua draft metadata agar list antrian benar-benar kosong
+    localStorage.setItem(STORAGE_KEYS.DRAFT_METADATA, JSON.stringify([]));
   },
 
   getSubmissionById(id: string): ProjectSubmission | undefined {
@@ -1417,3 +1419,4 @@ export const db = {
     localStorage.setItem(STORAGE_KEYS.DRAFT_METADATA, JSON.stringify(drafts));
   }
 };
+
