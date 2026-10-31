@@ -156,6 +156,8 @@ export interface LampiranHargaRow {
   ksepMaterial: number;
   /** Kesepakatan / Jasa. */
   ksepJasa: number;
+  /** Volume input oleh user. */
+  volume: number;
 }
 
 /** Baris Lampiran Harga kosong (baris bawaan tabel). */
@@ -169,6 +171,7 @@ export const barisLampiranHargaKosong = (): LampiranHargaRow => ({
   mandorJasa: 0,
   ksepMaterial: 0,
   ksepJasa: 0,
+  volume: 0,
 });
 
 /** Total nilai Kesepakatan satu baris (Material + Jasa). */
