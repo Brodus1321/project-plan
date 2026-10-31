@@ -1844,6 +1844,21 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                                   idx === i ? autoPopulateDariRAB(row, e.target.value) : row
                                 );
                                 setLampiranHargaRows(updated);
+                                setLampiranHargaErr(null);
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  const updated = lampiranHargaRows.map((row: LampiranHargaRow, idx: number) =>
+                                    idx === i ? autoPopulateDariRAB(row, e.currentTarget.value) : row
+                                  );
+                                  setLampiranHargaRows(updated);
+                                  // Tambah baris baru otomatis
+                                  setLampiranHargaRows(prev => {
+                                    const hasEmpty = prev.some(r => !r.designator?.trim());
+                                    return hasEmpty ? prev : [...prev, barisLampiranHargaKosong()];
+                                  });
+                                }
                               }}
                               className="w-32 rounded border border-slate-200 px-1.5 py-1 font-mono text-[10px] font-bold text-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
                             />
