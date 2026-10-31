@@ -1401,6 +1401,20 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
     const rekapPlan = kurvaSPlan ? rekapKurvaSPlan(kurvaSPlan) : null;
     const adaIsi = Boolean(kurvaSPlan && kurvaSPlan.entries.length);
     const progresTerisi = rekapPlan ? rekapPlan.baris.filter(b => b.nilai > 0).length : 0;
+    // Grafik jadwal menampilkan tahap yang dipakai pada kolom Progres aktif.
+    // Bila nama progres tidak bisa dipetakan, tahap lengkap tetap ditampilkan.
+    const tahapAktif = (() => {
+      if (!kurvaSPlan?.progres.length) return TAHAP_ALUR;
+      const nama = kurvaSPlan.progres.map(p => p.nama.toLowerCase());
+      const dipakai = TAHAP_ALUR.filter(t => {
+        if (t.key === 'persiapan') return nama.some(n => n.includes('persiapan'));
+        if (t.key === 'materialDelivery') return nama.some(n => n.includes('material'));
+        if (t.key === 'instalasi') return nama.some(n => n.includes('instalasi') || n.includes('istalasi') || n.includes('installation'));
+        if (t.key === 'commissioningTest') return nama.some(n => n.includes('commissioning') || n.includes('komisioning') || n.includes('penarikan'));
+        return nama.some(n => n.includes('uji') || n.includes('serah terima'));
+      });
+      return dipakai.length ? dipakai : TAHAP_ALUR;
+    })();
 
     return (
       <div className="space-y-4">
@@ -1514,7 +1528,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
             titikProgres={titikKurva}
             durasiHari={durasiKerjaHari}
             compact={false}
-            tahapHari={TAHAP_ALUR.map(t => ({ nama: t.label, hari: alurProyek[t.key] }))}
+            tahapHari={tahapAktif.map(t => ({ nama: t.label, hari: alurProyek[t.key] }))}
           />
         </div>
       </div>

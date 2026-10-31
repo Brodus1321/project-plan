@@ -317,7 +317,9 @@ function tahapDariNamaProgres(nama: string): keyof AlurProyek | null {
   const n = (nama || '').toLowerCase();
   if (n.includes('persiapan')) return 'persiapan';
   if (n.includes('material')) return 'materialDelivery';
-  if (n.includes('instalasi') || n.includes('installation')) return 'instalasi';
+  // Terima ejaan umum maupun typo yang sering terjadi pada input manual.
+  if (n.includes('instalasi') || n.includes('istalasi') || n.includes('installation'))
+    return 'instalasi';
   if (n.includes('uji') || n.includes('serah terima')) return 'ujiTerima';
   if (n.includes('penarikan') || n.includes('commissioning') || n.includes('komisioning'))
     return 'commissioningTest';
@@ -378,9 +380,16 @@ export function alurProyekDariKurvaS(
     adaTahapSebelumnya = true;
   }
 
-  // Tahap terakhir menampung sisa durasi (bila melebihi, di-clamp ke 0 dan
-  // validasi jumlah hari alur akan memberi peringatan sendiri).
-  hasil.ujiTerima = Math.max(0, durasiHari - akumulasi);
+  // Uji Terima yang punya tanggal sendiri ikut dihitung sebagai tahap seperti
+  // tahap lain. Bila belum memiliki tanggal, ia menampung sisa durasi.
+  const batasUjiTerima = batas.ujiTerima;
+  if (batasUjiTerima && batasUjiTerima >= akhir) {
+    const selisih = selisihHari(batasUjiTerima, akhir) ?? 0;
+    hasil.ujiTerima = Math.max(0, selisih);
+    akumulasi += hasil.ujiTerima;
+  } else {
+    hasil.ujiTerima = Math.max(0, durasiHari - akumulasi);
+  }
   return hasil;
 }
 
