@@ -360,8 +360,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
   // Input manual Lampiran Harga via pencarian designator (tanpa harus tempel/unggah Excel).
   const [lampiranManual, setLampiranManual] = useState(false);
   const [lampiranManualDesignator, setLampiranManualDesignator] = useState('');
-  const [lampiranManualUraian, setLampiranManualUraian] = useState('');
-  const [lampiranManualNilai, setLampiranManualNilai] = useState<number>(0);
+  const [lampiranManualVolume, setLampiranManualVolume] = useState<number>(0);
   const [gm, setGm] = useState('');
   const [pm, setPm] = useState('');
   const [mandor, setMandor] = useState('');
@@ -1002,31 +1001,31 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
     const itemMandor = cariRabMandor(designator);
     const item = itemTA || itemMandor;
 
-    // Jika ada di RAB, gunakan nilai dari sana; fallback ke master BOQ
-    const master = BOQ_SWAKELOLA_ITEMS.find(
-      i => i.designator.toLowerCase() === designator.toLowerCase()
-    );
+    if (!item) {
+      setLampiranHargaErr('Designator tidak ditemukan di master RAB TA maupun RAB MANDOR.');
+      return;
+    }
 
     const row: LampiranHargaRow = {
       ...barisLampiranHargaKosong(),
       designator,
-      uraian: item?.uraian || master?.uraian || lampiranManualUraian.trim(),
-      sat: item?.sat || master?.satuan || '',
+      uraian: item.uraian,
+      sat: item.sat,
       telkomMaterial: itemTA?.material || 0,
       telkomJasa: itemTA?.jasa || 0,
       mandorMaterial: itemMandor?.material || 0,
       mandorJasa: itemMandor?.jasa || 0,
-      // Kesepakatan = jika user input manual nilai, pakai itu; kalau tidak, pakai Negosiasi TA
-      ksepMaterial: lampiranManualNilai > 0 ? lampiranManualNilai : (itemTA?.material || 0),
+      // Nilai kesepakatan awal mengikuti harga Telkom Akses dari format RAB.
+      ksepMaterial: itemTA?.material || 0,
       ksepJasa: itemTA?.jasa || 0,
+      volume: lampiranManualVolume,
     };
     setBarisHarga([
       ...lampiranHargaRows.filter(r => r.designator.trim().toLowerCase() !== designator.toLowerCase()),
       row,
     ]);
     setLampiranManualDesignator('');
-    setLampiranManualUraian('');
-    setLampiranManualNilai(0);
+    setLampiranManualVolume(0);
     setLampiranHargaErr(null);
   };
 
@@ -1683,7 +1682,7 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   <div>
                     <h5 className="text-[12px] font-bold text-emerald-900">Input Manual â€” Designator</h5>
                     <p className="mt-0.5 text-[10px] leading-snug text-emerald-700">
-                      Cari designator dari master BOQ, isi nilai â€” tanpa harus tempel / unggah Excel.
+Pilih Designator dan isi Volume saja — uraian, satuan, serta seluruh harga diisi otomatis dari RAB.
                     </p>
                   </div>
                   <button
@@ -1709,14 +1708,6 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                       onChange={v => {
                         setLampiranManualDesignator(v);
                         setLampiranHargaErr(null);
-                        // Auto-fill uraian & sat dari RAB TA/MANDOR
-                        const upper = v.trim().toUpperCase();
-                        const item = cariRabTA(upper) || cariRabMandor(upper);
-                        if (item) {
-                          setLampiranManualUraian(item.uraian);
-                          // Kesepakatan default = Negosiasi TA
-                          setLampiranManualNilai(item.material + item.jasa);
-                        }
                       }}
                       placeholder="Ketik designator..."
                       emptyLabel="Designator tidak ditemukan di master RAB"
@@ -1724,29 +1715,19 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                       hintTone="muted"
                     />
                     <TextField
-                      id="f-lampiran-manual-uraian"
-                      label="Uraian Pekerjaan"
-                      containerClassName="md:col-span-3"
-                      value={lampiranManualUraian}
-                      onChange={e => setLampiranManualUraian(e.target.value)}
-                      hint="Kosongkan â€” diambil otomatis dari master bila designator ada."
-                      hintTone="muted"
-                    />
-                    <TextField
-                      id="f-lampiran-manual-nilai"
-                      label="Nilai Kesepakatan (Rp)"
+                      id="f-lampiran-manual-volume"
+                      label="Volume"
                       type="number"
                       min={0}
-                      step={1000}
-                      inputMode="numeric"
-                      prefix="Rp"
-                      containerClassName="md:col-span-2"
-                      value={lampiranManualNilai}
-                      onChange={e => setLampiranManualNilai(Math.max(0, Number(e.target.value) || 0))}
-                      hint="Material/Jasa â€” nilai kesepakatan manual."
+                      step={0.1}
+                      inputMode="decimal"
+                      containerClassName="md:col-span-3"
+                      value={lampiranManualVolume}
+                      onChange={e => setLampiranManualVolume(Math.max(0, Number(e.target.value) || 0))}
+                      hint="Isi volume saja — uraian, satuan, dan harga diambil otomatis dari RAB."
                       hintTone="muted"
                     />
-                    <div className="md:col-span-2 flex items-end">
+                    <div className="md:col-span-4 flex items-end">
                       <button
                         type="button"
                         onClick={tambahBarisManualLampiranHarga}
@@ -1781,53 +1762,25 @@ export const InputPengajuanView: React.FC<InputPengajuanViewProps> = ({
                   <table className="w-full min-w-[980px] text-[11px]">
                     <thead>
                       <tr className="bg-emerald-50 text-emerald-900">
-                        <th rowSpan={3} className="w-9 border-b border-emerald-200 px-2 py-2 text-left font-bold align-bottom">
-                          No
-                        </th>
-                        <th rowSpan={3} className="border-b border-emerald-200 px-2 py-2 text-left font-bold align-bottom">
-                          Designator
-                        </th>
-                        <th rowSpan={3} className="border-b border-emerald-200 px-2 py-2 text-left font-bold align-bottom">
-                          Uraian Pekerjaan
-                        </th>
-                        <th rowSpan={3} className="border-b border-emerald-200 px-2 py-2 text-left font-bold align-bottom">
-                          Sat
-                        </th>
-                        <th colSpan={4} className="border-b border-l border-emerald-200 px-2 py-2 text-center font-bold uppercase tracking-wide">
-                          Negosiasi
-                        </th>
-                        <th colSpan={2} className="border-b border-l border-emerald-200 px-2 py-2 text-center font-bold uppercase tracking-wide">
-                           Kesepakatan
-                         </th>
-                         <th rowSpan={2} className="border-b border-l border-emerald-200 px-2 py-2 text-center font-bold uppercase tracking-wide align-bottom">
-                           Volume
-                         </th>
-                         <th rowSpan={3} className="w-10 border-b border-emerald-200 px-2 py-2 align-bottom">
-                          <span className="sr-only">Aksi</span>
-                        </th>
+                        <th rowSpan={2} className="w-9 border-b border-emerald-200 px-2 py-2 text-center font-bold align-middle">NO</th>
+                        <th rowSpan={2} className="border-b border-emerald-200 px-2 py-2 text-center font-bold align-middle">DESIGNATOR</th>
+                        <th rowSpan={2} className="border-b border-emerald-200 px-2 py-2 text-center font-bold align-middle">URAIAN PEKERJAAN</th>
+                        <th rowSpan={2} className="border-b border-emerald-200 px-2 py-2 text-center font-bold align-middle">SAT</th>
+                        <th colSpan={2} className="border-b border-l border-emerald-200 px-2 py-2 text-center font-bold">Telkom Akses</th>
+                        <th colSpan={2} className="border-b border-l border-emerald-200 px-2 py-2 text-center font-bold">Mandor</th>
+                        <th colSpan={2} className="border-b border-l border-emerald-200 px-2 py-2 text-center font-bold">Kesepakatan</th>
+                        <th rowSpan={2} className="border-b border-l border-emerald-200 px-2 py-2 text-center font-bold align-middle">Volume</th>
+                        <th rowSpan={2} className="w-10 border-b border-emerald-200 px-2 py-2 align-middle"><span className="sr-only">Aksi</span></th>
                       </tr>
                       <tr className="bg-emerald-50 text-emerald-800">
-                        <th colSpan={2} className="border-b border-emerald-100 px-2 py-1.5 text-center font-semibold">
-                          Telkom Akses
-                        </th>
-                        <th colSpan={2} className="border-b border-emerald-100 px-2 py-1.5 text-center font-semibold">
-                          Mandor
-                        </th>
-                        <th rowSpan={2} className="border-b border-l border-emerald-200 px-2 py-1.5 text-center font-semibold align-bottom">
-                          Material
-                        </th>
-                        <th rowSpan={2} className="border-b border-emerald-200 px-2 py-1.5 text-center font-semibold align-bottom">
-                          Jasa
-                        </th>
+                        <th className="border-b border-l border-emerald-200 px-2 py-1.5 text-center font-semibold">Material</th>
+                        <th className="border-b border-emerald-200 px-2 py-1.5 text-center font-semibold">Jasa</th>
+                        <th className="border-b border-l border-emerald-200 px-2 py-1.5 text-center font-semibold">Material</th>
+                        <th className="border-b border-emerald-200 px-2 py-1.5 text-center font-semibold">Jasa</th>
+                        <th className="border-b border-l border-emerald-200 px-2 py-1.5 text-center font-semibold">Material</th>
+                        <th className="border-b border-emerald-200 px-2 py-1.5 text-center font-semibold">Jasa</th>
                       </tr>
-                      <tr className="bg-emerald-50 text-emerald-800">
-                        <th className="border-b border-emerald-200 px-2 py-1.5 text-center font-semibold">Material</th>
-                        <th className="border-b border-emerald-200 px-2 py-1.5 text-center font-semibold">Jasa</th>
-                        <th className="border-b border-emerald-200 px-2 py-1.5 text-center font-semibold">Material</th>
-                        <th className="border-b border-emerald-200 px-2 py-1.5 text-center font-semibold">Jasa</th>
-                         <th className="border-b border-l border-emerald-200 px-2 py-1.5 text-center font-semibold">Vol</th>
-                       </tr>
-                     </thead>
+                    </thead>
                      <tbody>
                       {lampiranHargaRows.map((r, i) => (
                         <tr key={i} className="border-t border-slate-100">
