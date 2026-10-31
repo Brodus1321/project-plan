@@ -243,7 +243,7 @@ export interface RentangKurvaS {
   awal: string;
   /** Tanggal progres terakhir. */
   akhir: string;
-  /** Selisih hari (akhir - awal), sama seperti durasi kerja pada aplikasi. */
+  /** Durasi hari inklusif (awal dan akhir ikut dihitung). */
   hari: number;
 }
 
@@ -262,7 +262,9 @@ export function rentangKurvaSDariPlan(plan: KurvaSPlan | null): RentangKurvaS | 
   const awal = patokanKurvaS(plan);
   const akhir = tanggalAktif[tanggalAktif.length - 1];
   if (!awal) return null;
-  const hari = selisihHari(akhir, awal);
+  const selisih = selisihHari(akhir, awal);
+  // Durasi kerja dihitung inklusif: 1 Nov s/d 3 Nov = 3 hari (bukan 2).
+  const hari = selisih === null ? null : selisih + 1;
   if (hari === null || hari < 1) return null;
   return { awal, akhir, hari };
 }
@@ -361,15 +363,19 @@ export function alurProyekDariKurvaS(
   let akhir = patokan;
   let akumulasi = 0;
   // Semua tahap, termasuk Persiapan, dihitung sebagai total hari kerja.
-  // Durasi tiap tahap adalah rentang dari batas tahap sebelumnya sampai
-  // tanggal progres terakhir pada tahap tersebut.
+  // Tahap pertama dihitung inklusif dari patokan: 1 Nov s/d 1 Nov = 1 hari.
+  // Tahap berikutnya dimulai setelah batas tahap sebelumnya, sehingga selisih
+  // tanggal sudah tepat tanpa tambahan 1.
+  let adaTahapSebelumnya = false;
   for (const tahap of URUTAN_TAHAP.slice(0, 4)) {
     const t = batas[tahap];
-    if (!t || t <= akhir) continue;
-    const hari = selisihHari(t, akhir) ?? 0;
+    if (!t || t < akhir) continue;
+    const selisih = selisihHari(t, akhir) ?? 0;
+    const hari = adaTahapSebelumnya ? selisih : selisih + 1;
     hasil[tahap] = Math.max(0, hari);
     akhir = t;
     akumulasi += hasil[tahap];
+    adaTahapSebelumnya = true;
   }
 
   // Tahap terakhir menampung sisa durasi (bila melebihi, di-clamp ke 0 dan
