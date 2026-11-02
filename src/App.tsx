@@ -203,10 +203,10 @@ export default function App() {
     <div
       className="relative flex h-screen w-full overflow-hidden font-['Plus_Jakarta_Sans',sans-serif]"
       style={{
-        backgroundColor: '#f4f6f8',
-        // Latar tech navy (backgournd.jpg) diselimuti putih tipis agar teks
-        // kartu di atasnya tetap terbaca.
-        backgroundImage: `linear-gradient(rgba(244,246,248,0.80), rgba(244,246,248,0.80)), url(${bgImage})`,
+        backgroundColor: '#070d1c',
+        // Latar navy pekat (backgournd.jpg) dengan sedikit overlay gelap
+        // agar kartu gelap maupun kartu putih tetap kontras.
+        backgroundImage: `linear-gradient(rgba(6,12,26,0.35), rgba(6,12,26,0.35)), url(${bgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}

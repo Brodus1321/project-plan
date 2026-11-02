@@ -109,14 +109,14 @@ export const LaporanIFView: React.FC<LaporanIFViewProps> = ({
   return (
     <div className="flex flex-col gap-4">
       {/* Header bar */}
-      <div className="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-slate-200">
+      <div className="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-white/15">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-teal-800 text-white flex items-center justify-center shadow-md">
             <WalletCards className="w-5 h-5 text-emerald-300" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Laporan Kas Imprest Fund (IF)</h2>
-            <p className="text-xs text-slate-500">
+            <h2 className="text-lg font-bold text-white">Laporan Kas Imprest Fund (IF)</h2>
+            <p className="text-xs text-slate-400">
               Buku kas mutasi pencairan panjar prelim, pengisian plafon IF, dan monitoring saldo kas proyek
             </p>
           </div>

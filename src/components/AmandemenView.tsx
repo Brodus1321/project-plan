@@ -116,14 +116,14 @@ export const AmandemenView: React.FC<AmandemenViewProps> = ({
   return (
     <div className="flex flex-col gap-4">
       {/* Header bar */}
-      <div className="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-slate-200">
+      <div className="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-white/15">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-md">
+          <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-md ring-1 ring-white/20">
             <FileEdit className="w-5 h-5 text-amber-400" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Amandemen & Addendum Pengajuan</h2>
-            <p className="text-xs text-slate-500">
+            <h2 className="text-lg font-bold text-white">Amandemen & Addendum Pengajuan</h2>
+            <p className="text-xs text-slate-400">
               Pengelolaan perubahan durasi kerja (Kurva S), nilai kontrak, dan penyesuaian SPK
             </p>
           </div>

@@ -33,11 +33,11 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header
-      className="relative shrink-0 overflow-hidden px-4 py-3.5 text-white shadow-[0_10px_26px_rgba(15,23,42,0.18)] md:px-6"
+      className="relative shrink-0 overflow-hidden border-b border-white/10 px-4 py-3.5 text-white shadow-[0_10px_26px_rgba(2,8,23,0.45)] md:px-6"
       style={{
-        // Topbar biru terang: backgournd.jpg diselimuti gradasi biru cerah
-        // (80% biru, 20% gambar) agar warna birunya menonjol dan lebih terang.
-        backgroundImage: `linear-gradient(180deg, rgba(52,140,245,0.80), rgba(95,190,252,0.80)), url(${bgImage})`,
+        // Topbar gelap navy: backgournd.jpg diselimuti navy pekat agar menyatu
+        // dengan latar aplikasi (gaya referensi).
+        backgroundImage: `linear-gradient(rgba(7,13,28,0.86), rgba(7,13,28,0.86)), url(${bgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
@@ -71,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Cari No. SPK, No. PP, Proyek, Vendor..."
-              className="w-full pl-10 pr-4 py-2 bg-white text-xs font-medium text-slate-800 rounded-full border border-white/50 focus:border-white focus:ring-2 focus:ring-white/30 focus:outline-none transition-all placeholder:text-slate-400 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/25 text-white text-xs font-medium rounded-full focus:border-white/40 focus:bg-white/15 focus:ring-2 focus:ring-white/20 focus:outline-none transition-all placeholder:text-white/55 shadow-sm"
             />
           </div>
 
@@ -83,16 +83,16 @@ export const Header: React.FC<HeaderProps> = ({
                 value={selectedStatus}
                 onChange={e => setSelectedStatus(e.target.value)}
                 aria-label="Filter status berkas"
-                className="appearance-none bg-white hover:bg-slate-50 text-slate-700 font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 cursor-pointer"
+                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/25 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
               >
-                <option value="ALL">Semua Status</option>
-                <option value="SIAP_CETAK">Siap Cetak (Eviden Lengkap)</option>
-                <option value="MENUNGGU_EVIDEN">Menunggu Eviden</option>
-                <option value="KIRIM_DIGITAL">Kirim Digital</option>
-                <option value="VERIFIKASI_ADMIN">Verifikasi Admin</option>
-                <option value="SELESAI">Selesai</option>
+                <option className="text-slate-900" value="ALL">Semua Status</option>
+                <option className="text-slate-900" value="SIAP_CETAK">Siap Cetak (Eviden Lengkap)</option>
+                <option className="text-slate-900" value="MENUNGGU_EVIDEN">Menunggu Eviden</option>
+                <option className="text-slate-900" value="KIRIM_DIGITAL">Kirim Digital</option>
+                <option className="text-slate-900" value="VERIFIKASI_ADMIN">Verifikasi Admin</option>
+                <option className="text-slate-900" value="SELESAI">Selesai</option>
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-3.5 h-3.5 text-white/70 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
             {/* Regional filter */}
@@ -101,22 +101,22 @@ export const Header: React.FC<HeaderProps> = ({
                 value={selectedRegional}
                 onChange={e => setSelectedRegional(e.target.value)}
                 aria-label="Filter regional proyek"
-                className="appearance-none bg-white hover:bg-slate-50 text-slate-700 font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 cursor-pointer"
+                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/25 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
               >
-                <option value="ALL">Semua Regional</option>
-                <option value="Regional Jawa Barat">Jawa Barat</option>
-                <option value="Regional Jawa Tengah">Jawa Tengah</option>
-                <option value="Regional Jawa Timur">Jawa Timur</option>
-                <option value="Regional DKI Jakarta & Banten">DKI Jakarta & Banten</option>
-                <option value="Regional Luar Jawa">Luar Jawa</option>
+                <option className="text-slate-900" value="ALL">Semua Regional</option>
+                <option className="text-slate-900" value="Regional Jawa Barat">Jawa Barat</option>
+                <option className="text-slate-900" value="Regional Jawa Tengah">Jawa Tengah</option>
+                <option className="text-slate-900" value="Regional Jawa Timur">Jawa Timur</option>
+                <option className="text-slate-900" value="Regional DKI Jakarta & Banten">DKI Jakarta & Banten</option>
+                <option className="text-slate-900" value="Regional Luar Jawa">Luar Jawa</option>
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-3.5 h-3.5 text-white/70 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
             {/* SOP Alur Badge Button */}
             <button
               onClick={onOpenSop}
-              className="flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white font-medium px-3 py-1.5 rounded-full transition-colors border border-white/30"
+              className="flex items-center gap-1.5 bg-red-900/70 hover:bg-red-800 text-white font-medium px-3 py-1.5 rounded-full transition-colors border border-red-700/60"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-white" />
               <span>Alur Berkas Prelim (SOP)</span>

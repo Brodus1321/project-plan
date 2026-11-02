@@ -14,7 +14,7 @@ import {
   Printer,
   ChevronRight
 } from 'lucide-react';
-import bcCard from '../../bccard.jpg';
+import bgImage from '../../backgournd.jpg';
 interface DashboardViewProps {
   submissions: ProjectSubmission[];
   onSelectSubmission: (sub: ProjectSubmission) => void;
@@ -223,33 +223,32 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* 1. Indikator Kinerja Utama (KPI) — latar gambar bccard.jpg + overlay gelap */}
+      {/* 1. Indikator Kinerja Utama (KPI) — latar navy (backgournd.jpg) + kartu kaca biru */}
       <section
         aria-label="Indikator Kinerja Utama"
-        className="rounded-3xl overflow-hidden ring-1 ring-rose-900/40 shadow-[0_6px_24px_rgba(30,58,138,0.3)] px-5 py-6"
+        className="rounded-3xl overflow-hidden ring-1 ring-blue-500/40 shadow-[0_8px_30px_rgba(2,8,23,0.5)] px-5 py-6"
         style={{
-          backgroundImage: `linear-gradient(rgba(15,23,42,0.45), rgba(15,23,42,0.45)), url(${bcCard})`,
-          backgroundSize: 'auto, 900% auto',
-          backgroundPosition: 'center, 0% 40%',
-          backgroundRepeat: 'no-repeat, no-repeat',
+          backgroundImage: `linear-gradient(rgba(8,16,38,0.55), rgba(8,16,38,0.55)), url(${bgImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       >
         <header className="text-center">
           <h2 className="text-2xl font-semibold text-white tracking-tight">Indikator Kinerja Utama (KPI)</h2>
-          <p className="mt-1.5 text-[13px] text-blue-200/70">Ringkasan metrik pertanggungan tingkat eksekutif.</p>
+          <p className="mt-1.5 text-[13px] text-blue-200/80">Ringkasan metrik pertanggungan tingkat eksekutif.</p>
           <button
             onClick={onOpenInput}
-            className="mt-3 text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 py-1.5 rounded-full shadow transition-colors"
+            className="mt-3 text-xs font-semibold bg-blue-500 hover:bg-blue-400 text-white px-4 py-1.5 rounded-full shadow-lg shadow-blue-500/30 transition-colors"
           >
             + Buat Pengajuan Baru
           </button>
         </header>
 
-        {/* Angka KPI dirangkum jadi satu kotak biru, gaya sama dengan strip metrik Monitoring */}
-        <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 max-w-[620px] mx-auto rounded-xl bg-slate-950/45 ring-1 ring-blue-700/50 shadow-[0_4px_14px_rgba(0,0,0,0.25)] divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+        {/* Tiga kartu kaca biru — gaya referensi */}
+        <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-[720px] mx-auto">
           {/* Total Uang Beredar */}
           <div
-            className="relative flex flex-col items-center gap-2 text-center px-4 py-5"
+            className="relative flex flex-col items-center gap-2 text-center px-4 py-5 rounded-2xl bg-white/5 backdrop-blur-sm ring-1 ring-blue-400/30 shadow-[0_4px_18px_rgba(0,0,0,0.25)]"
             aria-label="Total Uang Beredar"
           >
             <span className="grid place-items-center w-8 h-8 rounded-lg bg-white/10 text-blue-200" aria-hidden="true">
@@ -270,7 +269,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* Grand Total Nilai — sel yang menonjol */}
           <div
-            className="relative flex flex-col items-center gap-2 text-center px-4 py-5"
+            className="relative flex flex-col items-center gap-2 text-center px-4 py-5 rounded-2xl bg-white/5 backdrop-blur-sm ring-1 ring-blue-400/30 shadow-[0_4px_18px_rgba(0,0,0,0.25)]"
             aria-label="Grand Total Nilai"
           >
             <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 py-0.5 rounded-md bg-blue-500 text-white text-[10px] font-semibold leading-tight whitespace-nowrap shadow-sm">
@@ -294,7 +293,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* Rasio Aman */}
           <div
-            className="relative flex flex-col items-center gap-2 text-center px-4 py-5"
+            className="relative flex flex-col items-center gap-2 text-center px-4 py-5 rounded-2xl bg-white/5 backdrop-blur-sm ring-1 ring-blue-400/30 shadow-[0_4px_18px_rgba(0,0,0,0.25)]"
             aria-label="Rasio Aman"
           >
             <span className="grid place-items-center w-8 h-8 rounded-lg bg-white/10 text-blue-200" aria-hidden="true">
@@ -318,7 +317,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         
         {/* Card 1: Location & Operational Info (Col 1 - 5 columns) */}
-          <div className="lg:col-span-5 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between">
+          <div className="lg:col-span-5 rounded-3xl p-5 border border-blue-400/25 bg-[#0b1730]/80 backdrop-blur-md shadow-[0_10px_30px_rgba(2,8,23,0.45)] flex flex-col justify-between">
             <div>
               {/* Pemilih lokasi per branch */}
               <div className="mb-2">
@@ -334,14 +333,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       setDaftarTerbuka((v) => !v);
                       if (!daftarTerbuka) setCariLokasi('');
                     }}
-                    className="w-full flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-left hover:bg-slate-50 transition-colors"
+                    className="w-full flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-left text-white hover:bg-white/15 transition-colors"
                   >
                     <MapPin className="w-3.5 h-3.5 text-[#1a73e8] flex-shrink-0" />
                     <span className="min-w-0 flex-1">
                       <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wide">
                         Lokasi Proyek
                       </span>
-                      <span className="block text-xs font-bold text-slate-800 truncate">
+                      <span className="block text-xs font-bold text-white truncate">
                         {subInfo ? subInfo.lokasiProyek || subInfo.namaPekerjaan : 'Pilih lokasi...'}
                       </span>
                     </span>
@@ -466,24 +465,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
               {subInfo ? (
                 <>
-                  <div className="rounded-2xl border border-slate-100 divide-y divide-slate-100">
+                  <div className="rounded-2xl border border-white/10 divide-y divide-white/10">
                     {rincianTermin(subInfo).map((row) => (
                       <div key={row.label} className="flex items-center justify-between gap-3 px-3 py-2">
-                        <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                        <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
                           {row.label}
                         </span>
                         <span className="flex items-baseline gap-2">
-                          <span className="text-[10px] text-slate-400 tabular-nums">
+                          <span className="text-[10px] text-slate-500 tabular-nums">
                             {row.persen.toLocaleString('id-ID', { maximumFractionDigits: 1 })}%
                           </span>
-                          <span className="text-xs font-bold text-slate-800 tabular-nums">
+                          <span className="text-xs font-bold text-white tabular-nums">
                             {formatRupiah(row.nilai)}
                           </span>
                         </span>
                       </div>
                     ))}
-                    <div className="flex items-center justify-between gap-3 px-3 py-2 bg-slate-50">
-                      <span className="text-[10px] font-bold uppercase tracking-wide text-slate-700">
+                    <div className="flex items-center justify-between gap-3 px-3 py-2 bg-white/5">
+                      <span className="text-[10px] font-bold uppercase tracking-wide text-slate-200">
                         Total Nilai Pekerjaan
                       </span>
                       <span className="text-sm font-bold text-[#1a73e8] tabular-nums">
@@ -493,9 +492,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   </div>
                 </>
               ) : (
-                <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-8 text-center">
-                  <p className="text-xs font-semibold text-slate-500">Belum ada data termin</p>
-                  <p className="text-[10px] text-slate-400 mt-1">
+                <div className="rounded-2xl border border-dashed border-white/20 px-4 py-8 text-center">
+                  <p className="text-xs font-semibold text-slate-300">Belum ada data termin</p>
+                  <p className="text-[10px] text-slate-500 mt-1">
                     Data lokasi &quot;{selectedLokasi}&quot; belum tersedia
                   </p>
                 </div>
@@ -504,18 +503,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
             {/* Actions Footer */}
             {subInfo && (
-              <div className="flex items-center justify-between gap-2 pt-3 mt-3 border-t border-slate-100">
+              <div className="flex items-center justify-between gap-2 pt-3 mt-3 border-t border-white/10">
                 <div className="flex items-center gap-2">
                   <span
                     className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       subInfo.isLockedForPrint
-                        ? 'bg-rose-100 text-rose-700'
-                        : 'bg-emerald-100 text-emerald-700'
+                        ? 'bg-rose-500/15 text-rose-300'
+                        : 'bg-emerald-500/15 text-emerald-300'
                     }`}
                   >
                     {subInfo.isLockedForPrint ? 'Terkunci' : 'Siap Cetak'}
                   </span>
-                  <span className="text-[10px] text-slate-500 truncate max-w-[180px]">
+                  <span className="text-[10px] text-slate-400 truncate max-w-[180px]">
                     {subInfo.namaPekerjaan}
                   </span>
                 </div>
@@ -530,7 +529,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   ) : (
                     <button
                       onClick={() => onOpenPrintModal(subInfo)}
-                      className="text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-full shadow-sm transition-colors flex items-center gap-1.5"
+                      className="text-xs font-semibold bg-blue-500 hover:bg-blue-400 text-white px-3.5 py-1.5 rounded-full shadow-sm transition-colors flex items-center gap-1.5"
                     >
                       <Printer className="w-3.5 h-3.5" />
                       <span>Cetak Berkas</span>
@@ -542,7 +541,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
         {/* Card 2: Visual Card (Col 2 - 4 columns, matching modern building visual card from screenshot) */}
-        <div className="lg:col-span-4 bg-white rounded-3xl p-4 border border-slate-200/80 shadow-sm flex flex-col justify-between relative overflow-hidden">
+        <div className="lg:col-span-4 rounded-3xl p-4 border border-blue-400/25 bg-[#0b1730]/80 backdrop-blur-md shadow-[0_10px_30px_rgba(2,8,23,0.45)] flex flex-col justify-between relative overflow-hidden">
           <div className="relative rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900 mb-3 group">
             {/* Visual infrastructure image */}
             <img
@@ -568,27 +567,27 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* SOP Dates Checklist */}
           {subInfo && (
-            <div className="bg-slate-50 rounded-2xl p-3 border border-slate-100 text-xs flex flex-col gap-2">
-              <div className="text-[11px] font-bold text-slate-700 flex items-center justify-between">
+            <div className="bg-white/5 rounded-2xl p-3 border border-white/10 text-xs flex flex-col gap-2">
+              <div className="text-[11px] font-bold text-slate-200 flex items-center justify-between">
                 <span>Rangkaian Tanggal SOP:</span>
-                <span className="text-[10px] text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full font-medium">Tervalidasi</span>
+                <span className="text-[10px] text-teal-300 bg-teal-400/15 px-2 py-0.5 rounded-full font-medium">Tervalidasi</span>
               </div>
               <div className="space-y-1.5 text-[11px]">
-                <div className="flex items-center justify-between text-slate-600">
+                <div className="flex items-center justify-between text-slate-400">
                   <span>BAKH (= SPK)</span>
-                  <span className="font-semibold text-slate-800">{formatTanggalIndo(subInfo.tanggalBAKH)}</span>
+                  <span className="font-semibold text-white">{formatTanggalIndo(subInfo.tanggalBAKH)}</span>
                 </div>
-                <div className="flex items-center justify-between text-slate-600">
+                <div className="flex items-center justify-between text-slate-400">
                   <span>PP (+2 Hari SPK)</span>
-                  <span className="font-semibold text-slate-800">{formatTanggalIndo(subInfo.tanggalPP)}</span>
+                  <span className="font-semibold text-white">{formatTanggalIndo(subInfo.tanggalPP)}</span>
                 </div>
-                <div className="flex items-center justify-between text-slate-600">
+                <div className="flex items-center justify-between text-slate-400">
                   <span>Panjar (= PP)</span>
-                  <span className="font-semibold text-slate-800">{formatTanggalIndo(subInfo.tanggalPengajuanPanjar)}</span>
+                  <span className="font-semibold text-white">{formatTanggalIndo(subInfo.tanggalPengajuanPanjar)}</span>
                 </div>
-                <div className="flex items-center justify-between text-slate-600">
+                <div className="flex items-center justify-between text-slate-400">
                   <span>Imprest Fund (+2 Hari Panjar)</span>
-                  <span className="font-semibold text-slate-800">{formatTanggalIndo(subInfo.tanggalImprestFund)}</span>
+                  <span className="font-semibold text-white">{formatTanggalIndo(subInfo.tanggalImprestFund)}</span>
                 </div>
               </div>
             </div>
@@ -596,11 +595,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Card 3: Donut Gauge & Ringkasan Antrian (Col 3 - 3 columns, matching 8.5k members orange donut chart from screenshot) */}
-        <div className="lg:col-span-3 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-3 rounded-3xl p-5 border border-blue-400/25 bg-[#0b1730]/80 backdrop-blur-md shadow-[0_10px_30px_rgba(2,8,23,0.45)] flex flex-col justify-between">
           <div>
             <div className="flex items-start justify-between mb-3">
               <div>
-                <h4 className="text-sm font-bold text-slate-900">Realisasi Dana IF</h4>
+                <h4 className="text-sm font-bold text-white">Realisasi Dana IF</h4>
                 <p className="text-xs text-slate-400">Pencairan Panjar Prelim Aktif</p>
               </div>
 
@@ -627,7 +626,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     cx="50"
                     cy="50"
                     r="40"
-                    stroke="#f1f5f9"
+                    stroke="#1e293b"
                     strokeWidth="9"
                     fill="transparent"
                   />
@@ -647,7 +646,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
                 {/* Center text in donut */}
                 <div className="absolute flex flex-col items-center justify-center text-center">
-                  <span className="text-2xl font-black text-slate-900 tracking-tight">
+                  <span className="text-2xl font-black text-white tracking-tight">
                     {arcPercentage}%
                   </span>
                   <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
@@ -659,33 +658,33 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
             {/* Status Breakdown Pills */}
             <div className="space-y-1.5 text-xs pt-1">
-              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 text-slate-600">
+              <div className="flex items-center justify-between p-2 rounded-xl bg-white/5 text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                   Siap Cetak Berkas
                 </span>
-                <span className="font-bold text-slate-900">{readyToPrint}</span>
+                <span className="font-bold text-white">{readyToPrint}</span>
               </div>
-              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 text-slate-600">
+              <div className="flex items-center justify-between p-2 rounded-xl bg-white/5 text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                   Menunggu Eviden (j & k)
                 </span>
-                <span className="font-bold text-slate-900">{waitingEviden}</span>
+                <span className="font-bold text-white">{waitingEviden}</span>
               </div>
-              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 text-slate-600">
+              <div className="flex items-center justify-between p-2 rounded-xl bg-white/5 text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                   Selesai Diarsipkan
                 </span>
-                <span className="font-bold text-slate-900">{completed}</span>
+                <span className="font-bold text-white">{completed}</span>
               </div>
             </div>
           </div>
 
           <button
             onClick={onOpenAntrian}
-            className="w-full mt-3 py-2 text-xs font-semibold text-teal-800 bg-teal-50 hover:bg-teal-100 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+            className="w-full mt-3 py-2 text-xs font-semibold text-teal-200 bg-teal-400/10 hover:bg-teal-400/20 border border-teal-400/30 rounded-xl transition-colors flex items-center justify-center gap-1.5"
           >
             <span>Buka Antrian Pengajuan</span>
             <ChevronRight className="w-4 h-4" />
