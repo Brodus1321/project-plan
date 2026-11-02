@@ -1773,8 +1773,8 @@ Pilih Designator dan isi Volume saja — uraian, satuan, serta seluruh harga dii
                   </p>
                 </div>
 
-                <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-                  <table className="w-full min-w-[980px] text-[11px]">
+                <div className="relative max-w-full overflow-x-auto rounded-xl border border-slate-200 bg-white">
+                  <table className="w-full min-w-[900px] text-[11px]">
                     <thead>
                       <tr className="bg-emerald-50 text-emerald-900">
                         <th rowSpan={2} className="w-9 border-b border-emerald-200 px-2 py-2 text-center font-bold align-middle">NO</th>
