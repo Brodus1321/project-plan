@@ -2,6 +2,7 @@ import React from 'react';
 import { Search, ShieldCheck, ChevronDown } from 'lucide-react';
 import { formatRupiah } from '../db/storage';
 import { ProjectSubmission } from '../types';
+import bgImage from '../../backgournd.jpg';
 
 interface HeaderProps {
   searchQuery: string;
@@ -31,7 +32,16 @@ export const Header: React.FC<HeaderProps> = ({
   const siapCetakCount = submissions.filter(s => !s.isLockedForPrint).length;
 
   return (
-    <header className="relative shrink-0 overflow-hidden bg-gradient-to-b from-[#B71C1C] to-[#C62828] px-4 py-3.5 text-white shadow-[0_10px_26px_rgba(15,23,42,0.18)] md:px-6">
+    <header
+      className="relative shrink-0 overflow-hidden px-4 py-3.5 text-white shadow-[0_10px_26px_rgba(15,23,42,0.18)] md:px-6"
+      style={{
+        // Topbar biru terang: backgournd.jpg diselimuti gradasi biru cerah
+        // (80% biru, 20% gambar) agar warna birunya menonjol dan lebih terang.
+        backgroundImage: `linear-gradient(180deg, rgba(52,140,245,0.80), rgba(95,190,252,0.80)), url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       {/* Baris judul — meniru brand topbar web-bogor */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/20 pb-2.5">
         <div className="flex min-w-0 flex-col">
