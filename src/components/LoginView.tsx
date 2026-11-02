@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { login, SessionUser } from '../auth';
 import { LockKeyhole, UserRound, ShieldCheck } from 'lucide-react';
 import talogo from '../../talogo-crop.png';
+import logoTa from '../../logo-ta.png';
 
 interface LoginViewProps {
   onLoginSuccess: (session: SessionUser) => void;
@@ -36,6 +37,13 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
 
       <section className="relative w-full max-w-[360px] rounded-2xl border border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur sm:p-6">
         <header className="mb-6 text-center">
+          <div className="mx-auto mb-3 flex w-full items-center justify-center">
+            <img
+              src={logoTa}
+              alt="Logo"
+              className="h-12 w-auto max-w-full object-contain"
+            />
+          </div>
           <div className="mx-auto flex h-14 w-full items-center justify-center rounded-xl border border-slate-100 bg-slate-50 px-4">
             <img
               src={talogo}
