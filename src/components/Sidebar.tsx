@@ -80,128 +80,157 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
   ];
 
-  const getButtonClassName = (isActive: boolean) => {
-    if (isActive) {
-      return 'relative w-11 h-11 rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-900/25 ring-1 ring-slate-900/10 flex items-center justify-center transition-all';
-    }
-    return 'relative w-11 h-11 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm hover:ring-1 hover:ring-slate-200 flex items-center justify-center transition-all';
-  };
+  /**
+   * Gaya baris menu meniru web-bogor: teks putih transparan, dan menu aktif
+   * menjadi kartu putih dengan ikon merah (#C62828). Handler tetap sama.
+   */
+  const navRowClass = (isActive: boolean, hasBadge?: boolean) =>
+    [
+      'relative flex w-full items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors',
+      isActive
+        ? 'bg-white text-[#263238] shadow-sm'
+        : 'text-white/90 hover:bg-white/10 hover:text-white',
+      hasBadge ? 'pr-8' : '',
+    ].join(' ');
 
-  const iconButtonClass =
-    'w-10 h-10 rounded-2xl flex items-center justify-center transition-colors';
+  const footRowClass =
+    'flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[10px] font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white';
 
   return (
-    <aside className="w-18 md:w-20 flex-shrink-0 flex flex-col items-center justify-between py-6 px-2 border-r border-slate-100 select-none">
-      <div className="flex flex-col items-center gap-3">
+    <aside className="w-[170px] flex-shrink-0 overflow-hidden bg-gradient-to-b from-[#B71C1C] via-[#D32F2F] to-[#A31515] text-white select-none">
+      <div className="flex h-full flex-col overflow-y-auto px-3 py-4">
+        {/* Brand — tombol menuju Dashboard, teks & handler tetap sama */}
         <button
           onClick={() => setActiveTab('dashboard')}
           title="PROPERE - Dashboard Proyek"
-          className="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-700 text-white flex items-center justify-center shadow-lg shadow-slate-900/30 ring-1 ring-white/10 hover:scale-105 active:scale-95 transition-transform"
+          className="mb-4 flex items-center gap-2.5 rounded-lg px-1 py-1 text-left transition-opacity hover:opacity-90"
         >
-          <div className="grid grid-cols-2 gap-1">
-            <span className="w-2 h-2 rounded-full bg-white"></span>
-            <span className="w-2 h-2 rounded-full bg-teal-400"></span>
-            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-            <span className="w-2 h-2 rounded-full bg-white/70"></span>
-          </div>
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/15 ring-1 ring-white/25">
+            <span className="grid grid-cols-2 gap-1">
+              <span className="h-1.5 w-1.5 rounded-full bg-white"></span>
+              <span className="h-1.5 w-1.5 rounded-full bg-teal-300"></span>
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-300"></span>
+              <span className="h-1.5 w-1.5 rounded-full bg-white/70"></span>
+            </span>
+          </span>
+          <span className="flex min-w-0 flex-col">
+            <span className="text-[12px] font-semibold leading-tight tracking-wide text-white">
+              PROPERE
+            </span>
+            <span className="text-[9px] leading-tight text-white/75">Project Prelim</span>
+          </span>
         </button>
-        <span className="hidden md:block text-[8px] font-black uppercase tracking-[0.14em] text-slate-400">
-          PROPERE
-        </span>
-      </div>
 
-      <nav className="flex flex-col items-center gap-1.5 bg-slate-100/70 p-1.5 rounded-3xl border border-slate-200/70 shadow-inner">
-        {navItems.map(item => {
-          const isHidden = item.hidden;
-          if (isHidden) return null;
-          const Icon = item.icon;
-          const isActive = activeTab === item.id;
-          return (
-            <div key={item.id} className="relative group">
+        {/* Menu utama — daftar menu, badge, dan handler tetap sama */}
+        <nav className="flex flex-1 flex-col gap-[3px]">
+          {navItems.map(item => {
+            const isHidden = item.hidden;
+            if (isHidden) return null;
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
+            return (
               <button
+                key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 title={item.label}
                 aria-current={isActive ? 'page' : undefined}
-                className={getButtonClassName(isActive)}
+                className={navRowClass(isActive, item.badge !== undefined)}
               >
-                <Icon className="w-5 h-5" strokeWidth={isActive ? 2.1 : 1.8} />
+                <Icon
+                  className={`mt-px h-4 w-4 shrink-0 ${isActive ? 'text-[#C62828]' : ''}`}
+                  strokeWidth={isActive ? 2.1 : 1.8}
+                />
+                <span className="min-w-0 flex-1 text-left text-[10px] font-medium leading-tight">
+                  {item.label}
+                </span>
                 {item.badge !== undefined && (
-                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold leading-[18px] text-center ring-2 ring-slate-100">
+                  <span
+                    className={`absolute right-1.5 top-1 min-w-[16px] rounded-full bg-rose-500 px-1 text-center text-[9px] font-bold leading-4 text-white ring-2 ${
+                      isActive ? 'ring-white' : 'ring-white/50'
+                    }`}
+                  >
                     {item.badge}
                   </span>
                 )}
-                {isActive && (
-                  <span className="absolute -left-[9px] top-1/2 -translate-y-1/2 h-5 w-1 rounded-full bg-teal-500" />
-                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Aksi bawah — tombol & handler tetap sama */}
+        <div className="mt-3 flex flex-col gap-[3px] border-t border-white/20 pt-3">
+          <button
+            onClick={onOpenSop}
+            title="Petunjuk SOP & Alur Berkas"
+            className={footRowClass}
+          >
+            <Info className="h-3.5 w-3.5 shrink-0" strokeWidth={1.8} />
+            <span>Petunjuk SOP</span>
+          </button>
+
+          {role === 'ADMIN' && (
+            <>
+              <button
+                onClick={onClearAntrianData}
+                title="Hapus Semua Data Antrian"
+                className={footRowClass}
+              >
+                <Trash2 className="h-3.5 w-3.5 shrink-0" strokeWidth={1.8} />
+                <span>Hapus Antrian</span>
               </button>
 
-              <div className="absolute left-14 top-1/2 -translate-y-1/2 hidden group-hover:flex items-center z-50 pointer-events-none">
-                <div className="bg-slate-900 text-white text-xs font-medium px-3 py-1.5 rounded-xl shadow-xl whitespace-nowrap border border-slate-700 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
-                  {item.label}
-                </div>
-                <span className="w-2 h-2 -ml-1 rotate-45 bg-slate-900 border-r border-b border-slate-700"></span>
-              </div>
+              <button
+                onClick={onResetData}
+                title="Reset Data Demo"
+                className={footRowClass}
+              >
+                <RotateCcw className="h-3.5 w-3.5 shrink-0" strokeWidth={1.8} />
+                <span>Reset Data</span>
+              </button>
+            </>
+          )}
+
+          {role && userName && (
+            <div
+              title={`${userName} (${role})`}
+              className="mt-1 flex items-center gap-2 rounded-lg px-2 py-1.5"
+            >
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-[11px] font-bold text-[#C62828] ring-2 ring-white/40">
+                {userName.substring(0, 2).toUpperCase()}
+              </span>
+              <span className="flex min-w-0 flex-col">
+                <span className="truncate text-[10px] font-semibold leading-tight text-white">
+                  {userName}
+                </span>
+                <span className="text-[8px] uppercase leading-tight tracking-wider text-white/70">
+                  {role}
+                </span>
+              </span>
             </div>
-          );
-        })}
-      </nav>
+          )}
 
-      <div className="flex flex-col items-center gap-2">
-        <button
-          onClick={onOpenSop}
-          title="Petunjuk SOP & Alur Berkas"
-          className={`${iconButtonClass} text-slate-400 hover:text-teal-700 hover:bg-teal-50`}
-        >
-          <Info className="w-5 h-5" strokeWidth={1.8} />
-        </button>
-
-        {role === 'ADMIN' && (
-          <>
+          {!role && (
             <button
-              onClick={onClearAntrianData}
-              title="Hapus Semua Data Antrian"
-              className={`${iconButtonClass} text-slate-400 hover:text-rose-600 hover:bg-rose-50`}
+              onClick={() => setActiveTab('dashboard')}
+              title="Login sebagai Admin atau Verifikator"
+              className={footRowClass}
             >
-              <Trash2 className="w-4 h-4" strokeWidth={1.8} />
+              <Sparkles className="h-3.5 w-3.5 shrink-0" strokeWidth={1.8} />
+              <span>Login</span>
             </button>
+          )}
 
-            <button
-              onClick={onResetData}
-              title="Reset Data Demo"
-              className={`${iconButtonClass} text-slate-400 hover:text-rose-600 hover:bg-rose-50`}
-            >
-              <RotateCcw className="w-4 h-4" strokeWidth={1.8} />
-            </button>
-          </>
-        )}
-
-        {role && userName && (
-          <div
-            title={`${userName} (${role})`}
-            className="mt-1 w-10 h-10 rounded-full bg-gradient-to-tr from-teal-700 to-emerald-500 text-white text-xs font-bold flex items-center justify-center shadow-md ring-2 ring-white cursor-pointer"
-          >
-            {userName.substring(0, 2).toUpperCase()}
-          </div>
-        )}
-
-        {!role && (
           <button
-            onClick={() => setActiveTab('dashboard')}
-            title="Login sebagai Admin atau Verifikator"
-            className={`${iconButtonClass} text-slate-400 hover:text-teal-700 hover:bg-teal-50`}
+            onClick={onLogout}
+            title="Keluar Aplikasi"
+            className={footRowClass}
           >
-            <Sparkles className="w-4 h-4" strokeWidth={1.8} />
+            <Lock className="h-3.5 w-3.5 shrink-0" strokeWidth={1.8} />
+            <span>Keluar</span>
           </button>
-        )}
 
-        <button
-          onClick={onLogout}
-          title="Keluar Aplikasi"
-          className={`${iconButtonClass} text-slate-400 hover:text-rose-600 hover:bg-rose-50`}
-        >
-          <Lock className="w-4 h-4" strokeWidth={1.8} />
-        </button>
+          <p className="pt-2 text-center text-[8px] text-white/60">PT Telkom Akses</p>
+        </div>
       </div>
     </aside>
   );

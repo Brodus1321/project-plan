@@ -21,7 +21,6 @@ import { VerifikasiView } from './components/VerifikasiView';
 import { LoginView } from './components/LoginView';
 import { getSession, logout, SessionUser } from './auth';
 import { X, Layers } from 'lucide-react';
-import bgVideo from '../11.mp4';
 
 export default function App() {
   const [session, setSession] = useState<SessionUser | null>(getSession());
@@ -200,36 +199,22 @@ export default function App() {
   };
 
   return (
-    <div
-      className="relative isolate min-h-screen w-full p-2 sm:p-4 md:p-6 lg:p-8 flex items-center justify-center font-['Plus_Jakarta_Sans',sans-serif]"
-      style={{ backgroundColor: '#6b1220' }}
-    >
-      <video
-        className="fixed inset-0 -z-10 h-full w-full object-cover"
-        src={bgVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
+    <div className="relative flex h-screen w-full overflow-hidden bg-[#f4f6f8] font-['Plus_Jakarta_Sans',sans-serif]">
+      {/* Left Column Sidebar — tampilan web-bogor (visual saja) */}
+      <Sidebar
+        activeTab={tabValid}
+        setActiveTab={setActiveTab}
+        onOpenSop={() => setIsSopModalOpen(true)}
+        onResetData={handleResetData}
+        onClearAntrianData={handleClearAntrianData}
+        pendingEvidenCount={pendingEvidenCount}
+        role={session.role}
+        userName={session.nama}
+        onLogout={handleLogout}
       />
-      {/* Outer Floating Main Application Frame (matches user's uploaded image) */}
-      <div className="w-full max-w-7xl bg-white/95 backdrop-blur-xl rounded-[28px] md:rounded-[36px] shadow-2xl border border-white/70 overflow-hidden flex flex-col md:flex-row min-h-[820px] transition-all duration-300">
-        
-        {/* Left Column Sidebar */}
-        <Sidebar
-          activeTab={tabValid}
-          setActiveTab={setActiveTab}
-          onOpenSop={() => setIsSopModalOpen(true)}
-          onResetData={handleResetData}
-          onClearAntrianData={handleClearAntrianData}
-          pendingEvidenCount={pendingEvidenCount}
-          role={session.role}
-          userName={session.nama}
-          onLogout={handleLogout}
-        />
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col p-4 md:p-6 overflow-hidden">
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           {/* Top Bar Header */}
           <Header
             searchQuery={searchQuery}
@@ -244,7 +229,7 @@ export default function App() {
 
           {/* Toast Notification Alert */}
           {toastMessage && (
-            <div className="my-2 p-3 bg-slate-900 text-white text-xs font-semibold rounded-2xl shadow-lg border border-slate-700 flex items-center justify-between animate-fadeIn">
+            <div className="mx-4 mt-3 p-3 bg-slate-900 text-white text-xs font-semibold rounded-2xl shadow-lg border border-slate-700 flex items-center justify-between animate-fadeIn md:mx-6">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 <span>{toastMessage}</span>
@@ -256,7 +241,7 @@ export default function App() {
           )}
 
           {/* Viewport for Active Interface */}
-          <main className="flex-1 overflow-y-auto pt-4 pr-1">
+          <main className="flex-1 overflow-y-auto px-4 pb-6 pt-4 md:px-6">
             {/* 1. DASHBOARD */}
             {tabValid === 'dashboard' && (
               <DashboardView
@@ -314,7 +299,6 @@ export default function App() {
             )}
           </main>
         </div>
-      </div>
 
       {/* MODAL 1: Upload Eviden Transfer & Serah Terima (k & l) */}
       {evidenModalSub && (
