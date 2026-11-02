@@ -95,7 +95,7 @@ export const BerkasStepShell: React.FC<BerkasStepShellProps> = ({
       </header>
 
       {/* Slot alur — konten langkah ini */}
-      <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">{children}</div>
+      <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 overflow-x-auto max-w-full">{children}</div>
 
       {actions && (
         <div className="flex flex-wrap items-center justify-end gap-2 pt-1">{actions}</div>
