@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Search, ShieldCheck, ChevronDown } from 'lucide-react';
 import { formatRupiah } from '../db/storage';
 import { ProjectSubmission } from '../types';
@@ -42,8 +42,17 @@ export const Header: React.FC<HeaderProps> = ({
         backgroundPosition: 'center',
       }}
     >
-      {/* Baris judul — meniru brand topbar web-bogor */}
+      {/* Baris judul â€” meniru brand topbar web-bogor */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/20 pb-2.5">
+        <div className="flex min-w-0 flex-col">
+          <span className="text-[12px] font-semibold leading-tight tracking-wide text-white">
+            PROPERE
+          </span>
+          <span className="text-[9px] leading-tight text-white/80">
+            Project Prelim — PT Telkom Akses
+          </span>
+        </div>
+
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-bold uppercase tracking-wider text-white/85">MIE II</span>
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -51,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Baris kontrol — pencarian, filter, SOP, dan ringkasan angka tetap sama */}
+      {/* Baris kontrol â€” pencarian, filter, SOP, dan ringkasan angka tetap sama */}
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <div className="flex min-w-[240px] flex-1 flex-wrap items-center gap-2">
           {/* Search bar */}
@@ -115,7 +124,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Floating Highlight Metrics Pill — isi & fungsi tetap sama */}
+        {/* Floating Highlight Metrics Pill â€” isi & fungsi tetap sama */}
         <div className="ml-auto inline-flex items-center bg-slate-950 text-white rounded-full p-1.5 px-3 shadow-lg border border-slate-800 text-xs">
           {/* Section 1 */}
           <div className="flex items-center gap-2 px-3 border-r border-slate-800">

@@ -111,7 +111,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Brand — tombol menuju Dashboard, teks & handler tetap sama */}
         <button
           onClick={() => setActiveTab('dashboard')}
-          title="Dashboard Proyek"
+          title="PROPERE - Dashboard Proyek"
           className="mb-4 flex items-center gap-2.5 rounded-lg px-1 py-1 text-left transition-opacity hover:opacity-90"
         >
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/15 ring-1 ring-white/25">
@@ -123,6 +123,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
           </span>
           <span className="flex min-w-0 flex-col">
+            <span className="text-[12px] font-semibold leading-tight tracking-wide text-white">
+              PROPERE
+            </span>
+            <span className="text-[9px] leading-tight text-white/75">Project Prelim</span>
           </span>
         </button>
 
