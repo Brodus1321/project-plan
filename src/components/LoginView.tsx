@@ -51,10 +51,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
               className="h-9 w-auto max-w-full object-contain"
             />
           </div>
-          <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-teal-700">
-            Project Prelim
-          </p>
-          <h1 className="mt-1 text-lg font-bold tracking-tight text-slate-800">Masuk ke PROPERE</h1>
+          <h1 className="mt-1 text-lg font-bold tracking-tight text-slate-800">Masuk</h1>
           <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
             Gunakan akun Admin atau Verifikator yang terdaftar.
           </p>

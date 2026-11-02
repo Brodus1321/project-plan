@@ -44,15 +44,6 @@ export const Header: React.FC<HeaderProps> = ({
     >
       {/* Baris judul — meniru brand topbar web-bogor */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/20 pb-2.5">
-        <div className="flex min-w-0 flex-col">
-          <span className="text-[12px] font-semibold leading-tight tracking-wide text-white">
-            PROPERE
-          </span>
-          <span className="text-[9px] leading-tight text-white/80">
-            Project Prelim — PT Telkom Akses
-          </span>
-        </div>
-
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-bold uppercase tracking-wider text-white/85">MIE II</span>
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
