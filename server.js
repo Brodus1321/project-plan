@@ -33,5 +33,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`PrelimHub berjalan di http://localhost:${PORT}`);
+  console.log(`PROPERE berjalan di http://localhost:${PORT}`);
 });
