@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { login, SessionUser } from '../auth';
-import { Lock, User, ShieldCheck, Sparkles } from 'lucide-react';
+import { LockKeyhole, UserRound, ShieldCheck } from 'lucide-react';
 import talogo from '../../talogo-crop.png';
 
 interface LoginViewProps {
@@ -18,99 +18,95 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
     setError(null);
     setLoading(true);
     setTimeout(() => {
-      const s = login(username, password);
+      const session = login(username, password);
       setLoading(false);
-      if (!s) {
+      if (!session) {
         setError('Username atau password salah.');
         return;
       }
-      onLoginSuccess(s);
+      onLoginSuccess(session);
     }, 250);
   };
 
   return (
-    <div
-      className="relative isolate min-h-screen w-full flex items-center justify-center p-4 font-['Plus_Jakarta_Sans',sans-serif]"
-      style={{ backgroundColor: '#6b1220' }}
-    >
-      <div className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-950/90 via-slate-950/70 to-teal-950/40" />
-      <div className="w-full max-w-md bg-white/95 backdrop-blur-xl rounded-[28px] shadow-2xl border border-white/70 p-6 md:p-8">
-        <div className="flex flex-col items-center gap-4 text-center mb-7">
-          <div className="flex h-24 w-full items-center justify-center rounded-3xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50 px-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f5f8f8] p-5 font-['Plus_Jakarta_Sans',sans-serif]">
+      {/* Latar lembut tanpa kontras berlebihan. */}
+      <div className="pointer-events-none absolute -left-20 top-[-7rem] h-80 w-80 rounded-full bg-teal-100/60 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-28 -right-16 h-96 w-96 rounded-full bg-slate-200/65 blur-3xl" />
+
+      <section className="relative w-full max-w-[360px] rounded-2xl border border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur sm:p-6">
+        <header className="mb-6 text-center">
+          <div className="mx-auto flex h-14 w-full items-center justify-center rounded-xl border border-slate-100 bg-slate-50 px-4">
             <img
               src={talogo}
               alt="Logo Telkom Akses"
-              className="h-16 w-auto max-w-full object-contain"
+              className="h-9 w-auto max-w-full object-contain"
             />
           </div>
-          <div>
-            <h1 className="text-2xl font-black uppercase tracking-[0.18em] text-slate-900 flex items-center justify-center gap-2">
-              PROPERE <Sparkles className="h-4 w-4 text-amber-500" />
-            </h1>
-            <p className="mt-1.5 text-xs font-medium text-slate-500">
-              Login terpisah untuk Admin &amp; Verifikator
-            </p>
-          </div>
-        </div>
+          <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-teal-700">
+            Project Prelim
+          </p>
+          <h1 className="mt-1 text-lg font-bold tracking-tight text-slate-800">Masuk ke PROPERE</h1>
+          <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
+            Gunakan akun Admin atau Verifikator yang terdaftar.
+          </p>
+        </header>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-3.5">
           <div>
-            <label className="block text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1.5">
+            <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wide text-slate-500">
               Username
             </label>
             <div className="relative">
-              <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <UserRound className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
               <input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="admin / verifikator"
-                className="w-full pl-9 pr-3 py-2.5 rounded-2xl border border-slate-200 bg-white/80 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-100 focus:border-teal-500 text-sm font-medium text-slate-800"
+                placeholder="Masukkan username"
+                autoComplete="username"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-9 py-2.5 text-sm font-medium text-slate-800 outline-none transition focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1.5">
+            <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wide text-slate-500">
               Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <LockKeyhole className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••"
-                className="w-full pl-9 pr-3 py-2.5 rounded-2xl border border-slate-200 bg-white/80 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-100 focus:border-teal-500 text-sm font-medium text-slate-800"
+                placeholder="Masukkan password"
+                autoComplete="current-password"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-9 py-2.5 text-sm font-medium text-slate-800 outline-none transition focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
                 required
               />
             </div>
             {error && (
-              <p className="mt-2 text-[11px] font-semibold text-rose-600">{error}</p>
+              <p role="alert" className="mt-2 text-[11px] font-medium text-rose-600">
+                {error}
+              </p>
             )}
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 px-4 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition-all disabled:opacity-50 flex items-center justify-center gap-1.5"
+            className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-teal-700 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-teal-800 focus:outline-none focus:ring-4 focus:ring-teal-500/20 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <ShieldCheck className="w-4 h-4" />
-            <span>{loading ? 'Memproses...' : 'Masuk'}</span>
+            <ShieldCheck className="h-4 w-4" />
+            {loading ? 'Memproses...' : 'Masuk'}
           </button>
         </form>
 
-        <div className="mt-5 grid grid-cols-2 gap-2 text-[10px] text-slate-500">
-          <div className="p-2 rounded-2xl bg-slate-50 border border-slate-200">
-            <span className="font-bold text-slate-700">Admin</span>
-            <div className="mt-0.5">admin / pas123</div>
-          </div>
-          <div className="p-2 rounded-2xl bg-slate-50 border border-slate-200">
-            <span className="font-bold text-slate-700">Verifikator</span>
-            <div className="mt-0.5">verifikator / pass123</div>
-          </div>
-        </div>
-      </div>
-    </div>
+        <footer className="mt-5 border-t border-slate-100 pt-3 text-center text-[10px] text-slate-400">
+          Akses sistem terbatas untuk pengguna terdaftar.
+        </footer>
+      </section>
+    </main>
   );
 };
