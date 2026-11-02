@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Lock,
 } from 'lucide-react';
+import sideBg from '../../side.jpg';
 
 export type ActiveTab = 'dashboard' | 'input' | 'antrian' | 'amandemen' | 'laporan_if' | 'verifikasi';
 
@@ -97,8 +98,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
     'flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[10px] font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white';
 
   return (
-    <aside className="w-[170px] flex-shrink-0 overflow-hidden bg-gradient-to-b from-[#B71C1C] via-[#D32F2F] to-[#A31515] text-white select-none">
-      <div className="flex h-full flex-col overflow-y-auto px-3 py-4">
+    <aside className="relative w-[170px] flex-shrink-0 overflow-hidden bg-[#4a0d0d] text-white select-none">
+      {/* Tekstur logam merah (side.jpg) sebagai latar sidebar — scale-150
+          memotong sudut putih agar hanya tekstur merah yang terlihat. */}
+      <img
+        src={sideBg}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full scale-150 object-cover"
+      />
+      <div className="relative flex h-full flex-col overflow-y-auto px-3 py-4">
         {/* Brand — tombol menuju Dashboard, teks & handler tetap sama */}
         <button
           onClick={() => setActiveTab('dashboard')}

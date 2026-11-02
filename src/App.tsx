@@ -21,6 +21,7 @@ import { VerifikasiView } from './components/VerifikasiView';
 import { LoginView } from './components/LoginView';
 import { getSession, logout, SessionUser } from './auth';
 import { X, Layers } from 'lucide-react';
+import bgImage from '../backgournd.jpg';
 
 export default function App() {
   const [session, setSession] = useState<SessionUser | null>(getSession());
@@ -199,7 +200,17 @@ export default function App() {
   };
 
   return (
-    <div className="relative flex h-screen w-full overflow-hidden bg-[#f4f6f8] font-['Plus_Jakarta_Sans',sans-serif]">
+    <div
+      className="relative flex h-screen w-full overflow-hidden font-['Plus_Jakarta_Sans',sans-serif]"
+      style={{
+        backgroundColor: '#f4f6f8',
+        // Latar tech navy (backgournd.jpg) diselimuti putih tipis agar teks
+        // kartu di atasnya tetap terbaca.
+        backgroundImage: `linear-gradient(rgba(244,246,248,0.80), rgba(244,246,248,0.80)), url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       {/* Left Column Sidebar — tampilan web-bogor (visual saja) */}
       <Sidebar
         activeTab={tabValid}
