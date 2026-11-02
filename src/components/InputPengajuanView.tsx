@@ -3124,7 +3124,7 @@ Pilih Designator dan isi Volume saja — uraian, satuan, serta seluruh harga dii
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
       <div ref={topRef} />
 
       {/* Kepala */}
@@ -3274,7 +3274,7 @@ Pilih Designator dan isi Volume saja — uraian, satuan, serta seluruh harga dii
             </div>
           </div>
 
-          <div className="w-full flex items-center justify-between gap-3 pt-3 border-t border-slate-100">
+          <div className="w-full flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={() => goto(step - 1)}

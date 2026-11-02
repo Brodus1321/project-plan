@@ -61,7 +61,7 @@ export const WizardRail: React.FC<WizardRailProps> = ({
             const status = active ? 'Sedang diisi' : done ? 'Lengkap' : 'Belum diisi';
 
             return (
-              <li key={def.step} className="min-w-[150px] flex-1">
+              <li key={def.step} className="min-w-[120px] flex-1 basis-[140px]">
                 <button
                   type="button"
                   role="tab"
