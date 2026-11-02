@@ -15,6 +15,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import bgImage from '../../backgournd.jpg';
+import logoTa from '../../logo-ta.png';
 interface DashboardViewProps {
   submissions: ProjectSubmission[];
   onSelectSubmission: (sub: ProjectSubmission) => void;
@@ -234,6 +235,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         }}
       >
         <header className="text-center">
+          <img src={logoTa} alt="Logo" className="mx-auto mb-3 h-10 w-auto max-w-full object-contain" />
           <h2 className="text-2xl font-semibold text-white tracking-tight">Indikator Kinerja Utama (KPI)</h2>
           <p className="mt-1.5 text-[13px] text-blue-200/80">Ringkasan metrik pertanggungan tingkat eksekutif.</p>
           <button

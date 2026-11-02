@@ -44,7 +44,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
               className="h-12 w-auto max-w-full object-contain"
             />
           </div>
-          <div className="mx-auto flex h-14 w-full items-center justify-center rounded-xl border border-slate-100 bg-slate-50 px-4">
+          <div className="mx-auto flex h-14 w-full items-center justify-center px-4">
             <img
               src={talogo}
               alt="Logo Telkom Akses"
