@@ -41,105 +41,77 @@ body {
 }
 
 /* === PROPERE WHITE LINES === */
-/* (override final - satu garis per kontainer via pseudo-element) */
+/* (border langsung + box-shadow ring; tanpa ::after agar tidak tertutup) */
 
-/* a. Header atas (kartu header) */
 .proper-theme-v2 .header-card {
-  position: relative;
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
   overflow: visible !important;
 }
-.proper-theme-v2 .header-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  border: 1.5px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* b. Kartu KPI besar */
 .proper-theme-v2 .card-big {
-  position: relative;
+  border: 2.5px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 14px rgba(255, 255, 255, 0.08) !important;
   overflow: visible !important;
 }
-.proper-theme-v2 .card-big::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 28px;
-  border: 2px solid rgba(255, 255, 255, 0.75);
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* c. 3 kartu KPI kecil */
 .proper-theme-v2 .card-kpi {
-  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04)) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 18px rgba(190, 235, 255, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
   overflow: visible !important;
+  position: relative;
+  z-index: 2;
 }
-.proper-theme-v2 .card-kpi::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 16px rgba(190, 235, 255, 0.5);
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* d. 3 panel bawah */
 .proper-theme-v2 .card-panel {
-  position: relative;
+  border: 2.5px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 14px rgba(255, 255, 255, 0.08) !important;
   overflow: visible !important;
 }
-.proper-theme-v2 .card-panel::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* e. Tombol "+ Buat Pengajuan Baru" */
 .proper-theme-v2 .btn-buat-pengajuan {
-  position: relative;
-  overflow: visible !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.7), 0 4px 0 rgba(0, 0, 0, 0.4) !important;
 }
-.proper-theme-v2 .btn-buat-pengajuan::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 10px;
-  border: 2.5px solid #fff;
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.6);
-  pointer-events: none;
-  z-index: 5;
+.proper-theme-v2 .sidebar-active {
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5) !important;
 }
 
-/* f. Item sidebar aktif "1. Dashboard" */
-.sidebar .sidebar-active {
-  position: relative;
-  overflow: visible !important;
+/* Header search/dropdown/SOP/stat pill */
+.proper-theme-v2 .header-card input,
+.proper-theme-v2 .header-card select {
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
 }
-.sidebar .sidebar-active::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 10px;
-  border: 1.5px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  pointer-events: none;
-  z-index: 5;
+.proper-theme-v2 .header-card button {
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
+}
+/* SOP button: merah marun + ring putih */
+.proper-theme-v2 .header-card button.bg-red-900\/70 {
+  border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7), 0 0 12px rgba(255, 70, 90, 0.5) !important;
+}
+/* stat pill kanan atas */
+.proper-theme-v2 .header-card .bg-slate-950 {
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 70, 90, 0.45) !important;
 }
 
-/* g. Hapus border/outline dari inner container agar tidak ada kotak ganda */
+/* Garis pemisah */
+.proper-theme-v2 .header-card {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+.sidebar {
+  border-right: 1px solid rgba(255, 255, 255, 0.45) !important;
+}
+.sidebar-bottom-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.45) !important;
+}
+.proper-theme-v2 .header-card .border-l {
+  border-left: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Hapus border/outline/box-shadow dari inner container */
 .proper-theme-v2 .card-big > *,
 .proper-theme-v2 .card-big > * > *,
 .proper-theme-v2 .card-kpi > *,
@@ -150,27 +122,22 @@ body {
   box-shadow: none !important;
 }
 
-/* Garis pemisah */
-.proper-theme-v2 .header-card {
-  /* horizontal divider di bawah header ditangani di bawah */
-}
-.proper-theme-v2 .header-divider {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-}
-.sidebar {
-  border-right: 1px solid rgba(255, 255, 255, 0.45);
-}
-.sidebar-bottom-divider {
-  border-top: 1px solid rgba(255, 255, 255, 0.45);
-}
-.proper-theme-v2 .stat-pill .border-l,
-.proper-theme-v2 .stat-divider {
-  border-left: 1px solid rgba(255, 255, 255, 0.5);
+/* Hover */
+.proper-theme-v2 .card-big:hover,
+.proper-theme-v2 .card-kpi:hover,
+.proper-theme-v2 .card-panel:hover,
+.proper-theme-v2 .btn-buat-pengajuan:hover {
+  border-color: rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 22px rgba(255, 255, 255, 0.5), 0 0 32px rgba(120, 180, 255, 0.4) !important;
+  transition: all 0.25s ease !important;
 }
 
-/* Header search/dropdown/SOP border 1.5px putih 0.7 */
-.proper-theme-v2 .header-card input,
-.proper-theme-v2 .header-card select,
-.proper-theme-v2 .header-card button {
-  border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
+/* Judul KPI putih dengan text-shadow */
+.proper-theme-v2 .kpi-title {
+  color: #fff !important;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.35) !important;
+}
+.proper-theme-v2 .kpi-number {
+  color: #fff !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5) !important;
 }
