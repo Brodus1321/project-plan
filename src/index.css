@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+:root {
+  --border-white-strong: rgba(255, 255, 255, 0.9);
+  --border-white-medium: rgba(255, 255, 255, 0.75);
+  --border-white-soft: rgba(255, 255, 255, 0.5);
+  --glow-white: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 14px rgba(255, 255, 255, 0.35), 0 0 28px rgba(120, 180, 255, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 0 12px rgba(255, 255, 255, 0.08);
+}
+
 /* Sembunyikan scrollbar pada strip legenda lokasi (tetap bisa digeser). */
 @utility scrollbar-none {
   scrollbar-width: none;
@@ -18,8 +25,38 @@
   -moz-appearance: textfield;
 }
 
-.no-spin::-webkit-outer-spin-button,
-.no-spin::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+/* === Override: garis pembatas putih tegas (Dashboard PROPERE) === */
+.rounded-3xl {
+  border: 2px solid var(--border-white-medium) !important;
+  box-shadow: var(--glow-white) !important;
+}
+.rounded-2xl {
+  border: 2px solid var(--border-white-strong) !important;
+  background: linear-gradient(145deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04)) !important;
+  backdrop-filter: blur(14px) !important;
+  box-shadow: var(--glow-white) !important;
+}
+header {
+  border: 1.5px solid var(--border-white-strong) !important;
+  box-shadow: 0 0 12px rgba(255,255,255,0.35), 0 0 16px rgba(255,80,80,0.35) !important;
+}
+aside {
+  border-right: 1.5px solid var(--border-white-soft) !important;
+}
+.border-t {
+  border-top: 1.5px solid rgba(255,255,255,0.6) !important;
+}
+.border-r {
+  border-right: 1.5px solid rgba(255,255,255,0.6) !important;
+}
+.border-l {
+  border-left: 1.5px solid rgba(255,255,255,0.6) !important;
+}
+.rounded-full {
+  border: 1.5px solid var(--border-white-soft) !important;
+}
+button:hover, .rounded-3xl:hover, .rounded-2xl:hover {
+  border-color: rgba(255,255,255,1) !important;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.5), 0 0 32px rgba(120,180,255,0.4), inset 0 1px 0 rgba(255,255,255,0.7) !important;
+  transition: all 0.25s ease !important;
 }
