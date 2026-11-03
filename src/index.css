@@ -12,28 +12,21 @@
   --line-soft: rgba(255, 255, 255, 0.5);
 }
 
-/* Background halaman: gradasi vertikal navy */
 body {
   background: linear-gradient(180deg, #0a1128 0%, #0d1633 100%);
   background-attachment: fixed;
 }
 
-/* Sembunyikan scrollbar pada strip legenda lokasi (tetap bisa digeser). */
 @utility scrollbar-none {
   scrollbar-width: none;
   -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  &::-webkit-scrollbar { display: none; }
 }
 
-/* Field angka: sembunyikan spinner bawaan browser */
 .no-spin {
   appearance: textfield;
   -moz-appearance: textfield;
 }
-
 .no-spin::-webkit-outer-spin-button,
 .no-spin::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -41,17 +34,17 @@ body {
 }
 
 /* === PROPERE WHITE LINES === */
-/* (border langsung + box-shadow ring; tanpa ::after agar tidak tertutup) */
-
 .proper-theme-v2 .header-card {
   border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
   overflow: visible !important;
+  position: relative;
 }
 .proper-theme-v2 .card-big {
-  border: 2.5px solid rgba(255, 255, 255, 0.9) !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 14px rgba(255, 255, 255, 0.08) !important;
+  border: 3px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 22px rgba(255, 255, 255, 0.35), inset 0 0 14px rgba(255, 255, 255, 0.08) !important;
   overflow: visible !important;
+  position: relative;
 }
 .proper-theme-v2 .card-kpi {
   border: 2px solid rgba(255, 255, 255, 0.95) !important;
@@ -63,9 +56,10 @@ body {
   z-index: 2;
 }
 .proper-theme-v2 .card-panel {
-  border: 2.5px solid rgba(255, 255, 255, 0.9) !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 14px rgba(255, 255, 255, 0.08) !important;
+  border: 3px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 22px rgba(255, 255, 255, 0.35), inset 0 0 14px rgba(255, 255, 255, 0.08) !important;
   overflow: visible !important;
+  position: relative;
 }
 .proper-theme-v2 .btn-buat-pengajuan {
   border: 2px solid #fff !important;
@@ -86,21 +80,16 @@ body {
   border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
 }
-/* SOP button: merah marun + ring putih */
 .proper-theme-v2 .header-card button.bg-red-900\/70 {
   border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7), 0 0 12px rgba(255, 70, 90, 0.5) !important;
 }
-/* stat pill kanan atas */
 .proper-theme-v2 .header-card .bg-slate-950 {
   border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 70, 90, 0.45) !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.3), 0 0 16px rgba(255, 70, 90, 0.4) !important;
 }
 
 /* Garis pemisah */
-.proper-theme-v2 .header-card {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
-}
 .sidebar {
   border-right: 1px solid rgba(255, 255, 255, 0.45) !important;
 }
@@ -110,10 +99,13 @@ body {
 .proper-theme-v2 .header-card .border-l {
   border-left: 1px solid rgba(255, 255, 255, 0.5) !important;
 }
+.proper-theme-v2 .header-divider {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
 
 /* Hapus border/outline/box-shadow dari inner container */
-.proper-theme-v2 .card-big > *,
-.proper-theme-v2 .card-big > * > *,
+.proper-theme-v2 .card-big > *:not(.card-kpi),
+.proper-theme-v2 .card-big > * > *:not(.card-kpi),
 .proper-theme-v2 .card-kpi > *,
 .proper-theme-v2 .card-panel > *,
 .proper-theme-v2 .card-panel > * > * {
@@ -130,14 +122,4 @@ body {
   border-color: rgba(255, 255, 255, 1) !important;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 22px rgba(255, 255, 255, 0.5), 0 0 32px rgba(120, 180, 255, 0.4) !important;
   transition: all 0.25s ease !important;
-}
-
-/* Judul KPI putih dengan text-shadow */
-.proper-theme-v2 .kpi-title {
-  color: #fff !important;
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.35) !important;
-}
-.proper-theme-v2 .kpi-number {
-  color: #fff !important;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5) !important;
 }
