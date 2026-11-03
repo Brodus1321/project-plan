@@ -7,9 +7,13 @@
   --cyan-glow: rgba(79, 216, 240, 0.45);
   --white-line: rgba(255, 255, 255, 0.55);
   --red-neon: rgba(255, 70, 90, 0.55);
-  --line-strong: rgba(255, 255, 255, 0.95);
-  --line-medium: rgba(255, 255, 255, 0.75);
-  --line-soft: rgba(255, 255, 255, 0.5);
+  --line-w-main: 2.5px;
+  --line-w-card: 2px;
+  --line-w-ui: 1.5px;
+  --line-alpha-main: 0.95;
+  --line-alpha-card: 0.95;
+  --line-alpha-ui: 0.9;
+  --glow-white: 0 0 16px rgba(255, 255, 255, 0.35);
 }
 
 body {
@@ -34,21 +38,20 @@ body {
 }
 
 /* === PROPERE WHITE LINES === */
-.header-card {
-  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
-  border-bottom: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+.proper-theme-v2 .header-card {
+  border: var(--line-w-ui) solid rgba(255, 255, 255, var(--line-alpha-ui)) !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
   overflow: visible !important;
   position: relative;
 }
 .proper-theme-v2 .card-big {
-  border: 3px solid rgba(255, 255, 255, 0.95) !important;
+  border: var(--line-w-main) solid rgba(255, 255, 255, var(--line-alpha-main)) !important;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 22px rgba(255, 255, 255, 0.35), inset 0 0 14px rgba(255, 255, 255, 0.08) !important;
   overflow: visible !important;
   position: relative;
 }
 .proper-theme-v2 .card-kpi {
-  border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  border: var(--line-w-card) solid rgba(255, 255, 255, var(--line-alpha-card)) !important;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04)) !important;
   backdrop-filter: blur(12px) !important;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 18px rgba(190, 235, 255, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
@@ -57,14 +60,14 @@ body {
   z-index: 2;
 }
 .proper-theme-v2 .card-panel {
-  border: 3px solid rgba(255, 255, 255, 0.95) !important;
+  border: var(--line-w-main) solid rgba(255, 255, 255, var(--line-alpha-main)) !important;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 22px rgba(255, 255, 255, 0.35), inset 0 0 14px rgba(255, 255, 255, 0.08) !important;
   overflow: visible !important;
   position: relative;
 }
 .proper-theme-v2 .btn-buat-pengajuan {
   border: 2.5px solid #fff !important;
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.7), 0 4px 0 rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.6), 0 4px 0 rgba(0, 0, 0, 0.35) !important;
 }
 .proper-theme-v2 .sidebar-active {
   border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
@@ -72,21 +75,21 @@ body {
 }
 
 /* Header search/dropdown/SOP/stat pill */
-.header-card input,
-.header-card select {
-  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+.proper-theme-v2 .header-card input,
+.proper-theme-v2 .header-card select {
+  border: var(--line-w-ui) solid rgba(255, 255, 255, var(--line-alpha-ui)) !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
 }
-.header-card button {
-  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+.proper-theme-v2 .header-card button {
+  border: var(--line-w-ui) solid rgba(255, 255, 255, var(--line-alpha-ui)) !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
 }
-.header-card button.bg-red-900/70 {
-  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
-  box-shadow: 0 0 12px rgba(255, 70, 90, 0.5) !important;
+.proper-theme-v2 .header-card button.bg-red-900\/70 {
+  border: var(--line-w-ui) solid rgba(255, 255, 255, var(--line-alpha-ui)) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7), 0 0 12px rgba(255, 70, 90, 0.5) !important;
 }
-.header-card .bg-slate-950 {
-  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+.proper-theme-v2 .header-card .bg-slate-950 {
+  border: var(--line-w-ui) solid rgba(255, 255, 255, var(--line-alpha-ui)) !important;
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.3), 0 0 16px rgba(255, 70, 90, 0.4) !important;
 }
 
@@ -97,11 +100,11 @@ body {
 .sidebar-bottom-divider {
   border-top: 1.5px solid rgba(255, 255, 255, 0.5) !important;
 }
-.header-card .border-l {
+.proper-theme-v2 .header-card .border-l {
   border-left: 1.5px solid rgba(255, 255, 255, 0.5) !important;
 }
 .proper-theme-v2 .header-divider {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.75) !important;
 }
 
 /* Hapus border/outline/box-shadow dari inner container */
