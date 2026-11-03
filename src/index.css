@@ -34,8 +34,9 @@ body {
 }
 
 /* === PROPERE WHITE LINES === */
-.proper-theme-v2 .header-card {
+.header-card {
   border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.75) !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
   overflow: visible !important;
   position: relative;
@@ -62,7 +63,7 @@ body {
   position: relative;
 }
 .proper-theme-v2 .btn-buat-pengajuan {
-  border: 2px solid #fff !important;
+  border: 2.5px solid #fff !important;
   box-shadow: 0 0 18px rgba(255, 255, 255, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.7), 0 4px 0 rgba(0, 0, 0, 0.4) !important;
 }
 .proper-theme-v2 .sidebar-active {
@@ -71,33 +72,33 @@ body {
 }
 
 /* Header search/dropdown/SOP/stat pill */
-.proper-theme-v2 .header-card input,
-.proper-theme-v2 .header-card select {
+.header-card input,
+.header-card select {
   border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
 }
-.proper-theme-v2 .header-card button {
+.header-card button {
   border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.35) !important;
 }
-.proper-theme-v2 .header-card button.bg-red-900\/70 {
-  border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7), 0 0 12px rgba(255, 70, 90, 0.5) !important;
+.header-card button.bg-red-900/70 {
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 0 12px rgba(255, 70, 90, 0.5) !important;
 }
-.proper-theme-v2 .header-card .bg-slate-950 {
+.header-card .bg-slate-950 {
   border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.3), 0 0 16px rgba(255, 70, 90, 0.4) !important;
 }
 
 /* Garis pemisah */
 .sidebar {
-  border-right: 1px solid rgba(255, 255, 255, 0.45) !important;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.55) !important;
 }
 .sidebar-bottom-divider {
-  border-top: 1px solid rgba(255, 255, 255, 0.45) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.5) !important;
 }
-.proper-theme-v2 .header-card .border-l {
-  border-left: 1px solid rgba(255, 255, 255, 0.5) !important;
+.header-card .border-l {
+  border-left: 1.5px solid rgba(255, 255, 255, 0.5) !important;
 }
 .proper-theme-v2 .header-divider {
   border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
