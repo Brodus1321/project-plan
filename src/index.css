@@ -1,10 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --border-white-strong: rgba(255, 255, 255, 0.9);
-  --border-white-medium: rgba(255, 255, 255, 0.75);
-  --border-white-soft: rgba(255, 255, 255, 0.5);
-  --glow-white: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 14px rgba(255, 255, 255, 0.35), 0 0 28px rgba(120, 180, 255, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 0 12px rgba(255, 255, 255, 0.08);
+  --bg-deep: #0a1128;
+  --bg-card: #0f1a33;
+  --cyan: #4fd8f0;
+  --cyan-glow: rgba(79, 216, 240, 0.45);
+  --white-line: rgba(255, 255, 255, 0.55);
+  --red-neon: rgba(255, 70, 90, 0.55);
+}
+
+/* Background halaman: gradasi vertikal navy + tekstur jaring/titik halus */
+body {
+  background: linear-gradient(180deg, #0a1128 0%, #0d1633 100%);
+  background-attachment: fixed;
 }
 
 /* Sembunyikan scrollbar pada strip legenda lokasi (tetap bisa digeser). */
@@ -17,46 +25,100 @@
   }
 }
 
-/* Field angka: sembunyikan spinner bawaan browser agar suffix (Rp / % / hari)
-   tidak bertabrakan. Nilai tetap bisa diketik, digeser panah keyboard, atau
-   lewat chip persentase. */
+/* Field angka: sembunyikan spinner bawaan browser */
 .no-spin {
   appearance: textfield;
   -moz-appearance: textfield;
 }
 
-/* === Override: garis pembatas putih tegas (Dashboard PROPERE) === */
-.rounded-3xl {
-  border: 2px solid var(--border-white-medium) !important;
-  box-shadow: var(--glow-white) !important;
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
-.rounded-2xl {
-  border: 2px solid var(--border-white-strong) !important;
-  background: linear-gradient(145deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04)) !important;
-  backdrop-filter: blur(14px) !important;
-  box-shadow: var(--glow-white) !important;
+
+/* === PROPERE THEME V2 === */
+/* (override border/glow final - diterapkan ke kontainer utama dashboard) */
+.proper-theme-v2 .card-big {
+  position: relative;
+  border-radius: 28px;
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
-header {
-  border: 1.5px solid var(--border-white-strong) !important;
-  box-shadow: 0 0 12px rgba(255,255,255,0.35), 0 0 16px rgba(255,80,80,0.35) !important;
+.proper-theme-v2 .card-kpi {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(190, 235, 255, 0.75);
+  border-radius: 18px;
+  box-shadow: 0 0 20px var(--cyan-glow), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 0 18px rgba(79, 216, 240, 0.12);
 }
-aside {
-  border-right: 1.5px solid var(--border-white-soft) !important;
+.proper-theme-v2 .card-panel {
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
-.border-t {
-  border-top: 1.5px solid rgba(255,255,255,0.6) !important;
+.proper-theme-v2 .btn-buat-pengajuan {
+  background: linear-gradient(180deg, #3b5bd6, #1a2a78);
+  border: 2px solid rgba(220, 235, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 0 18px rgba(120, 170, 255, 0.55), inset 0 2px 0 rgba(255, 255, 255, 0.65), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 rgba(0, 0, 0, 0.4);
 }
-.border-r {
-  border-right: 1.5px solid rgba(255,255,255,0.6) !important;
+.proper-theme-v2 .btn-buat-pengajuan:hover {
+  box-shadow: 0 0 24px rgba(120, 170, 255, 0.75), inset 0 2px 0 rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+  transition: all 0.25s ease;
 }
-.border-l {
-  border-left: 1.5px solid rgba(255,255,255,0.6) !important;
+.proper-theme-v2 .stat-pill {
+  border: 1.5px solid var(--red-neon);
+  box-shadow: 0 0 18px var(--red-neon);
+  background: rgba(10, 15, 40, 0.7);
 }
-.rounded-full {
-  border: 1.5px solid var(--border-white-soft) !important;
+.proper-theme-v2 .stat-pill .divider {
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
 }
-button:hover, .rounded-3xl:hover, .rounded-2xl:hover {
-  border-color: rgba(255,255,255,1) !important;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.5), 0 0 32px rgba(120,180,255,0.4), inset 0 1px 0 rgba(255,255,255,0.7) !important;
-  transition: all 0.25s ease !important;
+.proper-theme-v2 .header-card {
+  margin: 12px;
+  border-radius: 20px;
+  border: none;
+  background: linear-gradient(120deg, #1c2f7a 0%, #141f4d 45%, #0e1735 100%);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+.proper-theme-v2 .sidebar {
+  background: linear-gradient(180deg, #5a1a1a 0%, #3a0d0d 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.35);
+}
+.proper-theme-v2 .sidebar-active {
+  border: 1px solid rgba(255, 90, 110, 0.8);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 90, 110, 0.3);
+  color: #fff;
+}
+.proper-theme-v2 .sidebar-bottom-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+.proper-theme-v2 .kpi-title {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+}
+.proper-theme-v2 .kpi-number {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+.proper-theme-v2 .kpi-number.zero {
+  color: #fff;
+}
+.proper-theme-v2.card-big::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/indonesia-map.svg');
+  background-size: 60% auto;
+  background-repeat: no-repeat;
+  background-position: left center;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 8px var(--cyan-glow));
+  pointer-events: none;
+  z-index: 0;
 }
