@@ -7,9 +7,12 @@
   --cyan-glow: rgba(79, 216, 240, 0.45);
   --white-line: rgba(255, 255, 255, 0.55);
   --red-neon: rgba(255, 70, 90, 0.55);
+  --line-strong: rgba(255, 255, 255, 0.95);
+  --line-medium: rgba(255, 255, 255, 0.75);
+  --line-soft: rgba(255, 255, 255, 0.5);
 }
 
-/* Background halaman: gradasi vertikal navy + tekstur jaring/titik halus */
+/* Background halaman: gradasi vertikal navy */
 body {
   background: linear-gradient(180deg, #0a1128 0%, #0d1633 100%);
   background-attachment: fixed;
@@ -37,88 +40,137 @@ body {
   margin: 0;
 }
 
-/* === PROPERE THEME V2 === */
-/* (override border/glow final - diterapkan ke kontainer utama dashboard) */
-.proper-theme-v2 .card-big {
-  position: relative;
-  border-radius: 28px;
-  background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-}
-.proper-theme-v2 .card-kpi {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
-  backdrop-filter: blur(14px);
-  border: 1.5px solid rgba(190, 235, 255, 0.75);
-  border-radius: 18px;
-  box-shadow: 0 0 20px var(--cyan-glow), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 0 18px rgba(79, 216, 240, 0.12);
-}
-.proper-theme-v2 .card-panel {
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-.proper-theme-v2 .btn-buat-pengajuan {
-  background: linear-gradient(180deg, #3b5bd6, #1a2a78);
-  border: 2px solid rgba(220, 235, 255, 0.9);
-  border-radius: 10px;
-  box-shadow: 0 0 18px rgba(120, 170, 255, 0.55), inset 0 2px 0 rgba(255, 255, 255, 0.65), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 rgba(0, 0, 0, 0.4);
-}
-.proper-theme-v2 .btn-buat-pengajuan:hover {
-  box-shadow: 0 0 24px rgba(120, 170, 255, 0.75), inset 0 2px 0 rgba(255, 255, 255, 0.75), inset 0 -3px 0 rgba(0, 0, 0, 0.35), 0 4px 0 rgba(0, 0, 0, 0.4);
-  transform: translateY(-1px);
-  transition: all 0.25s ease;
-}
-.proper-theme-v2 .stat-pill {
-  border: 1.5px solid var(--red-neon);
-  box-shadow: 0 0 18px var(--red-neon);
-  background: rgba(10, 15, 40, 0.7);
-}
-.proper-theme-v2 .stat-pill .divider {
-  border-left: 1px solid rgba(255, 255, 255, 0.25);
-}
+/* === PROPERE WHITE LINES === */
+/* (override final - satu garis per kontainer via pseudo-element) */
+
+/* a. Header atas (kartu header) */
 .proper-theme-v2 .header-card {
-  margin: 12px;
-  border-radius: 20px;
-  border: none;
-  background: linear-gradient(120deg, #1c2f7a 0%, #141f4d 45%, #0e1735 100%);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: visible !important;
 }
-.proper-theme-v2 .sidebar {
-  background: linear-gradient(180deg, #5a1a1a 0%, #3a0d0d 100%);
-  border-right: 1px solid rgba(255, 255, 255, 0.35);
-}
-.proper-theme-v2 .sidebar-active {
-  border: 1px solid rgba(255, 90, 110, 0.8);
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(255, 90, 110, 0.3);
-  color: #fff;
-}
-.proper-theme-v2 .sidebar-bottom-divider {
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
-}
-.proper-theme-v2 .kpi-title {
-  color: #fff;
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
-}
-.proper-theme-v2 .kpi-number {
-  color: #fff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-.proper-theme-v2 .kpi-number.zero {
-  color: #fff;
-}
-.proper-theme-v2.card-big::before {
-  content: '';
+.proper-theme-v2 .header-card::after {
+  content: "";
   position: absolute;
   inset: 0;
-  background-image: url('/indonesia-map.svg');
-  background-size: 60% auto;
-  background-repeat: no-repeat;
-  background-position: left center;
-  opacity: 0.85;
-  filter: drop-shadow(0 0 8px var(--cyan-glow));
+  border-radius: 20px;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
   pointer-events: none;
-  z-index: 0;
+  z-index: 5;
+}
+
+/* b. Kartu KPI besar */
+.proper-theme-v2 .card-big {
+  position: relative;
+  overflow: visible !important;
+}
+.proper-theme-v2 .card-big::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* c. 3 kartu KPI kecil */
+.proper-theme-v2 .card-kpi {
+  position: relative;
+  overflow: visible !important;
+}
+.proper-theme-v2 .card-kpi::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 16px rgba(190, 235, 255, 0.5);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* d. 3 panel bawah */
+.proper-theme-v2 .card-panel {
+  position: relative;
+  overflow: visible !important;
+}
+.proper-theme-v2 .card-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* e. Tombol "+ Buat Pengajuan Baru" */
+.proper-theme-v2 .btn-buat-pengajuan {
+  position: relative;
+  overflow: visible !important;
+}
+.proper-theme-v2 .btn-buat-pengajuan::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  border: 2.5px solid #fff;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* f. Item sidebar aktif "1. Dashboard" */
+.sidebar .sidebar-active {
+  position: relative;
+  overflow: visible !important;
+}
+.sidebar .sidebar-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* g. Hapus border/outline dari inner container agar tidak ada kotak ganda */
+.proper-theme-v2 .card-big > *,
+.proper-theme-v2 .card-big > * > *,
+.proper-theme-v2 .card-kpi > *,
+.proper-theme-v2 .card-panel > *,
+.proper-theme-v2 .card-panel > * > * {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Garis pemisah */
+.proper-theme-v2 .header-card {
+  /* horizontal divider di bawah header ditangani di bawah */
+}
+.proper-theme-v2 .header-divider {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+.sidebar {
+  border-right: 1px solid rgba(255, 255, 255, 0.45);
+}
+.sidebar-bottom-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+}
+.proper-theme-v2 .stat-pill .border-l,
+.proper-theme-v2 .stat-divider {
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Header search/dropdown/SOP border 1.5px putih 0.7 */
+.proper-theme-v2 .header-card input,
+.proper-theme-v2 .header-card select,
+.proper-theme-v2 .header-card button {
+  border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
 }

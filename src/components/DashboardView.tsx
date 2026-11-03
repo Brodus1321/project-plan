@@ -223,15 +223,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const strokeDashoffset = 251.2 - (251.2 * arcPercentage) / 100;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 proper-theme-v2">
       {/* 1. Indikator Kinerja Utama (KPI) — latar navy (backgournd.jpg) + kartu kaca biru */}
       <section
         aria-label="Indikator Kinerja Utama"
-        className="rounded-3xl overflow-hidden ring-1 ring-blue-500/40 shadow-[0_8px_30px_rgba(2,8,23,0.5)] px-5 py-6"
+        className="rounded-3xl overflow-hidden ring-1 ring-blue-500/40 shadow-[0_8px_30px_rgba(2,8,23,0.5)] px-5 py-6 card-big"
         style={{
           backgroundImage: `linear-gradient(rgba(8,16,38,0.55), rgba(8,16,38,0.55)), url(${bgImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
+          border: '1.5px solid rgba(255,255,255,0.6)',
+          boxShadow: '0 0 16px rgba(255,255,255,0.18), inset 0 1px 0 rgba(255,255,255,0.3)',
+          backdropFilter: 'blur(12px)',
         }}
       >
         <header className="text-center">
@@ -240,7 +243,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <p className="mt-1.5 text-[13px] text-blue-200/80">Ringkasan metrik pertanggungan tingkat eksekutif.</p>
           <button
             onClick={onOpenInput}
-            className="mt-3 text-xs font-semibold bg-blue-500 hover:bg-blue-400 text-white px-4 py-1.5 rounded-full shadow-lg shadow-blue-500/30 transition-colors"
+            className="mt-3 text-xs font-semibold text-white px-4 py-1.5 rounded-full transition-colors btn-buat-pengajuan" style={{ background: "linear-gradient(180deg, #1e3a8a, #172554)", boxShadow: "none" }}
           >
             + Buat Pengajuan Baru
           </button>
@@ -250,7 +253,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-[720px] mx-auto">
           {/* Total Uang Beredar */}
           <div
-            className="relative flex flex-col items-center gap-2 text-center px-4 py-5 rounded-2xl bg-white/5 backdrop-blur-sm ring-1 ring-blue-400/30 shadow-[0_4px_18px_rgba(0,0,0,0.25)]"
+            className="relative flex flex-col items-center gap-2 text-center px-4 py-5 rounded-2xl shadow-[0_4px_18px_rgba(0,0,0,0.25)]" style={{ background: "linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03))", backdropFilter: "blur(12px)" }}
             aria-label="Total Uang Beredar"
           >
             <span className="grid place-items-center w-8 h-8 rounded-lg bg-white/10 text-blue-200" aria-hidden="true">
@@ -271,7 +274,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* Grand Total Nilai — sel yang menonjol */}
           <div
-            className="relative flex flex-col items-center gap-2 text-center px-4 py-5 rounded-2xl bg-white/5 backdrop-blur-sm ring-1 ring-blue-400/30 shadow-[0_4px_18px_rgba(0,0,0,0.25)]"
+            className="relative flex flex-col items-center gap-2 text-center px-4 py-5 rounded-2xl shadow-[0_4px_18px_rgba(0,0,0,0.25)]" style={{ background: "linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03))", backdropFilter: "blur(12px)" }}
             aria-label="Grand Total Nilai"
           >
             <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 py-0.5 rounded-md bg-blue-500 text-white text-[10px] font-semibold leading-tight whitespace-nowrap shadow-sm">
@@ -295,7 +298,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* Rasio Aman */}
           <div
-            className="relative flex flex-col items-center gap-2 text-center px-4 py-5 rounded-2xl bg-white/5 backdrop-blur-sm ring-1 ring-blue-400/30 shadow-[0_4px_18px_rgba(0,0,0,0.25)]"
+            className="relative flex flex-col items-center gap-2 text-center px-4 py-5 rounded-2xl shadow-[0_4px_18px_rgba(0,0,0,0.25)]" style={{ background: "linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03))", backdropFilter: "blur(12px)" }}
             aria-label="Rasio Aman"
           >
             <span className="grid place-items-center w-8 h-8 rounded-lg bg-white/10 text-blue-200" aria-hidden="true">
@@ -319,7 +322,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         
         {/* Card 1: Location & Operational Info (Col 1 - 5 columns) */}
-          <div className="lg:col-span-5 rounded-3xl p-5 border border-blue-400/25 bg-[#0b1730]/80 backdrop-blur-md shadow-[0_10px_30px_rgba(2,8,23,0.45)] flex flex-col justify-between">
+          <div className="lg:col-span-5 rounded-3xl p-5 border-0 card-panel bg-[#0b1730]/80 backdrop-blur-md shadow-[0_0_16px_rgba(255,255,255,0.18),inset_0_1px_0_rgba(255,255,255,0.3)] flex flex-col justify-between">
             <div>
               {/* Pemilih lokasi per branch */}
               <div className="mb-2">
@@ -543,7 +546,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
         {/* Card 2: Visual Card (Col 2 - 4 columns, matching modern building visual card from screenshot) */}
-        <div className="lg:col-span-4 rounded-3xl p-4 border border-blue-400/25 bg-[#0b1730]/80 backdrop-blur-md shadow-[0_10px_30px_rgba(2,8,23,0.45)] flex flex-col justify-between relative overflow-hidden">
+        <div className="lg:col-span-4 rounded-3xl p-4 border-0 card-panel bg-[#0b1730]/80 backdrop-blur-md shadow-[0_0_16px_rgba(255,255,255,0.18),inset_0_1px_0_rgba(255,255,255,0.3)] flex flex-col justify-between relative overflow-hidden">
           <div className="relative rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900 mb-3 group">
             {/* Visual infrastructure image */}
             <img
@@ -597,7 +600,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Card 3: Donut Gauge & Ringkasan Antrian (Col 3 - 3 columns, matching 8.5k members orange donut chart from screenshot) */}
-        <div className="lg:col-span-3 rounded-3xl p-5 border border-blue-400/25 bg-[#0b1730]/80 backdrop-blur-md shadow-[0_10px_30px_rgba(2,8,23,0.45)] flex flex-col justify-between">
+        <div className="lg:col-span-3 rounded-3xl p-5 border-0 card-panel bg-[#0b1730]/80 backdrop-blur-md shadow-[0_0_16px_rgba(255,255,255,0.18),inset_0_1px_0_rgba(255,255,255,0.3)] flex flex-col justify-between">
           <div>
             <div className="flex items-start justify-between mb-3">
               <div>

@@ -89,7 +89,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     [
       'relative flex w-full items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors',
       isActive
-        ? 'bg-white text-[#263238] shadow-sm'
+        ? 'bg-white text-[#263238] shadow-sm border border-white shadow-[0_0_10px_rgba(255,255,255,0.5)] sidebar-active'
         : 'text-white/90 hover:bg-white/10 hover:text-white',
       hasBadge ? 'pr-8' : '',
     ].join(' ');
@@ -98,7 +98,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     'flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[10px] font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white';
 
   return (
-    <aside className="relative w-[170px] flex-shrink-0 overflow-hidden bg-[#4a0d0d] text-white select-none">
+    <aside className="relative w-[170px] flex-shrink-0 overflow-hidden bg-[#4a0d0d] text-white select-none border-r border-white/25 sidebar">
       {/* Tekstur logam merah (side.jpg) sebagai latar sidebar — scale-150
           memotong sudut putih agar hanya tekstur merah yang terlihat. */}
       <img
@@ -167,7 +167,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
 
         {/* Aksi bawah — tombol & handler tetap sama */}
-        <div className="mt-3 flex flex-col gap-[3px] border-t border-white/20 pt-3">
+        <div className="mt-3 flex flex-col gap-[3px] border-t border-white/25 pt-3 sidebar-bottom-divider">
           <button
             onClick={onOpenSop}
             title="Petunjuk SOP & Alur Berkas"

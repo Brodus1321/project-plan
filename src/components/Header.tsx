@@ -33,13 +33,11 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header
-      className="relative shrink-0 overflow-hidden border-b border-white/10 px-4 py-3.5 text-white shadow-[0_10px_26px_rgba(2,8,23,0.45)] md:px-6"
+      className="relative shrink-0 overflow-hidden border-b border-white/10 px-4 py-3.5 text-white shadow-[0_10px_26px_rgba(2,8,23,0.45)] md:px-6 header-card"
       style={{
         backgroundImage: `linear-gradient(rgba(7,13,28,0.86), rgba(7,13,28,0.86)), url(${bgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        border: '1.5px solid rgba(255,255,255,0.9)',
-        boxShadow: '0 0 12px rgba(255,255,255,0.35), 0 0 16px rgba(255,80,80,0.35)',
       }}
     >
       {/* Baris judul - meniru brand topbar web-bogor */}
@@ -71,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Cari No. SPK, No. PP, Proyek, Vendor..."
-              className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/60 text-white text-xs font-medium rounded-full focus:border-white/40 focus:bg-white/15 focus:ring-2 focus:ring-white/20 focus:outline-none transition-all placeholder:text-white/55 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 bg-white/10 border-0 text-white text-xs font-medium rounded-full focus:border-white/40 focus:bg-white/15 focus:ring-2 focus:ring-white/20 focus:outline-none transition-all placeholder:text-white/55 shadow-sm"
             />
           </div>
 
@@ -83,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
                 value={selectedStatus}
                 onChange={e => setSelectedStatus(e.target.value)}
                 aria-label="Filter status berkas"
-                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/60 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
+                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
               >
                 <option className="text-slate-900" value="ALL">Semua Status</option>
                 <option className="text-slate-900" value="SIAP_CETAK">Siap Cetak (Eviden Lengkap)</option>
@@ -101,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({
                 value={selectedRegional}
                 onChange={e => setSelectedRegional(e.target.value)}
                 aria-label="Filter regional proyek"
-                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/60 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
+                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
               >
                 <option className="text-slate-900" value="ALL">Semua Regional</option>
                 <option className="text-slate-900" value="Regional Jawa Barat">Jawa Barat</option>
