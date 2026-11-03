@@ -40,6 +40,8 @@ export const Header: React.FC<HeaderProps> = ({
         backgroundImage: `linear-gradient(rgba(7,13,28,0.86), rgba(7,13,28,0.86)), url(${bgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        border: '1.5px solid rgba(255,255,255,0.55)',
+        boxShadow: '0 0 16px rgba(255,80,80,0.25)',
       }}
     >
       {/* Baris judul â€” meniru brand topbar web-bogor */}
@@ -71,7 +73,7 @@ export const Header: React.FC<HeaderProps> = ({
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Cari No. SPK, No. PP, Proyek, Vendor..."
-              className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/25 text-white text-xs font-medium rounded-full focus:border-white/40 focus:bg-white/15 focus:ring-2 focus:ring-white/20 focus:outline-none transition-all placeholder:text-white/55 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/50 text-white text-xs font-medium rounded-full focus:border-white/40 focus:bg-white/15 focus:ring-2 focus:ring-white/20 focus:outline-none transition-all placeholder:text-white/55 shadow-sm"
             />
           </div>
 
@@ -83,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
                 value={selectedStatus}
                 onChange={e => setSelectedStatus(e.target.value)}
                 aria-label="Filter status berkas"
-                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/25 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
+                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/50 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
               >
                 <option className="text-slate-900" value="ALL">Semua Status</option>
                 <option className="text-slate-900" value="SIAP_CETAK">Siap Cetak (Eviden Lengkap)</option>
@@ -101,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
                 value={selectedRegional}
                 onChange={e => setSelectedRegional(e.target.value)}
                 aria-label="Filter regional proyek"
-                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/25 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
+                className="appearance-none bg-white/10 hover:bg-white/15 text-white font-medium pl-3 pr-7 py-1.5 rounded-full border border-white/50 focus:outline-none focus:ring-2 focus:ring-white/25 cursor-pointer"
               >
                 <option className="text-slate-900" value="ALL">Semua Regional</option>
                 <option className="text-slate-900" value="Regional Jawa Barat">Jawa Barat</option>
@@ -127,19 +129,19 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Floating Highlight Metrics Pill â€” isi & fungsi tetap sama */}
         <div className="ml-auto inline-flex items-center bg-slate-950 text-white rounded-full p-1.5 px-3 shadow-lg border border-slate-800 text-xs">
           {/* Section 1 */}
-          <div className="flex items-center gap-2 px-3 border-r border-slate-800">
+          <div className="flex items-center gap-2 px-3 border-l border-white/40">
             <span className="text-base font-extrabold text-amber-400">{totalSubmissions}</span>
             <span className="text-[10px] text-slate-400 leading-tight uppercase font-medium">Pengajuan<br />Aktif</span>
           </div>
 
           {/* Section 2 */}
-          <div className="flex items-center gap-2 px-3 border-r border-slate-800">
+          <div className="flex items-center gap-2 px-3 border-l border-white/40">
             <span className="text-sm font-bold text-white tracking-tight">{formatRupiah(totalNilaiKontrak)}</span>
             <span className="text-[10px] text-slate-400 leading-tight uppercase font-medium">Total Nilai<br />Pekerjaan</span>
           </div>
 
           {/* Section 3 */}
-          <div className="flex items-center gap-2 px-3 border-r border-slate-800">
+          <div className="flex items-center gap-2 px-3 border-l border-white/40">
             <span className="text-sm font-bold text-emerald-400 tracking-tight">{formatRupiah(totalPanjarPrelim)}</span>
             <span className="text-[10px] text-slate-400 leading-tight uppercase font-medium">Panjar IF<br />Prelim</span>
           </div>
